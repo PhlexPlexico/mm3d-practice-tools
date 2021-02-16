@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "valarray": "cpp",
+        "ios": "cpp",
+        "xiosbase": "cpp",
+        "iosfwd": "cpp"
+    }
+}

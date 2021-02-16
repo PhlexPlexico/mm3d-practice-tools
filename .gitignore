@@ -1,0 +1,19 @@
+# Build files
+.mypy_cache
+*.bin
+*.o
+*.x
+*.elf
+*.sym
+*.d
+*.map
+newcodeinfo.h
+build/
+bak/
+
+# IDA
+*.id*
+*.nam
+*.til
+
+release/

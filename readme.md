@@ -18,6 +18,8 @@ As of right now the following features exist:
 - Frame advance (Done by pressing d-pad down, then dpad right to advance frames).
 - Pressing select/start in the ocarina menu opens up the songs instead of touch screen.
 - Bomber's notebook can be interacted with buttons.
+- Faster blocks in Stone Tower
+- ZR + Start/Select Open Different menus.
 
 
 The aim of this project right now is to provide some hot-keys for useful commands (time control, frame advance...) and will later be expanded to include other things such as giving items to the player.

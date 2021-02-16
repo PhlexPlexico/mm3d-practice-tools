@@ -60,16 +60,6 @@ static bool IsStartOrSelectPressed() {
                                   game::pad::Button::Start, game::pad::Button::Select);
 }
 
-// If we remove the hotkeys to gear I think we can remove this.
-static void UiGearScreenUpdate() {
-  if (!game::ui::CheckCurrentScreen(game::ui::ScreenType::Gear))
-    return;
-  auto* screen =
-      static_cast<game::ui::GearScreen*>(game::ui::GetScreen(game::ui::ScreenType::Gear));
-  if (IsStartOrSelectPressed()) {
-    screen->pressed_btn_option = 1;
-  }
-}
 
 static void UiOcarinaScreenUpdate() {
   if (!game::ui::CheckCurrentScreen(game::ui::ScreenType::Ocarina))
@@ -89,34 +79,6 @@ static void UiOcarinaScreenUpdate() {
   }
 }
 
-static void UiScheduleScreenUpdate() {
-  if (!game::ui::CheckCurrentScreen(game::ui::ScreenType::Schedule))
-    return;
-  auto* screen =
-      static_cast<game::ui::ScheduleScreen*>(game::ui::GetScreen(game::ui::ScreenType::Schedule));
-
-  // Allow several touch buttons to be activated with physical button presses.
-  // Conveniently enough, it looks like this is already partially implemented by Grezzo,
-  // so all we have to do is copy over the pad button flags.
-  const auto& input = rst::GetContext().gctx->pad_state.input;
-  const auto copy_btn_flag = [&input, screen](game::pad::Button btn) {
-    if (input.new_buttons.IsSet(btn))
-      screen->btn_press_flags |= u32(btn);
-  };
-  copy_btn_flag(game::pad::Button::X);
-  copy_btn_flag(game::pad::Button::Y);
-
-  if (input.new_buttons.IsSet(game::pad::Button::Select) &&
-      screen->btn_map_anim_player->GetAnim() == screen->disp_btn_map_anim) {
-    auto& ctx = game::ui::GetScreenContext();
-    auto& handler = screen->GetTouchHandler();
-    for (auto* btn : {screen->btn_map_l, screen->base1_btn_map_l}) {
-      handler.UpdateState(btn, ctx, 0, 0);
-      handler.OnActivate(btn, false, ctx, 0, 0);
-      handler.OnRelease(btn, false, false, ctx, 0, 0);
-    }
-  }
-}
 
 void toggle_advance(game::GlobalContext* gctx) {
   AdvanceState& advState = GetAdvState();
@@ -154,9 +116,7 @@ RST_HOOK void Calc(game::State* state) {
   // Check to advance
   toggle_advance(context.gctx);
   // Move in improvements from Project Restoration
-  UiOcarinaScreenUpdate();
-  UiScheduleScreenUpdate();
-  UiGearScreenUpdate();
+  // UiOcarinaScreenUpdate();
   // End improvments.
   if(advState.advance_ctx_t.advance_state == advState.STEP) {
         if(right) {
@@ -194,29 +154,29 @@ RST_HOOK void PreActorCalcHook() {
 // }
 
 // This opens menu based on what buttons are pressed.
-// RST_HOOK void UiScheduleTriggerHook() {
-//   auto* gctx = GetContext().gctx;
-//   if (!gctx || gctx->type != game::StateType::Play)
-//     return;
+RST_HOOK void UiScheduleTriggerHook() {
+  auto* gctx = GetContext().gctx;
+  if (!gctx || gctx->type != game::StateType::Play)
+    return;
 
-//   const bool zr = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR);
-//   const bool start = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Start);
-//   const bool select = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Select);
-//   if (!zr && select)
-//     game::ui::OpenScreen(game::ui::ScreenType::Items);
-//   if (!zr && start && game::GetCommonData().save.inventory.collect_register & 0x40000)
-//     game::ui::OpenScreen(game::ui::ScreenType::Schedule);
-//   // if (zr && start)
-//   //   game::ui::OpenScreen(game::ui::ScreenType::Quest);
-//   if (zr && select) {
-//     // Clear map screen type. (Needed because the screen could be in "soaring" mode.)
-//     util::Write<u8>(game::ui::GetScreen(game::ui::ScreenType::Map), 0x78E, 0);
-//     game::ui::OpenScreen(game::ui::ScreenType::Map);
-//     gctx->pad_state.input.buttons.Clear(game::pad::Button::Select);
-//     gctx->pad_state.input.new_buttons.Clear(game::pad::Button::Select);
-//   }
+  const bool zr = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR);
+  const bool start = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Start);
+  const bool select = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Select);
+  if (!zr && select)
+    game::ui::OpenScreen(game::ui::ScreenType::Items);
+  if (!zr && start && game::GetCommonData().save.inventory.collect_register & 0x40000)
+    game::ui::OpenScreen(game::ui::ScreenType::Schedule);
+  if (zr && start)
+    game::ui::OpenScreen(game::ui::ScreenType::Quest);
+  if (zr && select) {
+    // Clear map screen type. (Needed because the screen could be in "soaring" mode.)
+    util::Write<u8>(game::ui::GetScreen(game::ui::ScreenType::Map), 0x78E, 0);
+    game::ui::OpenScreen(game::ui::ScreenType::Map);
+    gctx->pad_state.input.buttons.Clear(game::pad::Button::Select);
+    gctx->pad_state.input.new_buttons.Clear(game::pad::Button::Select);
+  }
     
-// }
+}
 
 }  // namespace rst
 

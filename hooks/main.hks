@@ -33,16 +33,16 @@ message_get_hook:
   func: rst::MessageDataGet(game::MessageData*, unsigned short, game::Message*)
 
 # Input
-pad_update_hook:
-  type: softbranch
-  opcode: post
-  func: rst::UpdatePadState()
-  addr: 0x116A30
-pad_update_hook:
-  type: softbranch
-  opcode: post
-  func: rst::UpdatePadStateForOcarina()
-  addr: 0x116900
+# pad_update_hook:
+#   type: softbranch
+#   opcode: post
+#   func: rst::UpdatePadState()
+#   addr: 0x116A30
+# pad_update_hook:
+#   type: softbranch
+#   opcode: post
+#   func: rst::UpdatePadStateForOcarina()
+#   addr: 0x116900
 decouple_trigger_btns:
   type: patch
   data: 12 00 00 EA # skips over the ZL/ZR checks
@@ -53,21 +53,21 @@ decouple_start_select:
   addr: 0x006B083C
 
 # Item triggers
-ui_items_fast_assign_item:
-  type: branch
-  link: true
-  func: rst_trampoline_rst_ui_items_IsItemAssignRequested
-  addr: 0x5C14F4
-ui_items_fast_assign_item:
-  type: branch
-  link: true
-  func: rst_trampoline_rst_ui_items_GetItemAssignIndex
-  addr: 0x5C161C
-trigger_item_use_hook:
-  type: softbranch
-  opcode: post
-  addr: 0x1DB744
-  func: rst::link::TriggerItemUseHook()
+# ui_items_fast_assign_item:
+#   type: branch
+#   link: true
+#   func: rst_trampoline_rst_ui_items_IsItemAssignRequested
+#   addr: 0x5C14F4
+# ui_items_fast_assign_item:
+#   type: branch
+#   link: true
+#   func: rst_trampoline_rst_ui_items_GetItemAssignIndex
+#   addr: 0x5C161C
+# trigger_item_use_hook:
+#   type: softbranch
+#   opcode: post
+#   addr: 0x1DB744
+#   func: rst::link::TriggerItemUseHook()
 
 # UI menu triggers
 ui_schedule_trigger_hook:

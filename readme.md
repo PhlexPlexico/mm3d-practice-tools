@@ -15,7 +15,7 @@ This patch is going to aim to implement these things as well, and throw in some 
 After viewing the source code of [Project Restoration](https://github.com/leoetlino/project-restoration), and ~~annoying~~ asking @leoetlino for help with this, I was able to strip out a majority of Restoration's code, and start including my own. However, there are a few things I've kept in as quality of life (QOL) improvements.
 
 As of right now the following features exist:
-- Frame advance (Done by pressing d-pad down, then dpad right to advance frames).
+- Frame advance (Done by pressing R+d-pad down, then d-pad right to advance frames).
 - Pressing select/start in the ocarina menu opens up the songs instead of touch screen.
 - Bomber's notebook can be interacted with buttons.
 - Faster blocks in Stone Tower

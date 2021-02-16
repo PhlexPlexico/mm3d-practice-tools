@@ -82,7 +82,6 @@ static void UiOcarinaScreenUpdate() {
 }
 
 void scan_shared_hid_inputs() {
-  util::Print("%s: Address? %p", __func__, shared_hid);
   inputs.cur.val = shared_hid->pad.pads[shared_hid->pad.index].curr.val;
   inputs.pressed.val = (inputs.cur.val) & (~inputs.old.val);
   inputs.up.val = (~inputs.cur.val) & (inputs.old.val);
@@ -91,20 +90,19 @@ void scan_shared_hid_inputs() {
 
 static void toggle_advance() {
   AdvanceState& advState = GetAdvState();
-  
   scan_shared_hid_inputs();
-  if (inputs.pressed.d_down && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
+  if ((inputs.pressed.val == (s32)(384)) && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
     util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
     advState.advance_ctx_t.advance_state = advState.PAUSED;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if (inputs.pressed.d_down && advState.advance_ctx_t.advance_state != advState.NORMAL && !advState.advance_ctx_t.d_down_latched) {
+  } else if ((inputs.pressed.val == (s32)(384)) && advState.advance_ctx_t.advance_state != advState.NORMAL) {
     util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
     advState.advance_ctx_t.advance_state = advState.NORMAL;
     advState.advance_ctx_t.d_down_latched = 1;
   } else if (advState.advance_ctx_t.advance_state == advState.NORMAL && (inputs.pressed.d_right)) {
     util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
     advState.advance_ctx_t.advance_state = advState.LATCHED;
-  } else if (inputs.pressed.d_down) {
+  } else if (inputs.pressed.val == (s32)(384)) {
     advState.advance_ctx_t.d_down_latched = 0;
   }
 }

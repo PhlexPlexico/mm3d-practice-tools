@@ -16,6 +16,8 @@
 
 namespace rst {
 
+advance_input_t inputs = {};
+
 namespace {
 
 void Init(Context& context) {
@@ -79,24 +81,54 @@ static void UiOcarinaScreenUpdate() {
   }
 }
 
+void scan_shared_hid_inputs() {
+  inputs.cur.val = shared_hid.pad.pads[shared_hid.pad.index].curr.val;
+  inputs.pressed.val = (inputs.cur.val) & (~inputs.old.val);
+  inputs.up.val = (~inputs.cur.val) & (inputs.old.val);
+  inputs.old.val = inputs.cur.val;
+}
 
-void toggle_advance(game::GlobalContext* gctx) {
+static void toggle_advance() {
   AdvanceState& advState = GetAdvState();
-  const bool down = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Down);
-  const bool right = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Right);
-  if (down &&  (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
+  
+  scan_shared_hid_inputs();
+  if (inputs.pressed.d_down && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
     util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
     advState.advance_ctx_t.advance_state = advState.PAUSED;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if (down &&  advState.advance_ctx_t.advance_state != advState.NORMAL && !advState.advance_ctx_t.d_down_latched) {
+  } else if (inputs.pressed.d_down && advState.advance_ctx_t.advance_state != advState.NORMAL && !advState.advance_ctx_t.d_down_latched) {
     util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
     advState.advance_ctx_t.advance_state = advState.NORMAL;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if (advState.advance_ctx_t.advance_state == advState.NORMAL && (right)) {
+  } else if (advState.advance_ctx_t.advance_state == advState.NORMAL && (inputs.pressed.d_right)) {
     util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
     advState.advance_ctx_t.advance_state = advState.LATCHED;
-  } else if (down) {
+  } else if (inputs.pressed.d_down) {
     advState.advance_ctx_t.d_down_latched = 0;
+  }
+}
+
+static void frame_advance() {
+  AdvanceState& advState = GetAdvState();
+  // Check to advance
+  toggle_advance();
+  if(advState.advance_ctx_t.advance_state == advState.STEP) {
+        if(inputs.pressed.d_right) {
+            advState.advance_ctx_t.advance_state = advState.LATCHED;
+        } else {
+            advState.advance_ctx_t.advance_state = advState.PAUSED;
+        }
+    }
+
+  while (advState.advance_ctx_t.advance_state == advState.PAUSED) {
+    toggle_advance();
+    if (advState.advance_ctx_t.advance_state == advState.LATCHED && !inputs.pressed.d_right) {
+      advState.advance_ctx_t.advance_state = advState.PAUSED;
+    }
+    if (advState.advance_ctx_t.advance_state == advState.PAUSED && inputs.pressed.d_right) {
+      advState.advance_ctx_t.advance_state = advState.STEP;
+    }
+    svcSleepThread(16e6);
   }
 }
 
@@ -111,34 +143,13 @@ RST_HOOK void Calc(game::State* state) {
 
   context.gctx = static_cast<game::GlobalContext*>(state);
 
-  AdvanceState& advState = GetAdvState();
-  bool right = context.gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Right);
-  // Check to advance
-  toggle_advance(context.gctx);
   // Move in improvements from Project Restoration
-  // UiOcarinaScreenUpdate();
+  UiOcarinaScreenUpdate();
   // End improvments.
-  if(advState.advance_ctx_t.advance_state == advState.STEP) {
-        if(right) {
-            advState.advance_ctx_t.advance_state = advState.LATCHED;
-        } else {
-            advState.advance_ctx_t.advance_state = advState.PAUSED;
-        }
-    }
 
-  while (advState.advance_ctx_t.advance_state == advState.PAUSED) {
-    toggle_advance(context.gctx);
-    // This pointer is a function that forces the update of the HID in GetControllerMgr.State
-    rst::util::GetPointer<void(game::GlobalContext*)>(0x107254)(context.gctx);
-    right = context.gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Right);
-    if (advState.advance_ctx_t.advance_state == advState.LATCHED && !right) {
-      advState.advance_ctx_t.advance_state = advState.PAUSED;
-    }
-    if (advState.advance_ctx_t.advance_state == advState.PAUSED && right) {
-      advState.advance_ctx_t.advance_state = advState.STEP;
-    }
-    svcSleepThread(16e6);
-  }
+  // Begin routines for MM3D Practice Patches.
+  frame_advance();
+  // End routines.
 
   if (false)
     PrintDebug(context.gctx);

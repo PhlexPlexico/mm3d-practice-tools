@@ -4,7 +4,7 @@
 
 
 namespace rst {
-#define shared_hid_addr 0x10002000  // Shared HID Memory address.
+#define shared_hid_addr 0x007b2d34  // Shared HID Memory address.
 
 struct AdvanceState {
   typedef enum { NORMAL = 0, PAUSED, STEP, LATCHED } frame_state_t;
@@ -101,5 +101,5 @@ struct AdvanceState {
 extern "C" void svcSleepThread(u64);
 extern "C" advance_input_t inputs;
 AdvanceState& GetAdvState();
-#define shared_hid (*(hid_mem_t *) shared_hid_addr)
+#define shared_hid (*(hid_mem_t **) shared_hid_addr)
 }  // namespace rst

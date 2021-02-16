@@ -82,7 +82,8 @@ static void UiOcarinaScreenUpdate() {
 }
 
 void scan_shared_hid_inputs() {
-  inputs.cur.val = shared_hid.pad.pads[shared_hid.pad.index].curr.val;
+  util::Print("%s: Address? %p", __func__, shared_hid);
+  inputs.cur.val = shared_hid->pad.pads[shared_hid->pad.index].curr.val;
   inputs.pressed.val = (inputs.cur.val) & (~inputs.old.val);
   inputs.up.val = (~inputs.cur.val) & (inputs.old.val);
   inputs.old.val = inputs.cur.val;

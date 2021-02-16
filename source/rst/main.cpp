@@ -92,15 +92,15 @@ static void toggle_advance() {
   AdvanceState& advState = GetAdvState();
   scan_shared_hid_inputs();
   if ((inputs.pressed.val == (s32)(384)) && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
-    util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
+    //util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
     advState.advance_ctx_t.advance_state = advState.PAUSED;
     advState.advance_ctx_t.d_down_latched = 1;
   } else if ((inputs.pressed.val == (s32)(384)) && advState.advance_ctx_t.advance_state != advState.NORMAL) {
-    util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
+    //util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
     advState.advance_ctx_t.advance_state = advState.NORMAL;
     advState.advance_ctx_t.d_down_latched = 1;
   } else if (advState.advance_ctx_t.advance_state == advState.NORMAL && (inputs.pressed.d_right)) {
-    util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
+    //util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
     advState.advance_ctx_t.advance_state = advState.LATCHED;
   } else if (inputs.pressed.val == (s32)(384)) {
     advState.advance_ctx_t.d_down_latched = 0;
@@ -149,6 +149,38 @@ static void freeze_unfreeze_time() {
   
 }
 
+static void daychanger() {
+  auto* gctx = GetContext().gctx;
+  if (!gctx || gctx->type != game::StateType::Play)
+    return;
+
+  const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
+  const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
+  const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
+  game::CommonData& cdata = game::GetCommonData();
+
+  // Advance day, if max days, loop back to 1.
+  if(zl && dpright) {
+    if(cdata.save.day <= cdata.save.total_day+1){
+      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day, cdata.save.day);
+      cdata.save.day++;
+      return;
+    } else {
+      cdata.save.day = 0;
+    }
+  }
+  // Advance day, if max days, loop back to 1.
+  if(zl && dpleft) {
+    if(cdata.save.day >= -1){
+      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day, cdata.save.day);
+      cdata.save.day--;
+      return;
+    } else {
+      cdata.save.day = 0;
+    }
+  }
+}
+
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;
@@ -167,6 +199,7 @@ RST_HOOK void Calc(game::State* state) {
   // Begin routines for MM3D Practice Patches.
   frame_advance();
   freeze_unfreeze_time();
+  daychanger();
   // End routines.
 
   if (false)

@@ -22,6 +22,10 @@ As of right now the following features exist:
 - ZR + Start/Select Open Different menus.
 - ZR + Dpad left stops time. 
 - ZR + Dpad Right resumes time. Press it again to speed up time.
+- ZL + Dpad Right moves forward one day.
+- - If you go over the max days, it will roll back to day 0. If you go one day past total days (i.e. day 4), you will increase the total_days by 1.
+- ZL + Dpad Left moves backward one day.
+- - If you keep moving backward, it will get you go to day -1.
 
 
 The aim of this project right now is to provide some hot-keys for useful commands (time control, frame advance...) and will later be expanded to include other things such as giving items to the player.

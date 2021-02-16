@@ -20,6 +20,8 @@ As of right now the following features exist:
 - Bomber's notebook can be interacted with buttons.
 - Faster blocks in Stone Tower
 - ZR + Start/Select Open Different menus.
+- ZR + Dpad left stops time. 
+- ZR + Dpad Right resumes time. Press it again to speed up time.
 
 
 The aim of this project right now is to provide some hot-keys for useful commands (time control, frame advance...) and will later be expanded to include other things such as giving items to the player.

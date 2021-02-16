@@ -131,6 +131,24 @@ static void frame_advance() {
   }
 }
 
+static void freeze_unfreeze_time() {
+  auto* gctx = GetContext().gctx;
+  if (!gctx || gctx->type != game::StateType::Play)
+    return;
+
+  const bool zr = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR);
+  const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
+  const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
+  game::CommonData& cdata = game::GetCommonData();
+  if(zr && dpleft) {
+    cdata.save.extra_time_speed = -2;
+  }
+  if(zr && dpright) {
+    cdata.save.extra_time_speed += 1;
+  }
+  
+}
+
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;
@@ -148,6 +166,7 @@ RST_HOOK void Calc(game::State* state) {
 
   // Begin routines for MM3D Practice Patches.
   frame_advance();
+  freeze_unfreeze_time();
   // End routines.
 
   if (false)

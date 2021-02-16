@@ -1,42 +1,26 @@
-# Project Restoration
+# MM3D Practice Patch
 
-**Project Restoration** is a *Majora's Mask 3D* patch that restores some mechanics from the original *Majora's Mask*
-and fixes some issues to make the game more enjoyable.
+**MM3D Practice Patch** is a *Majora's Mask 3D* patch that includes game patches from [Project Restoration](https://github.com/leoetlino/project-restoration) and some other custom patches that makes the game a bit easier to glitch hunt and practice speedrun strategies.
 
-Please refer to the [official website at restoration.zora.re](https://restoration.zora.re) for features and setup instructions.
+Please refer to the [official website at restoration.zora.re](https://restoration.zora.re) for setup instructions.
 
 ## Rationale
+Right now there is a project for the OoT3D community that has a practice patch that includes things such as warp codes, items, actor watches, to name a few of the features.
 
-### Zora swim
-In MM3D, swimming is a bit slower. It is possible to fast swim; however it now requires and consumes magic at a fast rate. Chateau Romani isn't a satisfactory workaround: it only becomes available after a bunch of quests and requires wasting most of the First Day, and even then it's still impossible to get rid of the constant buzzing sound that comes from using the barrier.
-
-Besides, why would Zora Link need magic to swim like a Zora?
-
-### Inverted Song of Time potency
-
-The ISoT nerf might have been another unintended change.
-
-The in-game time is updated by adding a speed value and another value I'll call the extra speed to the time variable every frame. In MM, the time speed is usually 3 (units/frame) and the ISoT sets the extra speed to -2, resulting in a +1 effective speed (which means 1/3 speed). Because the time is updated every frame, in MM3D, the developers reduced the speed to 2 to compensate for the increased framerate. The ISoT was updated to set the speed to -1 instead of -2. However, that only gives players 1/2 speed.
-
-I couldn't see any good reason to keep this change, so I reverted it.
-
-### Twinmold
-
-The new Twinmold battle drags on for way too long. Spinning the main stick makes it faster, but that's not an obvious mechanic. Even with that trick, killing Red Twinmold still takes 3 long identical cycles!
-
-Another issue is the addition of a hidden hit counter. 10 hits are required to stun Red or Blue Twinmold. This would have been acceptable if it weren't for the fact that Red Twinmold regularly burrows back into sand during phase 2
-and the hit counter is silently reset every time that happens.
-
-This makes for a confusing experience the first time the player fights Twinmold,
-as there is nothing in the game that indicates that the hit counter resets every time,
-and it's still frustrating on subsequent playthroughs.
+This patch is going to aim to implement these things as well, and throw in some more custom code, such as time freezing/moving, and a few of the cheats that Luma has.
 
 
 ## About the project
 
-*Project Restoration* was born out of frustration with some of the changes in the remaster (regarding Zora Link in particular), with the realisation that I might be able to have my cake and eat it too, and get the best out of the original and MM3D's massively improved graphics and small quality of life improvements.
+After viewing the source code of [Project Restoration](https://github.com/leoetlino/project-restoration), and ~~annoying~~ asking @leoetlino for help with this, I was able to strip out a majority of Restoration's code, and start including my own. However, there are a few things I've kept in as quality of life (QOL) improvements.
 
-I personally consider the project to be pretty much complete. The game is **playable with no game-breaking issues**, has been 100% completed several times by myself and others (now that the project is more than two months old!) and I have fixed everything I have most wanted to fix, so I probably will not be working on it very actively anymore. Future versions of *Project Restoration* will most likely only be bug fix releases, which may occasionally bring small new improvements.
+As of right now the following features exist:
+- Frame advance (Done by pressing d-pad down, then dpad right to advance frames).
+- Pressing select/start in the ocarina menu opens up the songs instead of touch screen.
+- Bomber's notebook can be interacted with buttons.
+
+
+The aim of this project right now is to provide some hot-keys for useful commands (time control, frame advance...) and will later be expanded to include other things such as giving items to the player.
 
 ### Project structure
 
@@ -44,7 +28,7 @@ I personally consider the project to be pretty much complete. The game is **play
   * `build/`: build outputs.
   * `common/`: small utilities.
   * `game/`: implementation for the known parts of *Majora's Mask 3D*. Contains headers and some reimplementation of game functions.
-  * `rst/`: *Project Restoration* code.
+  * `rst/`: *Project Restoration*/*MM3D Practice Patch* code.
 * `hooks/`: configuration for patches and hooks (for Magikoopa).
 * `loader/`: Code loader (from [Magikoopa](https://github.com/RicBent/Magikoopa)).
 
@@ -53,7 +37,13 @@ Sometimes you will find *Project Restoration* extensions and new code under `sou
 ### Build instructions
 
 * Put the original code.bin and exheader.bin files in the v100, v101 and v110 folders respectively. You must dump those binaries from the ExeFS yourself; those are **not** provided in this repository for copyright reasons.
-* Run make_release.sh. You need git and Magikoopa in your PATH. **Currently, a [fork](https://github.com/leoetlino/Magikoopa) is required**.
+* Run make_release.sh. You need git and Magikoopa and Flips in your PATH. **Currently, a [fork](https://github.com/leoetlino/Magikoopa) is required**.
 * Generated code patches (code.bps) and patched exheaders can be found in `release/`.
+* If you're using Luma on 3DS, copy over exheader_legacy.bin as exheader.bin, and code.bps to /luma/titles/0004000000125500/ where 0004000000125500 is the TitleID of Majora's Mask 3D US.
+
+# Thanks To
+ - [Leo](https://github.com/leoetlino) for the source of Project Restoration, plus all the pestering he's had to put up with me and my questions!
+ - N3rdsWithGame for the initial idea of Frame Advance and his repos for basic implementation.
+ - Megahirtz for testing
 
 PRs and help are welcome!

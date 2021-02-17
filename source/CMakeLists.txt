@@ -69,6 +69,43 @@ add_executable(newcode
   game/ui/screens/main_screen.h
   game/ui/screens/schedule_screen.h
   game/ui/screens/screen.h
+  msys/include/3ds/font.h
+  msys/include/3ds/gfx.h
+  msys/include/3ds/os.h
+  msys/include/3ds/result.h
+  msys/include/3ds/svc.h
+  msys/include/3ds/srv.h
+  msys/include/3ds/synchronization.h
+  msys/include/3ds/types.h
+  msys/include/3ds/sys/lock.h
+  msys/include/3ds/services/gspgpu.h
+  msys/include/csvc.h
+  msys/include/draw.h
+  msys/include/fmt.h
+  msys/include/menu.h
+  msys/include/menus.h
+  msys/include/MyThread.h
+  msys/include/utils.h
+  msys/include/fonts/ascii_font.h
+  msys/include/lib/printf.h
+  msys/include/lib/string.h
+  msys/include/lib/types.h
+  msys/include/menus/cheats.h
+  msys/include/menus/commands.h
+  msys/include/menus/debug.h
+  msys/include/menus/equips.h
+  msys/include/menus/file.h
+  msys/include/menus/inventory.h
+  msys/include/menus/scene.h
+  msys/include/menus/warps.h
+  msys/include/menus/watches.h
+  msys/abi.cpp
+  msys/draw.cpp
+  msys/menu.cpp
+  msys/menus.cpp
+  msys/MyThread.cpp
+  msys/svc_loader.s
+  msys/svc_menus.s
   # rst/camera.cpp
   # rst/camera.h
   # rst/fixes/boss.cpp

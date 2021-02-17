@@ -17,3 +17,4 @@ bak/
 *.til
 
 release/
+source/lib/eigen

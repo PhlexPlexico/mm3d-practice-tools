@@ -70,6 +70,7 @@ decouple_start_select:
 #   func: rst::link::TriggerItemUseHook()
 
 # UI menu triggers
+# Possible to comment out and remove code?
 ui_schedule_trigger_hook:
   type: softbranch
   opcode: post

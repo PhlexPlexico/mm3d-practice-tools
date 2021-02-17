@@ -13,6 +13,10 @@
 #include "game/ui.h"
 #include "game/ui/screens/gear_screen.h"
 #include "game/ui/screens/schedule_screen.h"
+#include "msys/include/MyThread.h"
+#include "msys/include/draw.h"
+#include "msys/include/menu.h"
+
 
 namespace rst {
 
@@ -23,6 +27,8 @@ namespace {
 void Init(Context& context) {
   //link::Init();
 
+  Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
+  Draw_FlushFramebufferTop();
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
   game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_QUEST_CLEAR);
   context.has_initialised = true;
@@ -207,6 +213,7 @@ static void store_pos() {
   }
 }
 
+// Main entry hook in game loop.
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;

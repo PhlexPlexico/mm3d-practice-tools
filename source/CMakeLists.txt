@@ -105,7 +105,7 @@ add_executable(newcode
   msys/menus.cpp
   msys/MyThread.cpp
   msys/svc_loader.s
-  msys/svc_menus.s
+  # msys/svc_menus.s
   # rst/camera.cpp
   # rst/camera.h
   # rst/fixes/boss.cpp

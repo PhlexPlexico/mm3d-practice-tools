@@ -13,3 +13,8 @@ svcSleepThread:
     svc 0x0A
     bx lr
 
+.global svcFlushProcessDataCache
+.type svcFlushProcessDataCache, %function
+svcFlushProcessDataCache:
+	svc 0x54
+	bx  lr

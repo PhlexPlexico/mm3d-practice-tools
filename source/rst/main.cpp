@@ -21,14 +21,14 @@
 namespace rst {
 
 advance_input_t inputs = {};
+bool frameBufferInit = true;
 
 namespace {
 
 void Init(Context& context) {
   //link::Init();
 
-  Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
-  Draw_FlushFramebufferTop();
+
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
   game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_QUEST_CLEAR);
   context.has_initialised = true;
@@ -126,6 +126,7 @@ static void frame_advance() {
     }
 
   while (advState.advance_ctx_t.advance_state == advState.PAUSED) {
+    
     toggle_advance();
     if (advState.advance_ctx_t.advance_state == advState.LATCHED && !inputs.pressed.d_right) {
       advState.advance_ctx_t.advance_state = advState.PAUSED;
@@ -147,6 +148,7 @@ static void freeze_unfreeze_time() {
   const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
   game::CommonData& cdata = game::GetCommonData();
   if(zr && dpleft) {
+    
     cdata.save.extra_time_speed = -2;
   }
   if(zr && dpright) {
@@ -223,8 +225,13 @@ RST_HOOK void Calc(game::State* state) {
   if (state->type != game::StateType::Play)
     return;
 
+  if (frameBufferInit) {
+    Draw_SetupFramebuffer();
+    frameBufferInit = false;
+  }
   context.gctx = static_cast<game::GlobalContext*>(state);
-
+  Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
+  Draw_FlushFramebufferTop();
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.

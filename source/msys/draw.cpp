@@ -36,7 +36,7 @@
 #include "../common/utils.h"
 
 static u8* FRAMEBUFFER[6];
-Graphics* graphics = *rst::util::GetPointer<Graphics*>(0x6a3a4c);
+
 static RecursiveLock lock;
 
 void Draw_Lock(void)
@@ -88,7 +88,7 @@ void Draw_DrawCharacterTop(u32 posX, u32 posY, u32 color, char character)
     volatile u8 *const fb3 = FRAMEBUFFER[3];
     volatile u8 *const fb4 = FRAMEBUFFER[4];
     volatile u8 *const fb5 = FRAMEBUFFER[5];
-
+    
     s32 y;
     for(y = 0; y < 10; y++)
     {
@@ -214,6 +214,7 @@ void Draw_ClearFramebuffer(void)
 
 void Draw_SetupFramebuffer(void)
 {
+    Graphics* graphics = *rst::util::GetPointer<Graphics*>(0x6a3a4c);
     FRAMEBUFFER[0] = graphics->bottom.display_buffers[0];
     FRAMEBUFFER[1] = graphics->bottom.display_buffers[1];
     FRAMEBUFFER[2] = graphics->top1.display_buffers[0];

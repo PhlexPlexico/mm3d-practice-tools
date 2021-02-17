@@ -181,6 +181,32 @@ static void daychanger() {
   }
 }
 
+static void store_pos() {
+  auto* gctx = GetContext().gctx;
+  if (!gctx || gctx->type != game::StateType::Play)
+    return;
+
+  AdvanceState& advState = GetAdvState();
+
+  const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
+  const bool dpup = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Up);
+  const bool dpdown = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Down);
+  auto* player = gctx->GetPlayerActor();
+
+  // Store player position.
+  if(zl && dpup) {
+    advState.advance_ctx_t.storedPos = player->pos;
+    advState.advance_ctx_t.storedAngle = player->angle;
+  }
+  // Restore all positions to our stored positions and angle.
+  if(zl && dpdown) {
+    player->pos = advState.advance_ctx_t.storedPos;
+    player->initial_pos = advState.advance_ctx_t.storedPos;
+    player->target_pos = advState.advance_ctx_t.storedPos;
+    player->angle = advState.advance_ctx_t.storedAngle;
+  }
+}
+
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;
@@ -200,6 +226,7 @@ RST_HOOK void Calc(game::State* state) {
   frame_advance();
   freeze_unfreeze_time();
   daychanger();
+  store_pos();
   // End routines.
 
   if (false)

@@ -15,7 +15,7 @@ This patch is going to aim to implement these things as well, and throw in some 
 After viewing the source code of [Project Restoration](https://github.com/leoetlino/project-restoration), and ~~annoying~~ asking @leoetlino for help with this, I was able to strip out a majority of Restoration's code, and start including my own. However, there are a few things I've kept in as quality of life (QOL) improvements.
 
 As of right now the following features exist:
-- Frame advance (Done by pressing R+d-pad down, then d-pad right to advance frames).
+- Frame advance (Done by pressing R+d-pad down, then d-pad right to advance frames. Dpad down twice to disable).
 - Pressing select/start in the ocarina menu opens up the songs instead of touch screen.
 - Bomber's notebook can be interacted with buttons.
 - Faster blocks in Stone Tower
@@ -26,7 +26,8 @@ As of right now the following features exist:
 - - If you go over the max days, it will roll back to day 0. If you go one day past total days (i.e. day 4), you will increase the total_days by 1.
 - ZL + Dpad Left moves backward one day.
 - - If you keep moving backward, it will get you go to day -1.
-
+- ZL + Dpad Up - Store position on map
+- ZL + Dpad Down - Go back to position
 
 The aim of this project right now is to provide some hot-keys for useful commands (time control, frame advance...) and will later be expanded to include other things such as giving items to the player.
 

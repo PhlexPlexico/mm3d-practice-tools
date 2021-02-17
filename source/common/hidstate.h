@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/types.h"
+#include "game/actor.h"
 
 namespace rst {
 #define shared_hid_addr 0x007b2d34  // Shared HID Memory address.
@@ -10,6 +11,8 @@ struct AdvanceState {
   struct {
     frame_state_t advance_state = NORMAL;
     u8 d_down_latched;
+    game::act::PosRot storedPos;
+    u16 storedAngle;
   } advance_ctx_t;
 };
 

@@ -16,7 +16,7 @@
 #include "msys/include/MyThread.h"
 #include "msys/include/draw.h"
 #include "msys/include/menu.h"
-
+#include "msys/include/menus/commands.h"
 
 namespace rst {
 
@@ -98,6 +98,7 @@ void scan_shared_hid_inputs() {
 static void toggle_advance() {
   AdvanceState& advState = GetAdvState();
   scan_shared_hid_inputs();
+  //util::Print("%s: %d pressed is pressed and we are NOT normal. UNPAUSING", __func__, inputs.cur.val);
   if ((inputs.pressed.val == (s32)(384)) && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
     //util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
     advState.advance_ctx_t.advance_state = advState.PAUSED;
@@ -233,12 +234,13 @@ RST_HOOK void Calc(game::State* state) {
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.
-
+  scan_shared_hid_inputs();
+  Command_UpdateCommands(inputs.cur.val);
   // Begin routines for MM3D Practice Patches.
-  frame_advance();
-  freeze_unfreeze_time();
-  daychanger();
-  store_pos();
+  // frame_advance();
+  // freeze_unfreeze_time();
+  // daychanger();
+  // store_pos();
   // End routines.
 
   

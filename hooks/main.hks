@@ -32,6 +32,7 @@ message_get_hook:
   addr: 0x1BDE78
   func: rst::MessageDataGet(game::MessageData*, unsigned short, game::Message*)
 
+
 # Input
 # pad_update_hook:
 #   type: softbranch
@@ -78,16 +79,16 @@ draw_hook:
 
 # UI menu triggers
 # Possible to comment out and remove code?
-ui_schedule_trigger_hook:
-  type: softbranch
-  opcode: post
-  func: rst::UiScheduleTriggerHook()
-  addr: 0x59BA10
-ui_schedule_disable_existing_trigger:
-  type: patch
-  data: 51 00 00 EA
-  addr: 0x59BA14
-ui_item_close_on_select:
-  type: patch
-  data: 06 00 11 E3 # tst r1, (Button::B | Button::Select)
-  addr: 0x5C19E4
+# ui_schedule_trigger_hook:
+#  type: softbranch
+#  opcode: post
+#  func: rst::UiScheduleTriggerHook()
+#  addr: 0x59BA10
+# ui_schedule_disable_existing_trigger:
+#  type: patch
+#  data: 51 00 00 EA
+#  addr: 0x59BA14
+# ui_item_close_on_select:
+#  type: patch
+#  data: 06 00 11 E3 # tst r1, (Button::B | Button::Select)
+#  addr: 0x5C19E4

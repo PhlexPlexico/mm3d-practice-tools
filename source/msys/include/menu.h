@@ -35,6 +35,7 @@
 #define MAX(x,y) (x > y ? x : y)
 
 #define HID_PAD           (REG32(0x10146000) ^ 0xFFF)
+//#define HID_PAD 0x007b2d34  // Shared HID Memory address.
 
 #define BUTTON_A          (1 << 0)
 #define BUTTON_B          (1 << 1)

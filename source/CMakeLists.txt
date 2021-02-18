@@ -100,10 +100,13 @@ add_executable(newcode
   msys/include/menus/warps.h
   msys/include/menus/watches.h
   msys/abi.cpp
+  msys/commands.cpp
   msys/draw.cpp
+  msys/equips.cpp
   msys/menu.cpp
   msys/menus.cpp
   msys/MyThread.cpp
+  msys/synchronization.cpp
   msys/svc_loader.s
   # msys/svc_menus.s
   # rst/camera.cpp

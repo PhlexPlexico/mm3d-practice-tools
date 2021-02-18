@@ -50,19 +50,19 @@ void pz3DMenu_Test(void){
 }
 
 Menu pz3DMenu{
-    .title="Practice Menu",
-    .nbItems=8,
+    .title="MM3D Practice Menu",
+    .nbItems=3,
     .items{
-        { .title="Test method placeholder, change time to 6am", .action_type=METHOD, .method=&pz3DMenu_Test }
+        { .title="Test method placeholder, change time to 6am", .action_type=METHOD, .method=&pz3DMenu_Test },
         // { .title="Warps", .action_type=MENU, .menu=&WarpsMenu },
         // { .title="Scene", .action_type=MENU, .menu=&SceneMenu },
         // { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
         // { .title="Inventory", .action_type=MENU, .menu=&InventoryMenu },
-        // { .title="Equips", .action_type=MENU, .menu=&EquipsMenu },
+        { .title="Equips", .action_type=MENU, .menu=&EquipsMenu },
         // // { "File", .action_type=MENU, .menu=&FileMenu },
         // { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
         // { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
-        // { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands },
+        { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands },
     }
 };
 

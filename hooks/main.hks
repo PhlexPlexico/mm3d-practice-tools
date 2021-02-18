@@ -69,6 +69,13 @@ decouple_start_select:
 #   addr: 0x1DB744
 #   func: rst::link::TriggerItemUseHook()
 
+# Menu draw hook.
+draw_hook:
+  type: softbranch
+  opcode: post
+  addr: 0x107148
+  func: rst::DrawMenu()
+
 # UI menu triggers
 # Possible to comment out and remove code?
 ui_schedule_trigger_hook:

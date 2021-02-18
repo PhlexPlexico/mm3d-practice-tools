@@ -22,6 +22,7 @@ namespace rst {
 
 advance_input_t inputs = {};
 bool frameBufferInit = true;
+bool showTitle = true;
 
 namespace {
 
@@ -148,7 +149,6 @@ static void freeze_unfreeze_time() {
   const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
   game::CommonData& cdata = game::GetCommonData();
   if(zr && dpleft) {
-    
     cdata.save.extra_time_speed = -2;
   }
   if(zr && dpright) {
@@ -219,19 +219,17 @@ static void store_pos() {
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;
+  
   if (!context.has_initialised && state->type == game::StateType::FirstGame)
     Init(context);
-
+  if(state->type == game::StateType::FileSelect)
+    showTitle = true;
+  else 
+    showTitle = false;
   if (state->type != game::StateType::Play)
     return;
-
-  if (frameBufferInit) {
-    Draw_SetupFramebuffer();
-    frameBufferInit = false;
-  }
+  
   context.gctx = static_cast<game::GlobalContext*>(state);
-  Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
-  Draw_FlushFramebufferTop();
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.
@@ -243,8 +241,18 @@ RST_HOOK void Calc(game::State* state) {
   store_pos();
   // End routines.
 
-  if (false)
-    PrintDebug(context.gctx);
+  
+}
+
+RST_HOOK void DrawMenu() {
+  if (frameBufferInit) {
+    Draw_SetupFramebuffer();
+    frameBufferInit = false;
+  }
+  if (showTitle) {
+    Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
+    Draw_FlushFramebufferTop();
+  }
 }
 
 RST_HOOK void PreActorCalcHook() {

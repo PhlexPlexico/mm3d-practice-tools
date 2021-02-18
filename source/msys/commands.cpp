@@ -7,10 +7,12 @@
 #include "game/common_data.h"
 #include "msys/include/draw.h"
 #include "common/utils.h"
+#include "common/hidstate.h"
 
-u32 pauseUnpause = 0; //tells main to pause/unpause
-u32 frameAdvance = 0; //tells main to frame advance
-u32 menuExitFlag = 0; // Redef from header.
+// u32 pauseUnpause = 0; //tells main to pause/unpause
+// u32 frameAdvance = 0; //tells main to frame advance
+// u32 menuExitFlag = 0; // Redef from header.
+rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
 
 static game::act::Player* GetPlayer() {
@@ -21,7 +23,7 @@ static game::act::Player* GetPlayer() {
 static void Command_OpenMenu(void){
     MyThread* menuThread = menuCreateThread();
     MyThread_Join(menuThread, -1LL);
-    menuExitFlag = 1;
+    advState.menuExitFlag = 1;
 }
 
 static void Command_Levitate(void){
@@ -44,10 +46,14 @@ static void Command_Fall(void){ //TODO: Doesn't work
 static void Command_RunFast(void){
     game::act::Player* link = GetPlayer();
     if (link) {
-        game::act::GetFormParam(game::act::FormParamIndex::Deku).run_accel = 600;
-        game::act::GetFormParam(game::act::FormParamIndex::Human).run_accel = 600;
-        game::act::GetFormParam(game::act::FormParamIndex::Zora).run_accel = 600;
-        game::act::GetFormParam(game::act::FormParamIndex::Goron).run_accel = 600;
+        auto& deku_param = game::act::GetFormParam(game::act::FormParamIndex::Deku);
+        auto& human_param = game::act::GetFormParam(game::act::FormParamIndex::Human);
+        auto& zora_param = game::act::GetFormParam(game::act::FormParamIndex::Zora);
+        auto& goron_param = game::act::GetFormParam(game::act::FormParamIndex::Goron);
+        deku_param.walk_speed = 600;
+        human_param.walk_speed = 600;
+        zora_param.walk_speed = 600;
+        goron_param.walk_speed = 600;
     }
 }
 
@@ -99,11 +105,11 @@ static void Command_LoadPos(void){
 // static void Command_NextPos(void);
 
 static void Command_PauseUnpause(void){
-    pauseUnpause = 1;
+    advState.pauseUnpause = true;
 }
 
 static void Command_FrameAdvance(void){
-    frameAdvance = 1;
+    advState.frameAdvance = true;
 }
 
 // static void Command_RecordMacro(void);
@@ -121,7 +127,7 @@ static void Command_ToggleWatches(void){
 
 static Command commandList[] = {
     {"Open Menu", 0, 0, { 0 }, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
-    {"Levitate", 0, 0, { 0 }, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
+    {"Levitate (TODO)", 0, 0, { 0 }, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
     {"Fall (TODO)", 0, 0, { 0 }, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
     {"Run Fast", 0, 0, { 0 }, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
     {"Reset (TODO)", 0, 0, { 0 }, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
@@ -170,7 +176,7 @@ static void Commands_ListInitDefaults(void){
     commandList[10].strict = 0;
 
     for(u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i){
-        if (i != 0 && i != 1 && i != 3 && i != 7 && i != 8 && i != 9){
+        if (i != 0 && i != 1 && i != 3 && i != 7 && i != 8 && i != 9 && i != 10){
             commandList[i].comboLen = 0;
             commandList[i].strict = 0;
         }

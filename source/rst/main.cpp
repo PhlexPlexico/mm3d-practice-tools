@@ -27,8 +27,7 @@ bool showTitle = true;
 namespace {
 
 void Init(Context& context) {
-  //link::Init();
-
+  // link::Init();
 
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
   game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_QUEST_CLEAR);
@@ -69,7 +68,6 @@ static bool IsStartOrSelectPressed() {
                                   game::pad::Button::Start, game::pad::Button::Select);
 }
 
-
 static void UiOcarinaScreenUpdate() {
   if (!game::ui::CheckCurrentScreen(game::ui::ScreenType::Ocarina))
     return;
@@ -98,19 +96,23 @@ void scan_shared_hid_inputs() {
 static void toggle_advance() {
   AdvanceState& advState = GetAdvState();
   scan_shared_hid_inputs();
-  //util::Print("%s: %d pressed is pressed and we are NOT normal. UNPAUSING", __func__, inputs.cur.val);
-  if ((inputs.pressed.val == (s32)(384)) && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
-    //util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
+
+  // util::Print("%s: %d pressed is pressed and we are NOT normal. UNPAUSING", __func__,
+  // inputs.cur.val);
+  if (advState.pauseUnpause && advState.advance_ctx_t.advance_state == advState.NORMAL &&
+      !advState.advance_ctx_t.d_down_latched) {
+    // util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
     advState.advance_ctx_t.advance_state = advState.PAUSED;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if ((inputs.pressed.val == (s32)(384)) && advState.advance_ctx_t.advance_state != advState.NORMAL) {
-    //util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
+  } else if (advState.pauseUnpause && advState.advance_ctx_t.advance_state != advState.NORMAL &&
+             !advState.advance_ctx_t.d_down_latched) {
+    // util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
     advState.advance_ctx_t.advance_state = advState.NORMAL;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if (advState.advance_ctx_t.advance_state == advState.NORMAL && (inputs.pressed.d_right)) {
-    //util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
+  } else if (advState.frameAdvance && advState.advance_ctx_t.advance_state == advState.NORMAL) {
+    // util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
     advState.advance_ctx_t.advance_state = advState.LATCHED;
-  } else if (inputs.pressed.val == (s32)(384)) {
+  } else if (!advState.pauseUnpause) {
     advState.advance_ctx_t.d_down_latched = 0;
   }
 }
@@ -119,23 +121,33 @@ static void frame_advance() {
   AdvanceState& advState = GetAdvState();
   // Check to advance
   toggle_advance();
-  if(advState.advance_ctx_t.advance_state == advState.STEP) {
-        if(inputs.pressed.d_right) {
-            advState.advance_ctx_t.advance_state = advState.LATCHED;
-        } else {
-            advState.advance_ctx_t.advance_state = advState.PAUSED;
-        }
-    }
-
-  while (advState.advance_ctx_t.advance_state == advState.PAUSED) {
-    
-    toggle_advance();
-    if (advState.advance_ctx_t.advance_state == advState.LATCHED && !inputs.pressed.d_right) {
+  if (advState.advance_ctx_t.advance_state == advState.STEP) {
+    if (advState.frameAdvance) {
+      advState.advance_ctx_t.advance_state = advState.LATCHED;
+      util::Print("%s: We are now latched!", __func__);
+    } else {
       advState.advance_ctx_t.advance_state = advState.PAUSED;
     }
-    if (advState.advance_ctx_t.advance_state == advState.PAUSED && inputs.pressed.d_right) {
+  }
+  
+  advState.pauseUnpause = false;
+  advState.frameAdvance = false;
+
+  while (advState.advance_ctx_t.advance_state == advState.PAUSED ||
+         advState.advance_ctx_t.advance_state == advState.LATCHED) {
+    scan_shared_hid_inputs();
+    Command_UpdateCommands(inputs.cur.val);
+    toggle_advance();
+    if (advState.advance_ctx_t.advance_state == advState.LATCHED && !advState.frameAdvance) {
+      util::Print("%s: We are now paused! Our state? %d", __func__,
+                  advState.advance_ctx_t.advance_state);
+      advState.advance_ctx_t.advance_state = advState.PAUSED;
+    }
+    if (advState.advance_ctx_t.advance_state == advState.PAUSED && advState.frameAdvance) {
       advState.advance_ctx_t.advance_state = advState.STEP;
     }
+    advState.pauseUnpause = false;
+    advState.frameAdvance = false;
     svcSleepThread(16e6);
   }
 }
@@ -149,13 +161,12 @@ static void freeze_unfreeze_time() {
   const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
   const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
   game::CommonData& cdata = game::GetCommonData();
-  if(zr && dpleft) {
+  if (zr && dpleft) {
     cdata.save.extra_time_speed = -2;
   }
-  if(zr && dpright) {
+  if (zr && dpright) {
     cdata.save.extra_time_speed += 1;
   }
-  
 }
 
 static void daychanger() {
@@ -169,9 +180,10 @@ static void daychanger() {
   game::CommonData& cdata = game::GetCommonData();
 
   // Advance day, if max days, loop back to 1.
-  if(zl && dpright) {
-    if(cdata.save.day <= cdata.save.total_day+1){
-      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day, cdata.save.day);
+  if (zl && dpright) {
+    if (cdata.save.day <= cdata.save.total_day + 1) {
+      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day,
+                  cdata.save.day);
       cdata.save.day++;
       return;
     } else {
@@ -179,9 +191,10 @@ static void daychanger() {
     }
   }
   // Advance day, if max days, loop back to 1.
-  if(zl && dpleft) {
-    if(cdata.save.day >= -1){
-      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day, cdata.save.day);
+  if (zl && dpleft) {
+    if (cdata.save.day >= -1) {
+      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day,
+                  cdata.save.day);
       cdata.save.day--;
       return;
     } else {
@@ -190,46 +203,20 @@ static void daychanger() {
   }
 }
 
-static void store_pos() {
-  auto* gctx = GetContext().gctx;
-  if (!gctx || gctx->type != game::StateType::Play)
-    return;
-
-  AdvanceState& advState = GetAdvState();
-
-  const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
-  const bool dpup = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Up);
-  const bool dpdown = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Down);
-  auto* player = gctx->GetPlayerActor();
-
-  // Store player position.
-  if(zl && dpup) {
-    advState.advance_ctx_t.storedPos = player->pos;
-    advState.advance_ctx_t.storedAngle = player->angle;
-  }
-  // Restore all positions to our stored positions and angle.
-  if(zl && dpdown) {
-    player->pos = advState.advance_ctx_t.storedPos;
-    player->initial_pos = advState.advance_ctx_t.storedPos;
-    player->target_pos = advState.advance_ctx_t.storedPos;
-    player->angle = advState.advance_ctx_t.storedAngle;
-  }
-}
-
 // Main entry hook in game loop.
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;
-  
+
   if (!context.has_initialised && state->type == game::StateType::FirstGame)
     Init(context);
-  if(state->type == game::StateType::FileSelect)
+  if (state->type == game::StateType::FileSelect)
     showTitle = true;
-  else 
+  else
     showTitle = false;
   if (state->type != game::StateType::Play)
     return;
-  
+
   context.gctx = static_cast<game::GlobalContext*>(state);
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
@@ -237,13 +224,11 @@ RST_HOOK void Calc(game::State* state) {
   scan_shared_hid_inputs();
   Command_UpdateCommands(inputs.cur.val);
   // Begin routines for MM3D Practice Patches.
-  // frame_advance();
+  frame_advance();
   // freeze_unfreeze_time();
   // daychanger();
   // store_pos();
   // End routines.
-
-  
 }
 
 RST_HOOK void DrawMenu() {
@@ -258,8 +243,7 @@ RST_HOOK void DrawMenu() {
 }
 
 RST_HOOK void PreActorCalcHook() {
-  
-  //FixOwlStatueActivationTrigger();
+  // FixOwlStatueActivationTrigger();
 }
 
 // RST_HOOK void PostActorCalcHook() {
@@ -288,7 +272,6 @@ RST_HOOK void UiScheduleTriggerHook() {
     gctx->pad_state.input.buttons.Clear(game::pad::Button::Select);
     gctx->pad_state.input.new_buttons.Clear(game::pad::Button::Select);
   }
-    
 }
 
 }  // namespace rst

@@ -14,6 +14,9 @@ struct AdvanceState {
     game::act::PosRot storedPos;
     u16 storedAngle;
   } advance_ctx_t;
+  bool pauseUnpause = false;
+  bool frameAdvance = false;
+  bool menuExitFlag = false;
 };
 
 typedef union {

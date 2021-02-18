@@ -166,11 +166,11 @@ static void Commands_ListInitDefaults(void){
     commandList[9].strict = 0;
 
     commandList[10].comboLen = 1; //Frame Advance
-    commandList[19].inputs[0] = BUTTON_DOWN;
+    commandList[10].inputs[0] = BUTTON_DOWN;
     commandList[10].strict = 0;
 
     for(u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i){
-        if (i != 0 && i != 1 && i != 3 && i != 8 && i != 9 && i != 10 && i != 11){
+        if (i != 0 && i != 1 && i != 3 && i != 7 && i != 8 && i != 9){
             commandList[i].comboLen = 0;
             commandList[i].strict = 0;
         }

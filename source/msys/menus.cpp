@@ -62,7 +62,7 @@ Menu pz3DMenu{
         // // { "File", .action_type=MENU, .menu=&FileMenu },
         // { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
         // { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
-        { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands },
+        { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands }
     }
 };
 

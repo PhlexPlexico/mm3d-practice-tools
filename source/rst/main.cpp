@@ -23,6 +23,7 @@ namespace rst {
 advance_input_t inputs = {};
 bool frameBufferInit = true;
 bool showTitle = true;
+AdvanceState& advState = GetAdvState();
 
 namespace {
 
@@ -94,7 +95,6 @@ void scan_shared_hid_inputs() {
 }
 
 static void toggle_advance() {
-  AdvanceState& advState = GetAdvState();
   scan_shared_hid_inputs();
 
   // util::Print("%s: %d pressed is pressed and we are NOT normal. UNPAUSING", __func__,
@@ -118,7 +118,6 @@ static void toggle_advance() {
 }
 
 static void frame_advance() {
-  AdvanceState& advState = GetAdvState();
   // Check to advance
   toggle_advance();
   if (advState.advance_ctx_t.advance_state == advState.STEP) {
@@ -129,7 +128,7 @@ static void frame_advance() {
       advState.advance_ctx_t.advance_state = advState.PAUSED;
     }
   }
-  
+
   advState.pauseUnpause = false;
   advState.frameAdvance = false;
 
@@ -156,16 +155,11 @@ static void freeze_unfreeze_time() {
   auto* gctx = GetContext().gctx;
   if (!gctx || gctx->type != game::StateType::Play)
     return;
-
-  const bool zr = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR);
-  const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
-  const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
   game::CommonData& cdata = game::GetCommonData();
-  if (zr && dpleft) {
+  if (advState.timeFreeze && cdata.save.extra_time_speed != -2) {
     cdata.save.extra_time_speed = -2;
-  }
-  if (zr && dpright) {
-    cdata.save.extra_time_speed += 1;
+  } else if (!advState.timeFreeze && cdata.save.extra_time_speed == -2) {
+    cdata.save.extra_time_speed = 0;
   }
 }
 
@@ -182,8 +176,6 @@ static void daychanger() {
   // Advance day, if max days, loop back to 1.
   if (zl && dpright) {
     if (cdata.save.day <= cdata.save.total_day + 1) {
-      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day,
-                  cdata.save.day);
       cdata.save.day++;
       return;
     } else {
@@ -216,8 +208,10 @@ RST_HOOK void Calc(game::State* state) {
     showTitle = false;
   if (state->type != game::StateType::Play)
     return;
+  //
 
   context.gctx = static_cast<game::GlobalContext*>(state);
+  game::CommonData& cdata = game::GetCommonData();
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.
@@ -225,7 +219,7 @@ RST_HOOK void Calc(game::State* state) {
   Command_UpdateCommands(inputs.cur.val);
   // Begin routines for MM3D Practice Patches.
   frame_advance();
-  // freeze_unfreeze_time();
+  freeze_unfreeze_time();
   // daychanger();
   // store_pos();
   // End routines.

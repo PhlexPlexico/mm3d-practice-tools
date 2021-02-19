@@ -13,7 +13,7 @@ static void Cheats_Health(void) {
 static void Cheats_Magic(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
   game::CommonData& cdata = game::GetCommonData();
-  cdata.save.player.magic = 0x30 * cdata.magic_max;
+  cdata.save.player.magic = cdata.magic_max;
 }
 
 // 13 = arrow

@@ -50,8 +50,6 @@ static void Command_RunFast(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
     link->lin_vel = 27.f;
-    game::CommonData& cdata = game::GetCommonData();
-    cdata.save.player.anonymous_18 = 1;
   }
 }
 

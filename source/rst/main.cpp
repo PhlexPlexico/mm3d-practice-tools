@@ -211,7 +211,6 @@ RST_HOOK void Calc(game::State* state) {
   //
   context.gctx = static_cast<game::GlobalContext*>(state);
   game::CommonData& cdata = game::GetCommonData();
-
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.

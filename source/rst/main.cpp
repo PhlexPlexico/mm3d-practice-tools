@@ -211,13 +211,7 @@ RST_HOOK void Calc(game::State* state) {
   //
   context.gctx = static_cast<game::GlobalContext*>(state);
   game::CommonData& cdata = game::GetCommonData();
-  
-  //13 = arrow
-  //18 = bombs
-  //19 bombchus
-  //20 is sticks!!!
-  //21 is nuts
-  util::Print("%s: Value field_31 is? %d", __func__, cdata.save.player.field_31);
+
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.

@@ -6,13 +6,13 @@
 
 static void Cheats_Health(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.player.health_current = cdata.save.player.health_max;
 }
 
 static void Cheats_Magic(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.player.magic = 0x30 * cdata.magic_max;
 }
 
@@ -23,31 +23,31 @@ static void Cheats_Magic(void) {
 // 21 is nuts
 static void Cheats_Sticks(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.inventory.item_counts[20] = 0x63;
 }
 
 static void Cheats_Nuts(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.inventory.item_counts[21] = 0x63;
 }
 
 static void Cheats_Bombs(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.inventory.item_counts[18] = 0x63;
 }
 
 static void Cheats_Arrows(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.inventory.item_counts[13] = 0x63;
 }
 
 static void Cheats_Bombchus(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.inventory.item_counts[19] = 0x63;
 }
 
@@ -58,7 +58,7 @@ static void Cheats_Beans(void) {
 
 static void Cheats_Rupees(void) {
   game::GlobalContext& context = *rst::GetContext().gctx;
-  game::CommonData cdata = game::GetCommonData();
+  game::CommonData& cdata = game::GetCommonData();
   cdata.save.player.rupee_count = 500;
 }
 

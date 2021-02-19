@@ -5,7 +5,7 @@
 #define COMMAND_COMBO_MAX 4
 #define COMMAND_COMBO_TIMEOUT 3
 #define COMMAND_MENU_MAX_SHOW 18
-#define COMMAND_NUM_COMMANDS 15
+#define COMMAND_NUM_COMMANDS 14
 
 typedef enum {
     COMMAND_HOLD_TYPE, //command works as long as combo is held

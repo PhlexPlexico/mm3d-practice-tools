@@ -100,6 +100,7 @@ add_executable(newcode
   msys/include/menus/warps.h
   msys/include/menus/watches.h
   msys/abi.cpp
+  msys/cheats.cpp
   msys/commands.cpp
   msys/draw.cpp
   msys/equips.cpp

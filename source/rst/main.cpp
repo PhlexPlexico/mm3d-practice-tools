@@ -163,37 +163,38 @@ static void freeze_unfreeze_time() {
   }
 }
 
-static void daychanger() {
-  auto* gctx = GetContext().gctx;
-  if (!gctx || gctx->type != game::StateType::Play)
-    return;
 
-  const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
-  const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
-  const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
-  game::CommonData& cdata = game::GetCommonData();
+// static void daychanger() {
+//   auto* gctx = GetContext().gctx;
+//   if (!gctx || gctx->type != game::StateType::Play)
+//     return;
 
-  // Advance day, if max days, loop back to 1.
-  if (zl && dpright) {
-    if (cdata.save.day <= cdata.save.total_day + 1) {
-      cdata.save.day++;
-      return;
-    } else {
-      cdata.save.day = 0;
-    }
-  }
-  // Advance day, if max days, loop back to 1.
-  if (zl && dpleft) {
-    if (cdata.save.day >= -1) {
-      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day,
-                  cdata.save.day);
-      cdata.save.day--;
-      return;
-    } else {
-      cdata.save.day = 0;
-    }
-  }
-}
+//   const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
+//   const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
+//   const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
+//   game::CommonData& cdata = game::GetCommonData();
+
+//   // Advance day, if max days, loop back to 1.
+//   if (zl && dpright) {
+//     if (cdata.save.day <= cdata.save.total_day + 1) {
+//       cdata.save.day++;
+//       return;
+//     } else {
+//       cdata.save.day = 0;
+//     }
+//   }
+//   // Advance day, if max days, loop back to 1.
+//   if (zl && dpleft) {
+//     if (cdata.save.day >= -1) {
+//       util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day,
+//                   cdata.save.day);
+//       cdata.save.day--;
+//       return;
+//     } else {
+//       cdata.save.day = 0;
+//     }
+//   }
+// }
 
 // Main entry hook in game loop.
 RST_HOOK void Calc(game::State* state) {
@@ -210,7 +211,6 @@ RST_HOOK void Calc(game::State* state) {
     return;
   //
   context.gctx = static_cast<game::GlobalContext*>(state);
-  game::CommonData& cdata = game::GetCommonData();
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.

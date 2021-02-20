@@ -54,7 +54,9 @@ static void Command_RunFast(void) {
 }
 
 static void Command_Reset(void) {
-  // TODO
+  GetContext();
+  //Could be file select or title screen?
+  context.gctx->ChangeState(game::StateType::FileSelect);
 }
 
 static void Command_ReloadScene(void) {
@@ -63,7 +65,6 @@ static void Command_ReloadScene(void) {
     return;
 
   game::CommonData& cdata = game::GetCommonData();
-  
   context.gctx->next_entrance = cdata.sub1.entrance;
   context.gctx->field_C529_one_to_clear_input = 0x14;
 }
@@ -116,7 +117,6 @@ static void Command_HitboxView(void) {
 
 static void Command_ToggleWatches(void) {
   // TODO: Get watches working.
-  
 }
 
 static void Command_ToggleFreeze(void) {
@@ -158,6 +158,11 @@ static void Commands_ListInitDefaults(void) {
   commandList[3].inputs[0] = BUTTON_Y;
   commandList[3].strict = 0;
 
+  commandList[4].comboLen = 1;  // Run Fast
+  commandList[4].inputs[0] = BUTTON_Y;
+  commandList[4].inputs[1] = (BUTTON_Y | BUTTON_A);
+  commandList[4].strict = 0;
+
   commandList[7].comboLen = 2;  // Store Pos
   commandList[7].inputs[0] = BUTTON_L1;
   commandList[7].inputs[1] = BUTTON_LEFT;
@@ -181,7 +186,7 @@ static void Commands_ListInitDefaults(void) {
   commandList[13].strict = 0;
 
   for (u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i) {
-    if (i != 0 && i != 1 && i != 3 && i != 7 && i != 8 && i != 9 && i != 10 && i != 13) {
+    if (i != 0 && i != 1 && i != 3 && i != 4 && i != 7 && i != 8 && i != 9 && i != 10 && i != 13) {
       commandList[i].comboLen = 0;
       commandList[i].strict = 0;
     }

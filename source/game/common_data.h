@@ -477,7 +477,7 @@ struct CommonDataSub12 {
 };
 
 struct RespawnData {
-  Vec3 pos;
+  Vec3 pos; 
   s16 yaw;
   s16 player_params;
   s16 entrance_index;
@@ -490,7 +490,7 @@ struct RespawnData {
   u8 btn_i_can_use_item;
   //u32 stored_mask_id_maybe;
   u32 temp_collect_flags_maybe;
-};
+}; //0x20
 
 enum class UsableButton : u8 {
   B = 0,
@@ -574,7 +574,7 @@ struct CommonData {
   int setup;
   int setup2;
   int field_13624;
-  RespawnData sub13s[8];
+  RespawnData sub13s[9];
   u32 field_13728;
   int field_1372C;
   char field_13730;
@@ -623,7 +623,7 @@ struct CommonData {
   u16 field_140F2;
   int field_140F4;
 };
-static_assert(sizeof(CommonData) == 0x140F8);
+static_assert(sizeof(CommonData) == 0x14118);
 
 CommonData& GetCommonData();
 

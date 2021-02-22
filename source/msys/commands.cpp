@@ -63,6 +63,7 @@ static void Command_ReloadScene(void) {
     return;
   
   game::CommonData& cdata = game::GetCommonData();
+  rst::util::Print("%s: Our entrance in sub1 is: %x and our entrance index is: %x", __func__, cdata.sub1.entrance, cdata.sub13s[8].entrance_index);
   EntranceWarp(cdata.sub1.entrance);
   //context.gctx->next_entrance = cdata.sub1.entrance;
   //context.gctx->field_C529_one_to_clear_input = 0x14;
@@ -128,7 +129,7 @@ static Command commandList[] = {
     {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
     {"Fall (TODO)", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
-    {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
+    {"Run Fast", 0, 0, {0}, Command_ReloadScene, COMMAND_HOLD_TYPE, 0, 0},
     {"Reset", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},

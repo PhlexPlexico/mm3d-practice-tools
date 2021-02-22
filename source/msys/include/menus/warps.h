@@ -13,8 +13,7 @@ extern Menu WarpsPlacesMenu;
 // extern WarpsSceneMenu WarpsPlacesMiscMenu;
 // extern WarpsSceneMenu WarpsPlacesOverworldMenu;
 
-// void WarpsPlacesMenuShow(void);
-// void ClearCutscenePointer(void);
+void WarpsPlacesMenuShow(void);
 
 // enum {
 //     Manual_Entrance_Menu_Age,

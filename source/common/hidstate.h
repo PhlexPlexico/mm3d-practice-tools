@@ -18,6 +18,7 @@ struct AdvanceState {
   bool frameAdvance = false;
   bool menuExitFlag = false;
   bool timeFreeze = false;
+  bool showWatches = false;
 };
 
 typedef union {

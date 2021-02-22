@@ -5,6 +5,7 @@
 #include "msys/include/menu.h"
 #include "msys/include/menus/watches.h"
 #include "msys/include/draw.h"
+#include "../common/hidstate.h"
 #include <stdio.h>
 #include <string.h>
 
@@ -208,12 +209,21 @@ static bool is_valid_memory_read(const MemInfo* info) {
     return (info->perm & MEMPERM_READ) != 0;
 }
 
+void toggleWatches() {
+    rst::AdvanceState& advState = rst::GetAdvState();
+    for(u32 i = 0; i < WATCHES_MAX; i++) {
+        if (watches[i].addr != NULL)
+            watches[i].display = (u32)advState.showWatches;
+    }
+}
+
 void drawWatches() {
+    bool isDisplayed = false;
     for(u32 i = 0; i < WATCHES_MAX; ++i) {
         if (!watches[i].display) {
             continue;
         }
-
+        isDisplayed = true;
         // Skip attempting to draw the address if it would otherwise be an invalid read.
         // Attempting to read these locations would crash the game.
         const MemInfo address_info = query_memory_permissions((u32)watches[i].addr);
@@ -286,5 +296,6 @@ void drawWatches() {
             }
         }
     }
-    Draw_FlushFramebuffer();
+    if(isDisplayed)
+        Draw_FlushFramebuffer();
 }

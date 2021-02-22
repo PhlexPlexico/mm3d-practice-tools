@@ -106,6 +106,7 @@ struct SaveData {
   MaskId mask;
   bool has_completed_intro;
   char unused;
+  // Possible cutscene ID?
   char anonymous_0;
   bool is_night;
   /// Number of extra time units to add per game tick (0 normally; -1 with ISoT)
@@ -475,19 +476,20 @@ struct CommonDataSub12 {
   int field_14;
 };
 
-// Possible RespawnData Struct?
-struct CommonDataSub13 {
-  u32 field_C;
-  u32 field_10;
-  u32 field_14;
-  u16 field_18;
-  u16 field_1A;
-  u16 field_1C;
-  char field_1E;
-  char field_1F;
-  u32 field_20;
-  u32 field_24;
-  u32 field_28;
+struct RespawnData {
+  Vec3 pos;
+  s16 yaw;
+  s16 player_params;
+  s16 entrance_index;
+  u8 room_index;
+  s8 data;
+  u32 temp_swch_flags_maybe;
+  u8 field_1;
+  u8 btn_y_can_use_item;
+  u8 btn_x_can_use_item;
+  u8 btn_i_can_use_item;
+  //u32 stored_mask_id_maybe;
+  u32 temp_collect_flags_maybe;
 };
 
 enum class UsableButton : u8 {
@@ -572,7 +574,7 @@ struct CommonData {
   int setup;
   int setup2;
   int field_13624;
-  CommonDataSub13 sub13s[8];
+  RespawnData sub13s[8];
   u32 field_13728;
   int field_1372C;
   char field_13730;

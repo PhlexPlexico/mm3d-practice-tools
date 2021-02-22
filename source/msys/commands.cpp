@@ -1,4 +1,5 @@
 #include "msys/include/menus/commands.h"
+#include "msys/include/entrances.h"
 #include "common/context.h"
 #include "common/hidstate.h"
 #include "common/utils.h"
@@ -60,10 +61,11 @@ static void Command_ReloadScene(void) {
   GetContext();
   if (!context.gctx || context.gctx->type != game::StateType::Play)
     return;
-
+  
   game::CommonData& cdata = game::GetCommonData();
-  context.gctx->next_entrance = cdata.sub1.entrance;
-  context.gctx->field_C529_one_to_clear_input = 0x14;
+  EntranceWarp(cdata.sub1.entrance);
+  //context.gctx->next_entrance = cdata.sub1.entrance;
+  //context.gctx->field_C529_one_to_clear_input = 0x14;
 }
 
 static void Command_VoidOut(void) {
@@ -114,7 +116,8 @@ static void Command_HitboxView(void) {
 }
 
 static void Command_ToggleWatches(void) {
-  // TODO: Get watches working.
+  advState.showWatches = !advState.showWatches;
+  toggleWatches();
 }
 
 static void Command_ToggleFreeze(void) {
@@ -126,9 +129,9 @@ static Command commandList[] = {
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
     {"Fall (TODO)", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
     {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
-    {"Reset (TODO)", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Reset", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
-    {"Void Out (TODO)", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Store Position", 0, 0, {0}, Command_StorePos, COMMAND_PRESS_TYPE, 0, 0},
     {"Load Position", 0, 0, {0}, Command_LoadPos, COMMAND_PRESS_TYPE, 0, 0},
     // {"Previous Position", 0, 0, { 0 }, Command_PreviousPos, COMMAND_PRESS_TYPE, 0},
@@ -136,7 +139,7 @@ static Command commandList[] = {
     {"Pause/Unpause", 0, 0, {0}, Command_PauseUnpause, COMMAND_PRESS_TYPE, 0, 0},
     {"Frame Advance", 0, 0, {0}, Command_FrameAdvance, COMMAND_PRESS_TYPE, 0, 0},
     {"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
-    {"Toggle Watches (TODO)", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
+    {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
     {"Toggle Freeze Time", 0, 0, {0}, Command_ToggleFreeze, COMMAND_PRESS_ONCE_TYPE, 0, 0},
 };
 
@@ -156,7 +159,7 @@ static void Commands_ListInitDefaults(void) {
   commandList[3].inputs[0] = BUTTON_Y;
   commandList[3].strict = 0;
 
-  commandList[4].comboLen = 1;  // Run Fast
+  commandList[4].comboLen = 2;  // Goto File Select
   commandList[4].inputs[0] = BUTTON_Y;
   commandList[4].inputs[1] = (BUTTON_Y | BUTTON_A);
   commandList[4].strict = 0;

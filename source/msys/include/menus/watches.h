@@ -29,7 +29,7 @@ typedef struct Watch {
     u32 posX;
     u32 posY;
     void* addr;
-    u8 display; //whether to display on top screen
+    u8 display; //whether to display on bottom screen
     char name[WATCHES_MAXNAME + 1];
 } Watch;
 
@@ -38,3 +38,4 @@ extern Watch watches[WATCHES_MAX];
 void WatchesMenuFunc(void);
 void Watches_ToggleWatches(void);
 void drawWatches();
+void toggleWatches();

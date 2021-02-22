@@ -31,7 +31,7 @@ namespace {
 void Init(Context& context) {
   // link::Init();
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
-  game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_QUEST_CLEAR);
+  game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_PREDEMO_OMEN);
   context.has_initialised = true;
 }
 
@@ -151,54 +151,6 @@ static void frame_advance() {
   }
 }
 
-static void freeze_unfreeze_time() {
-  auto* gctx = GetContext().gctx;
-  if (!gctx || gctx->type != game::StateType::Play)
-    return;
-  game::CommonData& cdata = game::GetCommonData();
-  if (advState.timeFreeze && cdata.save.extra_time_speed != -2) {
-    cdata.save.extra_time_speed = -2;
-  } else if (!advState.timeFreeze && cdata.save.extra_time_speed == -2) {
-    cdata.save.extra_time_speed = 0;
-  }
-}
-
-
-
-
-
-// static void daychanger() {
-//   auto* gctx = GetContext().gctx;
-//   if (!gctx || gctx->type != game::StateType::Play)
-//     return;
-
-//   const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
-//   const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
-//   const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
-//   game::CommonData& cdata = game::GetCommonData();
-
-//   // Advance day, if max days, loop back to 1.
-//   if (zl && dpright) {
-//     if (cdata.save.day <= cdata.save.total_day + 1) {
-//       cdata.save.day++;
-//       return;
-//     } else {
-//       cdata.save.day = 0;
-//     }
-//   }
-//   // Advance day, if max days, loop back to 1.
-//   if (zl && dpleft) {
-//     if (cdata.save.day >= -1) {
-//       util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day,
-//                   cdata.save.day);
-//       cdata.save.day--;
-//       return;
-//     } else {
-//       cdata.save.day = 0;
-//     }
-//   }
-// }
-
 // Main entry hook in game loop.
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
@@ -214,19 +166,16 @@ RST_HOOK void Calc(game::State* state) {
     return;
   //
   context.gctx = static_cast<game::GlobalContext*>(state);
-  //game::CommonData& cdata = game::GetCommonData();
-  //util::Print("%s: What's this? %s", __func__, cdata.save.anonymous_a);
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.
+  // Begin routines for MM3D Practice Patches.
+  // Rest of functionality is included in Commands, menu, watches, etc. 
+  // In msys/
   scan_shared_hid_inputs();
   Command_UpdateCommands(inputs.cur.val);
-  // Begin routines for MM3D Practice Patches.
   frame_advance();
-  freeze_unfreeze_time();
   drawWatches();
-  // daychanger();
-  // store_pos();
   // End routines.
 }
 

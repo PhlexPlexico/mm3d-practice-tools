@@ -4,5 +4,8 @@
 
 extern Menu CheatsMenu;
 extern Menu CheatsItemsMenu;
-extern Menu CheatsKeysMenu;
+// TODO: Give keys in temples?
+//extern Menu CheatsKeysMenu;
 extern Menu TimeChangeMenu;
+extern Menu TimeSpeedMenu;
+extern Menu DayChangeMenu;

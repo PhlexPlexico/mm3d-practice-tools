@@ -81,6 +81,7 @@ add_executable(newcode
   msys/include/3ds/services/gspgpu.h
   msys/include/csvc.h
   msys/include/draw.h
+  msys/include/entrances.h
   msys/include/fmt.h
   msys/include/menu.h
   msys/include/menus.h
@@ -104,11 +105,13 @@ add_executable(newcode
   msys/commands.cpp
   msys/draw.cpp
   msys/equips.cpp
+  msys/entrances.cpp
   msys/menu.cpp
   msys/menus.cpp
   msys/MyThread.cpp
   msys/synchronization.cpp
   msys/svc_loader.s
+  msys/warps.cpp
   msys/watches.cpp
   # msys/svc_menus.s
   # rst/camera.cpp

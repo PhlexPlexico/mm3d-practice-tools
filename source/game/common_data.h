@@ -475,6 +475,7 @@ struct CommonDataSub12 {
   int field_14;
 };
 
+// Possible RespawnData Struct?
 struct CommonDataSub13 {
   u32 field_C;
   u32 field_10;

@@ -109,6 +109,7 @@ add_executable(newcode
   msys/MyThread.cpp
   msys/synchronization.cpp
   msys/svc_loader.s
+  msys/watches.cpp
   # msys/svc_menus.s
   # rst/camera.cpp
   # rst/camera.h

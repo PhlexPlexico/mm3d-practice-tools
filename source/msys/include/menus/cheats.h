@@ -5,3 +5,4 @@
 extern Menu CheatsMenu;
 extern Menu CheatsItemsMenu;
 extern Menu CheatsKeysMenu;
+extern Menu TimeChangeMenu;

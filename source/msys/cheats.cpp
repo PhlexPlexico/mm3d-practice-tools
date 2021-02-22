@@ -62,6 +62,30 @@ static void Cheats_UseItemsEverywhere(void) {
   // TODO
 }
 
+static void TimeAdvance_6AM(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.time = 0x4000;
+  cdata.save.is_night = false;
+}
+
+static void TimeAdvance_12PM(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.time = 0x8000;
+  cdata.save.is_night = false;
+}
+
+static void TimeAdvance_6PM(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.time = 0xC000;
+  cdata.save.is_night = false;
+}
+
+static void TimeAdvance_12AM(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.time = 0x0000;
+  cdata.save.is_night = false;
+}
+
 Menu CheatsMenu = {
     .title = "Cheats",
     .nbItems = 6,
@@ -70,7 +94,7 @@ Menu CheatsMenu = {
         {.title = "Refill Magic", .action_type = METHOD, .method = Cheats_Magic},
         {.title = "Refill Items", .action_type = MENU, .menu = &CheatsItemsMenu},
         {.title = "Refill Rupees", .action_type = METHOD, .method = Cheats_Rupees},
-        {.title = "Change Time of Day (TODO)", .action_type = METHOD, .method = Cheats_FreezeTime},
+        {.title = "Change Time of Day", .action_type = MENU, .menu = &TimeChangeMenu},
         {.title = "Usable Items (TODO)",
          .action_type = METHOD,
          .method = Cheats_UseItemsEverywhere
@@ -89,4 +113,15 @@ Menu CheatsItemsMenu = {
         {.title = "Refill Bombchus", .action_type = METHOD, .method = Cheats_Bombchus},
         {.title = "Refill Beans (TODO)", .action_type = METHOD, .method = Cheats_Beans},
     }
+};
+
+Menu TimeChangeMenu = {
+  .title = "Change Time of Day",
+  .nbItems = 4,
+  .items = {
+    {.title="6AM", .action_type = METHOD, .method = TimeAdvance_6AM},
+    {.title="12PM", .action_type = METHOD, .method = TimeAdvance_12PM},
+    {.title="6PM", .action_type = METHOD, .method = TimeAdvance_6PM},
+    {.title="12AM", .action_type = METHOD, .method = TimeAdvance_12AM}
+  }
 };

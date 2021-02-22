@@ -18,6 +18,13 @@ typedef enum {
     F32,
 } WatchType;
 
+// Special behavior for WatchType++
+inline WatchType operator++( WatchType &c, int ) {
+  WatchType result = c;
+  c++;
+  return result;
+}
+
 typedef struct Watch {
     WatchType type;
     u32 posX;

@@ -17,6 +17,7 @@
 #include "msys/include/draw.h"
 #include "msys/include/menu.h"
 #include "msys/include/menus/commands.h"
+#include "msys/include/menus/watches.h"
 
 namespace rst {
 
@@ -29,7 +30,6 @@ namespace {
 
 void Init(Context& context) {
   // link::Init();
-
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
   game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_QUEST_CLEAR);
   context.has_initialised = true;
@@ -164,6 +164,9 @@ static void freeze_unfreeze_time() {
 }
 
 
+
+
+
 // static void daychanger() {
 //   auto* gctx = GetContext().gctx;
 //   if (!gctx || gctx->type != game::StateType::Play)
@@ -211,6 +214,8 @@ RST_HOOK void Calc(game::State* state) {
     return;
   //
   context.gctx = static_cast<game::GlobalContext*>(state);
+  //game::CommonData& cdata = game::GetCommonData();
+  //util::Print("%s: What's this? %s", __func__, cdata.save.anonymous_a);
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.
@@ -219,6 +224,7 @@ RST_HOOK void Calc(game::State* state) {
   // Begin routines for MM3D Practice Patches.
   frame_advance();
   freeze_unfreeze_time();
+  drawWatches();
   // daychanger();
   // store_pos();
   // End routines.

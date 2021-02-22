@@ -19,10 +19,9 @@ typedef enum {
 } WatchType;
 
 // Special behavior for WatchType++
-inline WatchType operator++( WatchType &c, int ) {
-  WatchType result = c;
-  c++;
-  return result;
+inline WatchType operator++(WatchType &c, int) {
+  c = (c == WatchType::F32) ? WatchType::S8 : WatchType(int(c) + 1);
+  return c;
 }
 
 typedef struct Watch {
@@ -38,3 +37,4 @@ extern Watch watches[WATCHES_MAX];
 
 void WatchesMenuFunc(void);
 void Watches_ToggleWatches(void);
+void drawWatches();

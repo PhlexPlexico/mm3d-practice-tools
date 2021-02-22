@@ -10,9 +10,6 @@
 #include "msys/include/menus/warps.h"
 #include "msys/include/menus/watches.h"
 
-// u32 pauseUnpause = 0; //tells main to pause/unpause
-// u32 frameAdvance = 0; //tells main to frame advance
-// u32 menuExitFlag = 0; // Redef from header.
 rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
 
@@ -55,7 +52,7 @@ static void Command_RunFast(void) {
 
 static void Command_Reset(void) {
   GetContext();
-  //Could be file select or title screen?
+  // Could be file select or title screen? File Select works for now since important flags seem to reset?
   context.gctx->ChangeState(game::StateType::FileSelect);
 }
 
@@ -70,7 +67,8 @@ static void Command_ReloadScene(void) {
 }
 
 static void Command_VoidOut(void) {
-  // TODO: Figure out how voiding works, specfic flags needed.
+  GetContext();
+  context.gctx->VoidPlayer();
 }
 
 // static void Command_SaveState(void);

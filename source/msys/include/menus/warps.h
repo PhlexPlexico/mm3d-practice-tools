@@ -16,7 +16,7 @@ extern WarpsSceneMenu WarpsPlacesOverworldMenu;
 void WarpsPlacesMenuShow(void);
 
 enum {
-    Manual_Entrance_Menu_CsIdx,
+    //Manual_Entrance_Menu_CsIdx,
     Manual_Entrance_Menu_EtcIdx,
     Manual_Entrance_Menu_Go,
 };

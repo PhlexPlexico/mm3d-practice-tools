@@ -151,7 +151,7 @@ WarpsSceneMenu WarpsPlacesTownsMenu = {
 
 WarpsSceneMenu WarpsPlacesHousesMenu = {
     .title="Houses",
-    .nbItems = 0,
+    .nbItems = 1,
     .scenes={
         {"00: Mayor's House", &Entrances_Mayors_Residence}
     }
@@ -167,7 +167,7 @@ const WarpsPlacesMenuEntry placesMenuEntries[] = {
     {"Overworld", &WarpsPlacesOverworldMenu},
 };
 
-const s32 WarpsPlacesMenuSize = 1;
+const s32 WarpsPlacesMenuSize = 2;
 
 void WarpsPlacesMenuShow(void){
     s32 selected = 0;
@@ -241,7 +241,7 @@ void ManuallyEnterEntranceIndex(void){
         Draw_Lock();
         Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Manually Enter Entrance Index");
 
-        Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_CsIdx, COLOR_TITLE, selected == Manual_Entrance_Menu_CsIdx ? '>' : ' ');
+        //Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_CsIdx, COLOR_TITLE, selected == Manual_Entrance_Menu_CsIdx ? '>' : ' ');
 
         Draw_DrawFormattedString(30, 30 + SPACING_Y * Manual_Entrance_Menu_EtcIdx, COLOR_WHITE,
             "Entrance Index: 0x%04X", chosenIndex);
@@ -262,7 +262,7 @@ void ManuallyEnterEntranceIndex(void){
         }
         else if(pressed & BUTTON_A && !chosen)
         {
-            if(selected == Manual_Entrance_Menu_CsIdx || selected == Manual_Entrance_Menu_EtcIdx){
+            if(selected == Manual_Entrance_Menu_EtcIdx){
                 chosen = 1;
             }
             else if(selected == Manual_Entrance_Menu_Go){

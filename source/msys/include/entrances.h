@@ -52,16 +52,16 @@ const EntrancesByScene Entrances_Swamp_Poison = {
     .nbItems = 10,
     .items = {
         {0x8400, "From Road to Southern Swamp"},
-        {0x8401, "From Tourist Information"},
-        {0x8402, "From Woodfall"},
-        {0x8403, "Deku Palace"},
-        {0x8404, "Deku Palace (Shortcut)"},
-        {0x8405, "Hag's Potion Shop"},
-        {0x8406, "From Starting Boat Cruise"},
-        {0x8407, "From Woods of Mystery"},
-        {0x8408, "from Swamp Spiderhouse"},
-        {0x8409, "From Ikana Canyon"},
-        {0x840A, "From Owl Statue"}
+        {0x8410, "From Tourist Information"},
+        {0x8420, "From Woodfall"},
+        {0x8430, "Deku Palace"},
+        {0x8440, "Deku Palace (Shortcut)"},
+        {0x8450, "Hag's Potion Shop"},
+        {0x8460, "From Starting Boat Cruise"},
+        {0x8470, "From Woods of Mystery"},
+        {0x8480, "from Swamp Spiderhouse"},
+        {0x8490, "From Ikana Canyon"},
+        {0x84A0, "From Owl Statue"}
     }
 };
 

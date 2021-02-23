@@ -47,7 +47,7 @@ Menu pz3DMenu{
     .title="MM3D Practice Menu",
     .nbItems=4,
     .items{
-        // { .title="Warps (TODO)", .action_type=MENU, .menu=&WarpsMenu },
+        { .title="Warps (TODO)", .action_type=MENU, .menu=&WarpsMenu },
         // { .title="Scene", .action_type=MENU, .menu=&SceneMenu },
         { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
         // { .title="Inventory", .action_type=MENU, .menu=&InventoryMenu },

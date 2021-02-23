@@ -37,17 +37,35 @@ void WarpsSceneMenuShow(const WarpsSceneMenu* menu);
 
 void ManuallyEnterEntranceIndex(void);
 
-const EntrancesByScene Entrances_Swamp = {
-    .title = "Swamp Entrances",
-    .nbItems = 5,
+const EntrancesByScene Entrances_Mayors_Residence = {
+    .title = "Mayor's Residence",
+    .nbItems = 3,
     .items = {
-        {0x00, "Southern Swamp Clear"},
-        {0x0A, "From Potion Shop"},
-        {0x0398, "From Bombchu Shop"},
-        {0x029A, "From Market (Left Side)"},
-        {0x00AD, "From Market (Right Side)"},
+        {0x0000, "From East Clock Town"},
+        {0x0001, "From After Couple's Mask"},
+        {0x0002, "Crash"}
     }
 };
+
+const EntrancesByScene Entrances_Swamp_Poison = {
+    .title = "Poison Swamp Entrances",
+    .nbItems = 10,
+    .items = {
+        {0x8400, "From Road to Southern Swamp"},
+        {0x8401, "From Tourist Information"},
+        {0x8402, "From Woodfall"},
+        {0x8403, "Deku Palace"},
+        {0x8404, "Deku Palace (Shortcut)"},
+        {0x8405, "Hag's Potion Shop"},
+        {0x8406, "From Starting Boat Cruise"},
+        {0x8407, "From Woods of Mystery"},
+        {0x8408, "from Swamp Spiderhouse"},
+        {0x8409, "From Ikana Canyon"},
+        {0x840A, "From Owl Statue"}
+    }
+};
+
+
 
 enum {
     Entrance_Select_Menu_CsIdx,

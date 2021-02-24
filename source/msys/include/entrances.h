@@ -47,6 +47,22 @@ const EntrancesByScene Entrances_Mayors_Residence = {
     }
 };
 
+const EntrancesByScene Entrances_Majoras_Lair = {
+    .title = "Majora's Lair",
+    .nbItems = 1,
+    .items = {
+        {0x0200, "From Moon"}
+    }
+};
+
+const EntrancesByScene Entrances_Hags_Potion_Shop = {
+    .title = "Hag's Potion Shop",
+    .nbItems = 1,
+    .items = {
+        {0x0400, "From Southern Swamp"}
+    }
+};
+
 const EntrancesByScene Entrances_Swamp_Poison = {
     .title = "Poison Swamp Entrances",
     .nbItems = 10,
@@ -63,11 +79,4 @@ const EntrancesByScene Entrances_Swamp_Poison = {
         {0x8490, "From Ikana Canyon"},
         {0x84A0, "From Owl Statue"}
     }
-};
-
-
-
-enum {
-    Entrance_Select_Menu_CsIdx,
-    Entrance_Select_Menu_Etcs,
 };

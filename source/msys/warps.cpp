@@ -149,6 +149,30 @@ WarpsSceneMenu WarpsPlacesTownsMenu = {
     }
 };
 
+WarpsSceneMenu WarpsPlacesDungeonsMenu = {
+    .title="Dungeons",
+    .nbItems = 0,
+    .scenes={
+        
+    }
+};
+
+WarpsSceneMenu WarpsPlacesBossesMenu = {
+    .title="Boss Rooms",
+    .nbItems = 1,
+    .scenes={
+         {"01: Majora's Lair", &Entrances_Majoras_Lair}
+    }
+};
+
+WarpsSceneMenu WarpsPlacesShopsMenu = {
+    .title="Shops",
+    .nbItems = 1,
+    .scenes={
+        {"02: Hag's Potion Shop", &Entrances_Hags_Potion_Shop}
+    }
+};
+
 WarpsSceneMenu WarpsPlacesHousesMenu = {
     .title="Houses",
     .nbItems = 1,
@@ -157,17 +181,25 @@ WarpsSceneMenu WarpsPlacesHousesMenu = {
     }
 };
 
+WarpsSceneMenu WarpsPlacesMiscMenu = {
+    .title="Misc Places",
+    .nbItems = 0,
+    .scenes={
+       
+    }
+};
+
 const WarpsPlacesMenuEntry placesMenuEntries[] = {
-    // {"Dungeons", &WarpsPlacesDungeonsMenu},
-    // {"Bosses", &WarpsPlacesBossesMenu},
+    {"Dungeons", &WarpsPlacesDungeonsMenu},
+    {"Bosses", &WarpsPlacesBossesMenu},
     {"Towns", &WarpsPlacesTownsMenu},
-    // {"Houses", &WarpsPlacesHousesMenu},
-    // {"Shops", &WarpsPlacesShopsMenu},
-    // {"Misc", &WarpsPlacesMiscMenu},
+    {"Houses", &WarpsPlacesHousesMenu},
+    {"Shops", &WarpsPlacesShopsMenu},
+    {"Misc", &WarpsPlacesMiscMenu},
     {"Overworld", &WarpsPlacesOverworldMenu},
 };
 
-const s32 WarpsPlacesMenuSize = 2;
+const s32 WarpsPlacesMenuSize = 7;
 
 void WarpsPlacesMenuShow(void){
     s32 selected = 0;

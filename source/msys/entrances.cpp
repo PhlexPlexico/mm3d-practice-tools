@@ -24,7 +24,6 @@ void EntranceWarp(u16 EntranceIndex){
 
 void EntranceSelectMenuShow(const EntrancesByScene* entrances){
     s32 selected = 0, page = 0, pagePrev = 0;
-    u32 chosen = 0;
 
     Draw_Lock();
     Draw_ClearFramebuffer();
@@ -39,52 +38,40 @@ void EntranceSelectMenuShow(const EntrancesByScene* entrances){
             Draw_ClearFramebuffer();
         }
         Draw_DrawFormattedString(10, 10, COLOR_TITLE, entrances->title);
-
         for (u32 i = 0; i < ENTRANCE_MENU_MAX_SHOW && page * ENTRANCE_MENU_MAX_SHOW + i < entrances->nbItems; ++i)
         {
             s32 j = page * ENTRANCE_MENU_MAX_SHOW + i;
-            Draw_DrawString(45, 30 + (Entrance_Select_Menu_Etcs + i) * SPACING_Y, COLOR_WHITE, entrances->items[j].title);
-            Draw_DrawCharacter(10, 30 + (Entrance_Select_Menu_Etcs + i) * SPACING_Y, COLOR_TITLE, selected == (Entrance_Select_Menu_Etcs + j) ? '>' : ' ');
+            Draw_DrawString(30, 30 + (i) * SPACING_Y, COLOR_WHITE, entrances->items[j].title);
+            Draw_DrawCharacter(10, 30 + (i) * SPACING_Y, COLOR_TITLE, selected == (j) ? '>' : ' ');
         }
 
         Draw_FlushFramebuffer();
         Draw_Unlock();
 
         u32 pressed = waitInputWithTimeout(1000);
-        if((pressed & BUTTON_B) && !chosen)
+        if(pressed & BUTTON_B)
             break;
-        else if((pressed & BUTTON_B) && chosen)
+        else if(pressed & BUTTON_A)
         {
-            chosen = 0;
+            EntranceWarp(entrances->items[selected].entranceIndex);
+            svcExitThread();
+            break;
         }
-        else if((pressed & BUTTON_A) && !chosen)
-        {
-            if(selected == Entrance_Select_Menu_CsIdx){
-                chosen = 1;
-            }
-            else if(selected >= Entrance_Select_Menu_Etcs){
-                EntranceWarp(entrances->items[selected - Entrance_Select_Menu_Etcs].entranceIndex);
-                svcExitThread();
-                break;
-            }
-        }
-        else if((pressed & BUTTON_A) && chosen) //should be guaranteed selected == 1
-        {
-            chosen = 0;
-        }
-        else if((pressed & BUTTON_DOWN) && !chosen)
+        else if(pressed & BUTTON_DOWN)
         {
             selected++;
         }
-        else if((pressed & BUTTON_UP) && !chosen)
+        else if(pressed & BUTTON_UP)
         {
             selected--;
         }
         if(selected < 0)
-            selected = Entrance_Select_Menu_Etcs + entrances->nbItems - 1;
+            selected = entrances->nbItems - 1;
+        else if (selected >= (int)entrances->nbItems)
+            selected = 0; 
 
         pagePrev = page;
-        page = selected >= ENTRANCE_MENU_MAX_SHOW + Entrance_Select_Menu_Etcs ? 1 : 0;
+        page = selected >= ENTRANCE_MENU_MAX_SHOW ? 1 : 0;
     } while(true);
 }
 

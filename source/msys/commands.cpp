@@ -130,7 +130,7 @@ static Command commandList[] = {
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
     {"Fall (TODO)", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
     {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
-    {"Reset", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Store Position", 0, 0, {0}, Command_StorePos, COMMAND_PRESS_TYPE, 0, 0},

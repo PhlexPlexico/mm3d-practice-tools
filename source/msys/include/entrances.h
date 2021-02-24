@@ -39,11 +39,10 @@ void ManuallyEnterEntranceIndex(void);
 
 const EntrancesByScene Entrances_Mayors_Residence = {
     .title = "Mayor's Residence",
-    .nbItems = 3,
+    .nbItems = 2,
     .items = {
         {0x0000, "From East Clock Town"},
-        {0x0001, "From After Couple's Mask"},
-        {0x0002, "Crash"}
+        {0x0001, "From After Couple's Mask"}
     }
 };
 
@@ -52,6 +51,15 @@ const EntrancesByScene Entrances_Majoras_Lair = {
     .nbItems = 1,
     .items = {
         {0x0200, "From Moon"}
+    }
+};
+
+const EntrancesByScene Entrances_Ranch = {
+    .title = "Romani Ranch Buildings",
+    .nbItems = 2,
+    .items = {
+        {0x0600, "Barn From Ranch"},
+        {0x0610, "House From Ranch"}
     }
 };
 

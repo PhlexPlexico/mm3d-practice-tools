@@ -175,9 +175,10 @@ WarpsSceneMenu WarpsPlacesShopsMenu = {
 
 WarpsSceneMenu WarpsPlacesHousesMenu = {
     .title="Houses",
-    .nbItems = 1,
+    .nbItems = 2,
     .scenes={
-        {"00: Mayor's House", &Entrances_Mayors_Residence}
+        {"00: Mayor's House", &Entrances_Mayors_Residence},
+        {"03: Mama's House & Barn", &Entrances_Ranch}
     }
 };
 

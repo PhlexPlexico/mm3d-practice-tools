@@ -9,6 +9,19 @@
 
 namespace game {
 
+enum class SwordType : u16 {
+  NoSword = 0,
+  KokiriSword = 1,
+  RazorSword = 2,
+  GildedSword = 3,
+};
+
+enum class ShieldType : u16 {
+  NoShield = 0,
+  HeroShield = 1,
+  MirrorShield = 2,
+};
+
 struct __attribute__((packed)) __attribute__((aligned(2))) PlayerData {
   u32 field_11C;
   u8 gap_120[2];
@@ -54,26 +67,47 @@ union FormEquipmentData {
 struct EquipmentData {
   FormEquipmentData data[4];
   char field_14;
-  char anonymous_24;
-  char anonymous_25;
-  char anonymous_26;
-  char anonymous_27;
+  ItemId item_on_y_readonly;
+  ItemId item_on_x_readonly;
+  ItemId item_on_i_readonly;
+  ItemId item_on_ii_readonly;
   char field_19;
+  //255
   char field_1A;
+  //255
   char field_1B;
+  //255
   char field_1C;
+  //255
   char field_1D;
+  //255
   char field_1E;
+  //255
   char field_1F;
+  //255
   char field_20;
+  //255
   char field_21;
+  //255
   char field_22;
+  //255
   char field_23;
+  //255
   char field_24;
+  //255
   char field_25;
+  //255
   char field_26;
+  //255
   char field_27;
-  u16 anonymous_28;
+  union swordShield {
+    u16 raw;
+
+    BitField<0, 4, SwordType> sword;
+    BitField<4, 8, ShieldType> shield;
+  };
+  swordShield sword_shield;
+  //BitField<4, 8, u16> sword;
 };
 
 struct InventoryData {
@@ -83,7 +117,15 @@ struct InventoryData {
   u8 field_48[24];
   u8 field_60[24];
   int non_equip_register;
-  int collect_register;
+  union CollectRegister {
+    int raw;
+    
+    //BitField<0, 1, int> skulltula_count // This one sends off to a function to update a counter below.;
+    BitField<4, 1, int> bombers_notebook;
+    // TODO: Lots of different counts in here.
+    BitField<28, 4, int> heart_container_pieces;
+  };
+  CollectRegister collect_register;
   char anonymous_33[1];
   char anonymous_34[3];
   u8 gap200[6];
@@ -163,7 +205,13 @@ struct SaveData {
   int anonymous_57;
   int anonymous_58;
   u8 gap11EC[36];
-  int anonymous_59;
+  union SkulltulaRegister {
+    int raw;
+
+    BitField<0, 16, int> swamp_count;
+    BitField<16, 16, int> ocean_count;
+  };
+  SkulltulaRegister skulltulas_collected;
   int anonymous_60;
   u8 gap1218[4];
   int anonymous_61;
@@ -574,7 +622,7 @@ struct CommonData {
   int setup;
   int setup2;
   int field_13624;
-  RespawnData sub13s[9];
+  RespawnData sub13s[8];
   u32 field_13728;
   int field_1372C;
   char field_13730;
@@ -623,7 +671,7 @@ struct CommonData {
   u16 field_140F2;
   int field_140F4;
 };
-static_assert(sizeof(CommonData) == 0x14118);
+static_assert(sizeof(CommonData) == 0x140F8);
 
 CommonData& GetCommonData();
 

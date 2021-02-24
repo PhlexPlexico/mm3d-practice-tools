@@ -100,6 +100,7 @@
         "bvh": "cpp",
         "mprealsupport": "cpp",
         "matrixfunctions": "cpp",
-        "vips8": "cpp"
+        "vips8": "cpp",
+        "*.inc": "c"
     }
 }

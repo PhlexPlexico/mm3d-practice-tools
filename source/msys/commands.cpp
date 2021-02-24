@@ -48,6 +48,13 @@ static void Command_RunFast(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
     link->lin_vel = 27.f;
+    game::CommonData& cdata = game::GetCommonData();
+    // for (auto it = cdata.GetFormEquipment().item_btns.begin(); it != cdata.GetFormEquipment().item_btns.end(); ++it) {
+    //   rst::util::Print("%s: Items? %du", __func__, *it);
+    // }
+    rst::util::Print("%s: Items? %d", __func__, cdata.save.equipment.sword_shield);
+    cdata.save.equipment.sword_shield.sword = (game::SwordType)4;
+    //cdata.save.equipment.shield = (1 << 5);
   }
 }
 

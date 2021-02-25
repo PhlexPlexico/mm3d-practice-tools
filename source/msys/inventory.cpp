@@ -19,3 +19,16 @@ Menu InventoryMenu = {
         {"Amounts", METHOD, .method = Inventory_AmountsMenuFunc},
     }
 };
+
+static void Inventory_ItemsMenuInit(void){
+    InventoryItemsMenu.items[(u32)game::ItemId::Ocarina].on = game::HasItem(game::ItemId::Ocarina);
+    InventoryItemsMenu.items[(u32)game::ItemId::Arrow].on = game::HasItem(game::ItemId::Arrow);
+    InventoryItemsMenu.items[(u32)game::ItemId::FireArrow].on = game::HasItem(game::ItemId::FireArrow);
+    InventoryItemsMenu.items[(u32)game::ItemId::IceArrow].on = game::HasItem(game::ItemId::IceArrow);
+    InventoryItemsMenu.items[(u32)game::ItemId::LightArrow].on = game::HasItem(game::ItemId::LightArrow);
+    //InventoryItemsMenu.items[(u32)game::ItemId::FairyOcarina].on = game::HasItem(game::ItemId::FairyOcarina);
+    InventoryItemsMenu.items[(u32)game::ItemId::Bomb].on = game::HasItem(game::ItemId::Bomb);
+    InventoryItemsMenu.items[(u32)game::ItemId::Bombchu].on = game::HasItem(game::ItemId::Bombchu);
+    InventoryItemsMenu.items[(u32)game::ItemId::DekuStick].on = game::HasItem(game::ItemId::DekuStick);
+    
+}

@@ -167,9 +167,10 @@ WarpsSceneMenu WarpsPlacesBossesMenu = {
 
 WarpsSceneMenu WarpsPlacesShopsMenu = {
     .title="Shops",
-    .nbItems = 1,
+    .nbItems = 2,
     .scenes={
-        {"02: Hag's Potion Shop", &Entrances_Hags_Potion_Shop}
+        {"02: Hag's Potion Shop", &Entrances_Hags_Potion_Shop},
+        {"04: Honey & Darling's Shop", &Entrances_HoneyDarling_Potion_Shop},
     }
 };
 

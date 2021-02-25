@@ -71,6 +71,14 @@ const EntrancesByScene Entrances_Hags_Potion_Shop = {
     }
 };
 
+const EntrancesByScene Entrances_HoneyDarling_Potion_Shop = {
+    .title = "Honey & Darling's Shop",
+    .nbItems = 1,
+    .items = {
+        {0x0800, "From East Clock Town"}
+    }
+};
+
 const EntrancesByScene Entrances_Swamp_Poison = {
     .title = "Poison Swamp Entrances",
     .nbItems = 10,

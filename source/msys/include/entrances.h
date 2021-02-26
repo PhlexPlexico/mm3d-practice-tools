@@ -89,21 +89,13 @@ const EntrancesByScene Entrances_Swamp_Poison = {
     }
 };
 
-const EntrancesByScene Entrances_Magic_Hags_Potion_Shop = {
-    .title = "Magic Hags' Potion Shop",
-    .nbItems = 1,
-    .items = {
-        {0x0400, "from Southern Swamp"}
-    }
-}
-
 const EntrancesByScene Entrances_Honey_And_Darlings_Shop = {
     .title = "Honey And Darling's Shop",
     .nbItems = 1,
     .items = {
         {0x0800, "from East Clock Town"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Beneath_The_Graveyard_Iron_Knuckles = {
     .title = "Beneath The Graveyard Iron Knuckles",
@@ -112,7 +104,7 @@ const EntrancesByScene Entrances_Beneath_The_Graveyard_Iron_Knuckles = {
         {0x0A00, "from Night 2 grave"}
         {0x0A10, "from Night 1 grave"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Southern_Swamp_Clear = {
     .title = "Southern Swamp Clear",
@@ -130,7 +122,7 @@ const EntrancesByScene Entrances_Southern_Swamp_Clear = {
         {0x0C90, "from Ikana Canyon"}
         {0x0CA0, "from owl statue"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Curiosity_Shop = {
     .title = "Curiosity Shop",
@@ -141,7 +133,7 @@ const EntrancesByScene Entrances_Curiosity_Shop = {
         {0x0E20, "peeking into front room"}
         {0x0E30, "after peeking into front room"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Test_Scene = {
     .title = "Test Scene",
@@ -149,7 +141,7 @@ const EntrancesByScene Entrances_Test_Scene = {
     .items = {
         {0x1000, "standing on red checkerboard"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Lone_Peak_Shrine_And_Grottos = {
     .title = "Lone Peak Shrine And Grottos",
@@ -173,7 +165,7 @@ const EntrancesByScene Entrances_Lone_Peak_Shrine_And_Grottos = {
         {0x14F0, "Vines JP Grotto from Left Palace"}
         {0x1410, "Swamp Gossips"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Cutscene_Scene = {
     .title = "Cutscene Scene",
@@ -190,7 +182,7 @@ const EntrancesByScene Entrances_Cutscene_Scene = {
         {0x1C80, "(crash)"}
         {0x1C90, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Ikana_Canyon = {
     .title = "Ikana Canyon",
@@ -213,7 +205,7 @@ const EntrancesByScene Entrances_Ikana_Canyon = {
         {0x20E0, "Sharp's cave from central room"}
         {0x20F0, "(table overflow)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Pirates_Fortress_Tower = {
     .title = "Pirates' Fortress Tower",
@@ -235,7 +227,7 @@ const EntrancesByScene Entrances_Pirates_Fortress_Tower = {
         {0x22D0, "from target platform over moat (no intro)"}
         {0x22E0, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Milk_Bar = {
     .title = "Milk Bar",
@@ -243,7 +235,7 @@ const EntrancesByScene Entrances_Milk_Bar = {
     .items = {
         {0x2400, "from East Clock Town"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Stone_Tower_Temple_Upright = {
     .title = "Stone Tower Temple Upright",
@@ -252,7 +244,7 @@ const EntrancesByScene Entrances_Stone_Tower_Temple_Upright = {
         {0x2600, "from Stone Tower (intro)"}
         {0x2610, "from Stone Tower (no intro)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Treasure_Chest_Shop = {
     .title = "Treasure Chest Shop",
@@ -261,7 +253,7 @@ const EntrancesByScene Entrances_Treasure_Chest_Shop = {
         {0x2800, "from East Clock Town"}
         {0x2810, "after treasure chest game ends"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Stone_Tower_Temple_Inverted = {
     .title = "Stone Tower Temple Inverted",
@@ -271,7 +263,7 @@ const EntrancesByScene Entrances_Stone_Tower_Temple_Inverted = {
         {0x2A10, "after opening boss door"}
         {0x2A20, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Clock_Tower_Rooftop = {
     .title = "Clock Tower Rooftop",
@@ -281,7 +273,7 @@ const EntrancesByScene Entrances_Clock_Tower_Rooftop = {
         {0x2C10, "after learning Song of Time"}
         {0x2C20, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Deku_Intro_Scene = {
     .title = "Deku Intro Scene",
@@ -293,7 +285,7 @@ const EntrancesByScene Entrances_Deku_Intro_Scene = {
         {0x2E30, "after voiding in Deku Butler's son's room"}
         {0x2E40, "after first SoT (cutscene)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Woodfall_Temple = {
     .title = "Woodfall Temple",
@@ -303,7 +295,7 @@ const EntrancesByScene Entrances_Woodfall_Temple = {
         {0x3010, "Deku Princess's room after beating Woodfall Temple"}
         {0x3020, "Deku Princess's room from Woodfall"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Path_To_Mountain_Village = {
     .title = "Path To Mountain Village",
@@ -312,7 +304,7 @@ const EntrancesByScene Entrances_Path_To_Mountain_Village = {
         {0x3200, "from Termina Field"}
         {0x3210, "from Mountain Village"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Ancient_Castle_Of_Ikana = {
     .title = "Ancient Castle Of Ikana",
@@ -326,7 +318,7 @@ const EntrancesByScene Entrances_Ancient_Castle_Of_Ikana = {
         {0x3450, "inside from elegy block hole"}
         {0x3460, "inside from Igos du Ikana's Lair"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Deku_Scrub_Playground = {
     .title = "Deku Scrub Playground",
@@ -335,7 +327,7 @@ const EntrancesByScene Entrances_Deku_Scrub_Playground = {
         {0x3600, "from North Clock Town"}
         {0x3610, "after Deku Playground game ends"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Odolwas_Lair = {
     .title = "Odolwa's Lair",
@@ -343,7 +335,7 @@ const EntrancesByScene Entrances_Odolwas_Lair = {
     .items = {
         {0x3800, "from Woodfall Temple"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Town_Shooting_Gallery = {
     .title = "Town Shooting Gallery",
@@ -352,7 +344,7 @@ const EntrancesByScene Entrances_Town_Shooting_Gallery = {
         {0x3A00, "from East Clock Town (with title card)"}
         {0x3A10, "from East Clock Town (no title card)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Snowhead_Temple = {
     .title = "Snowhead Temple",
@@ -361,7 +353,7 @@ const EntrancesByScene Entrances_Snowhead_Temple = {
         {0x3C00, "from Snowhead (intro)"}
         {0x3C10, "from Snowhead (no intro)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Milk_Road = {
     .title = "Milk Road",
@@ -375,7 +367,7 @@ const EntrancesByScene Entrances_Milk_Road = {
         {0x3E50, "from Romani Ranch after cart ride"}
         {0x3E60, "from Gorman Track after cart ride"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Pirates_Fortress_Sewers = {
     .title = "Pirates' Fortress Sewers",
@@ -398,7 +390,7 @@ const EntrancesByScene Entrances_Pirates_Fortress_Sewers = {
         {0x40E0, "(crash)"}
         {0x40F0, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Swamp_Shooting_Gallery = {
     .title = "Swamp Shooting Gallery",
@@ -406,7 +398,7 @@ const EntrancesByScene Entrances_Swamp_Shooting_Gallery = {
     .items = {
         {0x4200, "from Southern Swamp"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Pinnacle_Rock = {
     .title = "Pinnacle Rock",
@@ -415,7 +407,7 @@ const EntrancesByScene Entrances_Pinnacle_Rock = {
         {0x4400, "from Great Bay Coast"}
         {0x4410, "from swimming in murky water"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Fairys_Fountain = {
     .title = "Fairy's Fountain",
@@ -432,7 +424,7 @@ const EntrancesByScene Entrances_Fairys_Fountain = {
         {0x4680, "after double defense"}
         {0x4690, "after Great Fairy's Sword"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Swamp_Spider_House = {
     .title = "Swamp Spider House",
@@ -440,7 +432,7 @@ const EntrancesByScene Entrances_Swamp_Spider_House = {
     .items = {
         {0x4800, "from Southern Swamp"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Oceanside_Spider_House = {
     .title = "Oceanside Spider House",
@@ -448,7 +440,7 @@ const EntrancesByScene Entrances_Oceanside_Spider_House = {
     .items = {
         {0x4A00, "from Great Bay Coast"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Astral_Observatory = {
     .title = "Astral Observatory",
@@ -458,7 +450,7 @@ const EntrancesByScene Entrances_Astral_Observatory = {
         {0x4C10, "from Termina Field"}
         {0x4C20, "after looking through observatory telescope"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Deku_Trial = {
     .title = "Deku Trial",
@@ -466,7 +458,7 @@ const EntrancesByScene Entrances_Deku_Trial = {
     .items = {
         {0x4E00, "from The Moon"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Deku_Palace = {
     .title = "Deku Palace",
@@ -484,7 +476,7 @@ const EntrancesByScene Entrances_Deku_Palace = {
         {0x5090, "from Magic Bean Seller's Grotto"}
         {0x50A0, "right palace from JP Vines Grotto"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Mountain_Smithy = {
     .title = "Mountain Smithy",
@@ -492,7 +484,7 @@ const EntrancesByScene Entrances_Mountain_Smithy = {
     .items = {
         {0x5200, "from Mountain Village"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Termina_Field = {
     .title = "Termina Field",
@@ -514,7 +506,7 @@ const EntrancesByScene Entrances_Termina_Field = {
         {0x54D0, "after Cremia cart ride"}
         {0x54E0, "after Skull Kid cutscene"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Post_Office = {
     .title = "Post Office",
@@ -522,7 +514,7 @@ const EntrancesByScene Entrances_Post_Office = {
     .items = {
         {0x5600, "from West Clock Town"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Marine_Research_Lab = {
     .title = "Marine Research Lab",
@@ -530,7 +522,7 @@ const EntrancesByScene Entrances_Marine_Research_Lab = {
     .items = {
         {0x5800, "from Great Bay Coast"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Beneath_The_Graveyard_Dampe = {
     .title = "Beneath The Graveyard Dampe",
@@ -539,7 +531,7 @@ const EntrancesByScene Entrances_Beneath_The_Graveyard_Dampe = {
         {0x5A00, "from Night 3 Grave"}
         {0x5A10, "from Dampe's door"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Shrine = {
     .title = "Goron Shrine",
@@ -550,7 +542,7 @@ const EntrancesByScene Entrances_Goron_Shrine = {
         {0x5E20, "after learning Lullaby"}
         {0x5E30, "from Goron Village (no intro)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Zora_Hall_Atrium = {
     .title = "Zora Hall Atrium",
@@ -566,7 +558,7 @@ const EntrancesByScene Entrances_Zora_Hall_Atrium = {
         {0x6070, "in front of stage"}
         {0x6080, "after rehearsal"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Trading_Post = {
     .title = "Trading Post",
@@ -575,7 +567,7 @@ const EntrancesByScene Entrances_Trading_Post = {
         {0x6200, "from West Clock Town (with title card)"}
         {0x6210, "from West Clock Town (no title card)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Romani_Ranch = {
     .title = "Romani Ranch",
@@ -594,7 +586,7 @@ const EntrancesByScene Entrances_Romani_Ranch = {
         {0x64A0, "after Romani talking about the aliens cutscene"}
         {0x64B0, "after starting the Cremia cart ride"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Twinmolds_Lair = {
     .title = "Twinmold's Lair",
@@ -606,7 +598,7 @@ const EntrancesByScene Entrances_Twinmolds_Lair = {
         {0x6630, "(crash)"}
         {0x6640, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Great_Bay_Coast = {
     .title = "Great Bay Coast",
@@ -627,7 +619,7 @@ const EntrancesByScene Entrances_Great_Bay_Coast = {
         {0x68C0, "being thrown out of Pirates' Fortress"}
         {0x68D0, "after jumping game ends"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Zora_Cape = {
     .title = "Zora Cape",
@@ -644,7 +636,7 @@ const EntrancesByScene Entrances_Zora_Cape = {
         {0x6A80, "after beating Great Bay Temple"}
         {0x6A90, "falling onto turtle platform"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Lottery_Shop = {
     .title = "Lottery Shop",
@@ -652,7 +644,7 @@ const EntrancesByScene Entrances_Lottery_Shop = {
     .items = {
         {0x6C00, "from West Clock Town"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Pirates_Fortress_Moat = {
     .title = "Pirates' Fortress Moat",
@@ -666,7 +658,7 @@ const EntrancesByScene Entrances_Pirates_Fortress_Moat = {
         {0x7050, "on barrel platform from Pirate's Fortress (tower)"}
         {0x7060, "from sewers door"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Fishermans_Hut = {
     .title = "Fisherman's Hut",
@@ -674,7 +666,7 @@ const EntrancesByScene Entrances_Fishermans_Hut = {
     .items = {
         {0x7200, "from Great Bay Coast"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Shop = {
     .title = "Goron Shop",
@@ -682,7 +674,7 @@ const EntrancesByScene Entrances_Goron_Shop = {
     .items = {
         {0x7400, "from Goron Shrine"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Deku_Kings_Chamber = {
     .title = "Deku King's Chamber",
@@ -693,7 +685,7 @@ const EntrancesByScene Entrances_Deku_Kings_Chamber = {
         {0x7620, "princess apologizes to monkey (cutscene)"}
         {0x7630, "after princess apologizes to monkey"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Trial = {
     .title = "Goron Trial",
@@ -701,7 +693,7 @@ const EntrancesByScene Entrances_Goron_Trial = {
     .items = {
         {0x7800, "from moon"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Road_To_Southern_Swamp = {
     .title = "Road To Southern Swamp",
@@ -711,7 +703,7 @@ const EntrancesByScene Entrances_Road_To_Southern_Swamp = {
         {0x7A10, "from Southern Swamp"}
         {0x7A20, "from Swamp Shooting Gallery"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Doggy_Racetrack = {
     .title = "Doggy Racetrack",
@@ -720,7 +712,7 @@ const EntrancesByScene Entrances_Doggy_Racetrack = {
         {0x7C00, "from Romani Ranch"}
         {0x7C10, "after dog race"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Cucco_Shack = {
     .title = "Cucco Shack",
@@ -729,7 +721,7 @@ const EntrancesByScene Entrances_Cucco_Shack = {
         {0x7E00, "from Romani Ranch"}
         {0x7E10, "getting Bunny Hood"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Ikana_Graveyard = {
     .title = "Ikana Graveyard",
@@ -742,7 +734,7 @@ const EntrancesByScene Entrances_Ikana_Graveyard = {
         {0x8040, "from Dampe's door"}
         {0x8050, "after defeating Captain Keeta (cutscene)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Gohts_Lair = {
     .title = "Goht's Lair",
@@ -750,7 +742,7 @@ const EntrancesByScene Entrances_Gohts_Lair = {
     .items = {
         {0x8200, "from Snowhead Temple"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Woodfall = {
     .title = "Woodfall",
@@ -762,7 +754,7 @@ const EntrancesByScene Entrances_Woodfall = {
         {0x8630, "from Woodfall Temple (deku princess's cell)"}
         {0x8640, "from owl statue"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Zora_Trial = {
     .title = "Zora Trial",
@@ -771,7 +763,7 @@ const EntrancesByScene Entrances_Zora_Trial = {
         {0x8800, "from The Moon"}
         {0x8810, "from taking a wrong turn"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Village_Spring = {
     .title = "Goron Village Spring",
@@ -783,7 +775,7 @@ const EntrancesByScene Entrances_Goron_Village_Spring = {
         {0x8A30, "from Lone Peak Shrine"}
         {0x8A40, "from voiding by ice platforms"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Great_Bay_Temple = {
     .title = "Great Bay Temple",
@@ -793,7 +785,7 @@ const EntrancesByScene Entrances_Great_Bay_Temple = {
         {0x8C10, "from Pirates Cutscene Scene"}
         {0x8C20, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Waterfall_Rapids = {
     .title = "Waterfall Rapids",
@@ -804,7 +796,7 @@ const EntrancesByScene Entrances_Waterfall_Rapids = {
         {0x8E20, "beaver race ending"}
         {0x8E30, "after beaver race"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Beneath_The_Well = {
     .title = "Beneath The Well",
@@ -813,7 +805,7 @@ const EntrancesByScene Entrances_Beneath_The_Well = {
         {0x9000, "from Ikana Canyon"}
         {0x9010, "from Ancient Castle of Ikana"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Zora_Hall_Rooms = {
     .title = "Zora Hall Rooms",
@@ -827,7 +819,7 @@ const EntrancesByScene Entrances_Zora_Hall_Rooms = {
         {0x9250, "Zora shop"}
         {0x9260, "getting Evan HP"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Village_Winter = {
     .title = "Goron Village Winter",
@@ -839,7 +831,7 @@ const EntrancesByScene Entrances_Goron_Village_Winter = {
         {0x9430, "from Lone Peak Shrine"}
         {0x9440, "from voiding by ice platforms"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Graveyard = {
     .title = "Goron Graveyard",
@@ -848,7 +840,7 @@ const EntrancesByScene Entrances_Goron_Graveyard = {
         {0x9600, "from Mountain Village"}
         {0x9610, "getting Goron Mask"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Sakons_Hideout = {
     .title = "Sakon's Hideout",
@@ -856,7 +848,7 @@ const EntrancesByScene Entrances_Sakons_Hideout = {
     .items = {
         {0x9800, "from Ikana Canyon"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Mountain_Village_Winter = {
     .title = "Mountain Village Winter",
@@ -872,7 +864,7 @@ const EntrancesByScene Entrances_Mountain_Village_Winter = {
         {0x9A70, "between hungry goron and Path to Snowhead"}
         {0x9A80, "from owl statue"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Ghost_Hut = {
     .title = "Ghost Hut",
@@ -882,7 +874,7 @@ const EntrancesByScene Entrances_Ghost_Hut = {
         {0x9C10, "from poe killing game"}
         {0x9C20, "after beating the poes"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Deku_Shrine = {
     .title = "Deku Shrine",
@@ -892,7 +884,7 @@ const EntrancesByScene Entrances_Deku_Shrine = {
         {0x9E10, "from Deku Palace (no title card)"}
         {0x9E20, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Road_To_Ikana = {
     .title = "Road To Ikana",
@@ -902,7 +894,7 @@ const EntrancesByScene Entrances_Road_To_Ikana = {
         {0xA010, "from Ikana Canyon"}
         {0xA020, "from Ikana Graveyard"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Swordsmans_School = {
     .title = "Swordsman's School",
@@ -910,7 +902,7 @@ const EntrancesByScene Entrances_Swordsmans_School = {
     .items = {
         {0xA200, "from East Clock Town"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Music_Box_House = {
     .title = "Music Box House",
@@ -918,7 +910,7 @@ const EntrancesByScene Entrances_Music_Box_House = {
     .items = {
         {0xA400, "from Ikana Canyon"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Igos_Du_Ikanas_Lair = {
     .title = "Igos Du Ikana's Lair",
@@ -926,7 +918,7 @@ const EntrancesByScene Entrances_Igos_Du_Ikanas_Lair = {
     .items = {
         {0xA600, "from Ancient Castle of Ikana"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Tourist_Information = {
     .title = "Tourist Information",
@@ -936,7 +928,7 @@ const EntrancesByScene Entrances_Tourist_Information = {
         {0xA810, "after boat cruise"}
         {0xA820, "after turning in pictograph"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Stone_Tower_Upright = {
     .title = "Stone Tower Upright",
@@ -947,7 +939,7 @@ const EntrancesByScene Entrances_Stone_Tower_Upright = {
         {0xAA20, "from Stone Tower Temple"}
         {0xAA30, "from owl statue"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Stone_Tower_Inverted = {
     .title = "Stone Tower Inverted",
@@ -956,7 +948,7 @@ const EntrancesByScene Entrances_Stone_Tower_Inverted = {
         {0xAC00, "after inverting Stone Tower"}
         {0xAC10, "from Stone Tower Temple"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Mountain_Village_Spring = {
     .title = "Mountain Village Spring",
@@ -972,7 +964,7 @@ const EntrancesByScene Entrances_Mountain_Village_Spring = {
         {0xAE70, "falling after beating Snowhead Temple"}
         {0xAE80, "from owl statue"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Path_To_Snowhead = {
     .title = "Path To Snowhead",
@@ -981,7 +973,7 @@ const EntrancesByScene Entrances_Path_To_Snowhead = {
         {0xB000, "from Mountain Village"}
         {0xB010, "from Snowhead"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Snowhead = {
     .title = "Snowhead",
@@ -992,7 +984,7 @@ const EntrancesByScene Entrances_Snowhead = {
         {0xB220, "from Fairy's Fountain"}
         {0xB230, "from owl statue"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Path_To_Goron_Village_Winter = {
     .title = "Path To Goron Village Winter",
@@ -1002,7 +994,7 @@ const EntrancesByScene Entrances_Path_To_Goron_Village_Winter = {
         {0xB410, "from Goron Village"}
         {0xB420, "from Goron Racetrack"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Path_To_Goron_Village_Spring = {
     .title = "Path To Goron Village Spring",
@@ -1012,7 +1004,7 @@ const EntrancesByScene Entrances_Path_To_Goron_Village_Spring = {
         {0xB610, "from Goron Village"}
         {0xB620, "from Goron Racetrack"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Gyorgs_Lair = {
     .title = "Gyorg's Lair",
@@ -1021,7 +1013,7 @@ const EntrancesByScene Entrances_Gyorgs_Lair = {
         {0xB800, "from Great Bay Temple"}
         {0xB810, "falling cutscene"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Secret_Shrine = {
     .title = "Secret Shrine",
@@ -1029,7 +1021,7 @@ const EntrancesByScene Entrances_Secret_Shrine = {
     .items = {
         {0xBA00, "from Ikana Canyon"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Stock_Pot_Inn = {
     .title = "Stock Pot Inn",
@@ -1042,7 +1034,7 @@ const EntrancesByScene Entrances_Stock_Pot_Inn = {
         {0xBC40, "eavesdropping cutscene"}
         {0xBC50, "after eavesdropping"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Pirates_Cutscene_Scene = {
     .title = "Pirates Cutscene Scene",
@@ -1050,7 +1042,7 @@ const EntrancesByScene Entrances_Pirates_Cutscene_Scene = {
     .items = {
         {0xBE00, "from Zora Cape"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Clock_Tower_Inside = {
     .title = "Clock Tower Inside",
@@ -1064,7 +1056,7 @@ const EntrancesByScene Entrances_Clock_Tower_Inside = {
         {0xC050, "in front of metal doors"}
         {0xC060, "after Majora's Mask cutscene"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Woods_Of_Mystery = {
     .title = "Woods Of Mystery",
@@ -1072,7 +1064,7 @@ const EntrancesByScene Entrances_Woods_Of_Mystery = {
     .items = {
         {0xC200, "from Southern Swamp"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Lost_Woods = {
     .title = "Lost Woods",
@@ -1082,7 +1074,7 @@ const EntrancesByScene Entrances_Lost_Woods = {
         {0xC410, "after first SoT (cutscene)"}
         {0xC420, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Link_Trial = {
     .title = "Link Trial",
@@ -1090,7 +1082,7 @@ const EntrancesByScene Entrances_Link_Trial = {
     .items = {
         {0xC600, "from moon"}
     }
-}
+};
 
 const EntrancesByScene Entrances_The_Moon = {
     .title = "The Moon",
@@ -1098,7 +1090,7 @@ const EntrancesByScene Entrances_The_Moon = {
     .items = {
         {0xC800, "from Clock Tower (rooftop)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Bomb_Shop = {
     .title = "Bomb Shop",
@@ -1107,7 +1099,7 @@ const EntrancesByScene Entrances_Bomb_Shop = {
         {0xCA00, "from West Clock Town (with title card)"}
         {0xCA10, "from West Clock Town (no title card)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Giants_Chamber = {
     .title = "Giants' Chamber",
@@ -1115,7 +1107,7 @@ const EntrancesByScene Entrances_Giants_Chamber = {
     .items = {
         {0xCC00, "from boss lair"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Gorman_Track = {
     .title = "Gorman Track",
@@ -1128,7 +1120,7 @@ const EntrancesByScene Entrances_Gorman_Track = {
         {0xCE40, "from Milk Road (back) (no intro)"}
         {0xCE50, "on the track"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Goron_Racetrack = {
     .title = "Goron Racetrack",
@@ -1138,7 +1130,7 @@ const EntrancesByScene Entrances_Goron_Racetrack = {
         {0xD010, "starting Goron race"}
         {0xD020, "after Goron race"}
     }
-}
+};
 
 const EntrancesByScene Entrances_East_Clock_Town = {
     .title = "East Clock Town",
@@ -1158,7 +1150,7 @@ const EntrancesByScene Entrances_East_Clock_Town = {
         {0xD2B0, "from Milk Bar"}
         {0xD2C0, "(crash)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_West_Clock_Town = {
     .title = "West Clock Town",
@@ -1175,7 +1167,7 @@ const EntrancesByScene Entrances_West_Clock_Town = {
         {0xD480, "from Lottery Shop"}
         {0xD490, "from Termina Field (again)"}
     }
-}
+};
 
 const EntrancesByScene Entrances_North_Clock_Town = {
     .title = "North Clock Town",
@@ -1190,7 +1182,7 @@ const EntrancesByScene Entrances_North_Clock_Town = {
         {0xD660, "after starting hide-and-seek"}
         {0xD670, "after Sakon leaves"}
     }
-}
+};
 
 const EntrancesByScene Entrances_South_Clock_Town = {
     .title = "South Clock Town",
@@ -1208,7 +1200,7 @@ const EntrancesByScene Entrances_South_Clock_Town = {
         {0xD890, "from owl statue"}
         {0xD8A0, "after first SoT"}
     }
-}
+};
 
 const EntrancesByScene Entrances_Laundry_Pool = {
     .title = "Laundry Pool",
@@ -1218,5 +1210,5 @@ const EntrancesByScene Entrances_Laundry_Pool = {
         {0xDA10, "from Curiosity Shop"}
         {0xDA20, "(crash)"}
     }
-}
+};
 

@@ -12,10 +12,15 @@ static game::ItemId SelectedBottle;
 static u32 SelectedBottleIndex;
 static u32 BottleNumber;
 game::GlobalContext* ctx;
+game::InventoryData inventory = game::GetCommonData().save.inventory;
 
 static void GetGlobalContext() {
   ctx = rst::GetContext().gctx;
 }
+
+// static void GetInventory() {
+//   inventory = game::GetCommonData().save.inventory;
+// }
 
 Menu InventoryMenu = {
     .title = "Inventory",
@@ -87,6 +92,21 @@ ToggleMenu InventoryBottlesMenu = {
     }
 };
 
+static void ResetSlotsIfMatchesID(u8 id) {
+    // Need to remove the slot from child/adult grids
+    
+    for (u8 i = 0; i < 0x18; ++i) {
+        if (inventory.field_60[i] == id) {
+            inventory.field_60[i] = 0xFF;
+        }
+        if (inventory.field_48[i] == id) {
+            inventory.field_48[i] = 0xFF;
+        }
+        if(inventory.items[i] == (game::ItemId)id) {
+          inventory.items[i] = game::ItemId::None;
+        }
+    }
+}
 
 static void DisableMenuToggles(ToggleMenu* menu) {
     for (u32 i = 0; i < menu->nbItems - 1; ++i) {
@@ -95,7 +115,7 @@ static void DisableMenuToggles(ToggleMenu* menu) {
 }
 
 static void Inventory_ItemsMenuInit(void) {
-  game::CommonData& cdata = game::GetCommonData();
+  //GetInventory();
   InventoryItemsMenu.items[(u32)game::ItemId::Ocarina].on = game::HasOcarina();
   InventoryItemsMenu.items[(u32)game::ItemId::Arrow].on = game::HasItem(game::ItemId::Arrow);
   InventoryItemsMenu.items[(u32)game::ItemId::FireArrow].on =
@@ -128,7 +148,7 @@ static void Inventory_ItemsMenuInit(void) {
       game::HasItem(game::ItemId::GreatFairySword);
   // Loop through bottles and check which ones we have.
   int numBottles =
-      std::count_if(cdata.save.inventory.items.begin(), cdata.save.inventory.items.end(), game::ItemIsBottled);
+      std::count_if(inventory.items.begin(), inventory.items.end(), game::ItemIsBottled);
   for (int i = 0; i < numBottles; i++) {
     InventoryItemsMenu.items[(u32)game::ItemId::Bottle + i - 3].on = true;
   }
@@ -140,24 +160,24 @@ void Inventory_ItemsMenuFunc(void) {
 }
 
 void Inventory_ItemsToggle(s32 selected) {
-  std::array<game::ItemId, 24> items = game::GetCommonData().save.inventory.items;
-  game::InventoryData equipLevels = game::GetCommonData().save.inventory;
+  std::array<game::ItemId, 24> items = inventory.items;
   GetGlobalContext();
   switch (selected) {
   case ((s32)game::ItemId::Bomb - 1):
-    if (items[(u32)game::ItemId::Bomb] == (std::array<game::ItemId, 24>::value_type)0xFF) {
-      equipLevels.inventory_count_register.bomb_bag_upgrade = game::BombBag::BombBag20;
-      items[(u32)game::ItemId::Bomb] = game::ItemId::Bomb;
-      equipLevels.item_counts[18] = 20;
+    if (!game::HasItem(game::ItemId::Bomb)) {
+      rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
+          ctx, game::ItemId::BombBag);
       InventoryItemsMenu.items[(u32)game::ItemId::Bomb - 1].on = 1;
     } else {
-      equipLevels.inventory_count_register.bomb_bag_upgrade = game::BombBag::NoBag;
-      items[(u32)game::ItemId::Bomb] = game::ItemId::None;
-      equipLevels.item_counts[18] = 0;
+      inventory.inventory_count_register.bomb_bag_upgrade = game::BombBag::NoBag;
+      items[(u32)game::ItemId::BombBag] = game::ItemId::None;
+      ResetSlotsIfMatchesID((u8)game::ItemId::BombBag);
+      ResetSlotsIfMatchesID((u8)game::ItemId::Bomb);
+      InventoryItemsMenu.items[(u32)game::ItemId::Bomb - 1].on = 0;
     }
     break;
   case ((u32)game::ItemId::Bombchu - 1):
-    if (items[(u32)game::ItemId::Bombchu] == (std::array<game::ItemId, 24>::value_type)0xFF) {
+    if (InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on) {
       rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
           ctx, game::ItemId::Bombchu);
       InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on = 1;
@@ -344,10 +364,10 @@ void Inventory_ItemsToggle(s32 selected) {
     break;
   default:
     if (!game::HasItem((game::ItemId)selected)) {
-      rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
-          ctx, (game::ItemId)selected);
+      items[selected] = (game::ItemId)selected;
       InventoryItemsMenu.items[selected].on = 1;
     } else {
+      ResetSlotsIfMatchesID((u8)selected);
       items[selected] = game::ItemId::None;
       InventoryItemsMenu.items[selected].on = 0;
     }
@@ -356,7 +376,7 @@ void Inventory_ItemsToggle(s32 selected) {
 }
 
 static void Inventory_BottlesMenuInit(void) {
-  game::CommonData& cdata = game::GetCommonData();
+  //game::CommonData& cdata = game::GetCommonData();
   for (u32 i = (u32)game::ItemId::RedPotion; i < (u32)game::ItemId::MoonTear; ++i) {
     if (game::HasItem(SelectedBottle)) {
       InventoryBottlesMenu.items[i].on = game::HasItem((game::ItemId)i);

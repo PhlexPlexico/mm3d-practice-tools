@@ -100,13 +100,13 @@ struct EquipmentData {
   char field_25;
   char field_26;
   char field_27;
-  union swordShield {
+  union SwordShield {
     u16 raw;
 
     BitField<0, 4, SwordType> sword;
     BitField<4, 8, ShieldType> shield;
   };
-  swordShield sword_shield;
+  SwordShield sword_shield;
 };
 
 struct InventoryData {

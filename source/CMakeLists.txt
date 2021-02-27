@@ -106,6 +106,7 @@ add_executable(newcode
   msys/draw.cpp
   msys/equips.cpp
   msys/entrances.cpp
+  msys/inventory.cpp
   msys/menu.cpp
   msys/menus.cpp
   msys/MyThread.cpp

@@ -45,12 +45,12 @@
 
 Menu pz3DMenu{
     .title="MM3D Practice Menu",
-    .nbItems=5,
+    .nbItems=6,
     .items{
         { .title="Warps (TODO)", .action_type=MENU, .menu=&WarpsMenu },
         // { .title="Scene", .action_type=MENU, .menu=&SceneMenu },
         { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
-        // { .title="Inventory", .action_type=MENU, .menu=&InventoryMenu },
+        { .title="Inventory", .action_type=MENU, .menu=&InventoryMenu },
         { .title="Equips (TODO)", .action_type=MENU, .menu=&EquipsMenu },
         // // { "File", .action_type=MENU, .menu=&FileMenu },
         { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },

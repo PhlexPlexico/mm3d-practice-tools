@@ -4,12 +4,40 @@
 
 extern Menu InventoryMenu;
 extern ToggleMenu InventoryItemsMenu;
+extern ToggleMenu InventoryBottlesMenu;
+
 extern AmountMenu InventoryAmountsMenu;
 
 void Inventory_ItemsMenuFunc(void);
 void Inventory_ItemsToggle(s32);
 void Inventory_BottlesMenuFunc(s32);
 void Inventory_BottleSelect(s32);
+
+enum BottleContents { //Bottle Choices
+    Empty_Bottle = 0,
+    Red_Potion,
+    Green_Potion,
+    Blue_Potion,
+    Bottled_Fairy,
+    Deku_Princess,
+    Lon_Lon_Milk,
+    Lon_Lon_Milk_Half,
+    Fish,
+    Bug,
+    Blue_Fire,
+    Poe,
+    Big_Poe,
+    Water,
+    Hot_Spring_Water,
+    Zora_Egg,
+    Gold_Dust,
+    Magical_Mushroom,
+    Sea_Horse,
+    Chateau_Romani,
+    Mystery_Milk,
+    Myster_Milk_Spoiled,
+    None
+};
 
 enum { //Gear Menu Choices
     Gear_Menu_Kokiri_Sword = 0,
@@ -37,7 +65,7 @@ enum { //Gear Menu Choices
     Gear_Menu_Letter_To_Mama,
     Gear_Menu_Letter_To_Kafei,
     Gear_Menu_Pendant_Of_Memories,
-    Gear_Menu_Fishing_Passes
+    //Gear_Menu_Fishing_Passes
 };
 
 enum { //Mask Gear Menu Choices

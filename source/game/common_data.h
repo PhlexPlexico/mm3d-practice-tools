@@ -22,6 +22,20 @@ enum class ShieldType : u16 {
   MirrorShield = 2,
 };
 
+enum class BombBag : u32 {
+  NoBag = 0,
+  BombBag20 = 1,
+  BombBag30 = 2,
+  BombBag40 = 3,
+};
+
+enum class Quiver : u32 {
+  NoQuiver = 0,
+  Quiver30 = 1,
+  Quiver40 = 2,
+  Quiver50 = 3,
+};
+
 struct __attribute__((packed)) __attribute__((aligned(2))) PlayerData {
   u32 field_11C;
   u8 gap_120[2];
@@ -72,33 +86,19 @@ struct EquipmentData {
   ItemId item_on_i_readonly;
   ItemId item_on_ii_readonly;
   char field_19;
-  //255
   char field_1A;
-  //255
   char field_1B;
-  //255
   char field_1C;
-  //255
   char field_1D;
-  //255
   char field_1E;
-  //255
   char field_1F;
-  //255
   char field_20;
-  //255
   char field_21;
-  //255
   char field_22;
-  //255
   char field_23;
-  //255
   char field_24;
-  //255
   char field_25;
-  //255
   char field_26;
-  //255
   char field_27;
   union swordShield {
     u16 raw;
@@ -107,7 +107,6 @@ struct EquipmentData {
     BitField<4, 8, ShieldType> shield;
   };
   swordShield sword_shield;
-  //BitField<4, 8, u16> sword;
 };
 
 struct InventoryData {
@@ -116,14 +115,44 @@ struct InventoryData {
   std::array<u8, 24> item_counts;
   u8 field_48[24];
   u8 field_60[24];
-  int non_equip_register;
+  union InventoryCountRegister {
+    u32 raw;
+
+    BitField<0, 3, Quiver> quiver_upgrade;
+    BitField<3, 3, BombBag> bomb_bag_upgrade;
+    BitField<6, 6, u32> pad_1;
+    BitField<12, 2, u32> wallet_upgrade;
+    BitField<14, 3, u32> pad_2;
+    BitField<17, 3, u32> stick_upgrades;
+    BitField<20, 3, u32> nut_upgrade;
+    BitField<23, 9, u32> pad_3;
+  };
+  InventoryCountRegister inventory_count_register;
   union CollectRegister {
-    int raw;
+    u32 raw;
     
-    //BitField<0, 1, int> skulltula_count // This one sends off to a function to update a counter below.;
-    BitField<4, 1, int> bombers_notebook;
-    // TODO: Lots of different counts in here.
-    BitField<28, 4, int> heart_container_pieces;
+    BitField<0, 1, u32> odolwas_remains;
+    BitField<1, 1, u32> gohts_remains;
+    BitField<2, 1, u32> gyorgs_remains;
+    BitField<3, 1, u32> twinmolds_remains;
+    BitField<4, 2, u32> pad_1;
+    BitField<6, 1, u32> sonata_of_awakening;
+    BitField<7, 1, u32> goron_lullaby;
+    BitField<8, 1, u32> new_wave_bossa_nova;
+    BitField<9, 1, u32> elegy_of_emptiness;
+    BitField<10, 1, u32> oath_to_order;
+    BitField<11, 1, u32> sarias_song;
+    BitField<12, 1, u32> song_of_time;
+    BitField<13, 1, u32> song_of_healing;
+    BitField<14, 1, u32> eponas_song;
+    BitField<15, 1, u32> song_of_soaring;
+    BitField<16, 1, u32> song_of_storms;
+    BitField<17, 1, u32> suns_song;
+    BitField<18, 1, u32> bombers_notebook;
+    BitField<19, 5, u32> pad_2;
+    BitField<24, 1, u32> lullaby_intro;
+    BitField<25, 3, u32> pad_3;
+    BitField<28, 4, u32> heart_container_pieces;
   };
   CollectRegister collect_register;
   char anonymous_33[1];
@@ -142,7 +171,7 @@ struct InventoryData {
   char gap98[60];
 };
 static_assert(sizeof(InventoryData) == 0xD4);
-static_assert(offsetof(InventoryData, non_equip_register) == 0x78);
+static_assert(offsetof(InventoryData, inventory_count_register) == 0x78);
 
 struct SaveData {
   MaskId mask;
@@ -538,7 +567,8 @@ struct RespawnData {
   u8 btn_i_can_use_item;
   //u32 stored_mask_id_maybe;
   u32 temp_collect_flags_maybe;
-}; //0x20
+}; 
+static_assert(sizeof(RespawnData) == 0x20);
 
 enum class UsableButton : u8 {
   B = 0,

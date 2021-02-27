@@ -48,13 +48,6 @@ static void Command_RunFast(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
     link->lin_vel = 27.f;
-    game::CommonData& cdata = game::GetCommonData();
-    // for (auto it = cdata.GetFormEquipment().item_btns.begin(); it != cdata.GetFormEquipment().item_btns.end(); ++it) {
-    //   rst::util::Print("%s: Items? %du", __func__, *it);
-    // }
-    rst::util::Print("%s: Items? %d", __func__, cdata.save.equipment.sword_shield);
-    cdata.save.equipment.sword_shield.sword = (game::SwordType)4;
-    //cdata.save.equipment.shield = (1 << 5);
   }
 }
 
@@ -70,10 +63,8 @@ static void Command_ReloadScene(void) {
     return;
   
   game::CommonData& cdata = game::GetCommonData();
-  //rst::util::Print("%s: Our entrance in sub1 is: %x and our entrance index is: %x", __func__, cdata.sub1.entrance, cdata.sub13s[8].entrance_index);
   EntranceWarp(cdata.sub1.entrance);
-  //context.gctx->next_entrance = cdata.sub1.entrance;
-  //context.gctx->field_C529_one_to_clear_input = 0x14;
+
 }
 
 static void Command_VoidOut(void) {

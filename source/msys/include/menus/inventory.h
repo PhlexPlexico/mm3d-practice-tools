@@ -8,10 +8,10 @@ extern ToggleMenu InventoryBottlesMenu;
 
 extern AmountMenu InventoryAmountsMenu;
 
-void Inventory_ItemsMenuFunc(void);
+//void Inventory_ItemsMenuFunc(void);
 void Inventory_ItemsToggle(s32);
-void Inventory_BottlesMenuFunc(s32);
-void Inventory_BottleSelect(s32);
+// void Inventory_BottlesMenuFunc(s32);
+// void Inventory_BottleSelect(s32);
 
 enum BottleContents { //Bottle Choices
     Empty_Bottle = 0,

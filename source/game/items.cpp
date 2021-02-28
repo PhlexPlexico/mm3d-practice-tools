@@ -56,6 +56,25 @@ bool HasItem(ItemId item_id) {
   return std::any_of(items.begin(), items.end(), [&](ItemId id) { return item_id == id; });
 }
 
+void RemoveItem(ItemId item_id) {
+  auto& items = GetCommonData().save.inventory.items;
+  items[(u32)item_id] = ItemId::None;
+  // for (u32 i = 0; i < items.size(); i++) {
+  //   if (items[i] == item_id) {
+  //     items[i] = ItemId::None;
+  //     break;
+  //   }
+  // }
+}
+
+void GiveItem(ItemId item_id) {
+  auto* gctx = rst::GetContext().gctx;
+  auto& items = GetCommonData().save.inventory.items;
+  rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
+          gctx, item_id);
+  items[(u32)item_id] = item_id;
+}
+
 bool HasMask(ItemId item_id) {
   const auto& masks = GetCommonData().save.inventory.masks;
   return std::any_of(masks.begin(), masks.end(), [&](ItemId id) { return item_id == id; });

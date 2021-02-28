@@ -204,6 +204,8 @@ enum class MaskId : u8 {
 
 bool HasOcarina();
 bool HasItem(ItemId item_id);
+void GiveItem(ItemId item_id);
+void RemoveItem(ItemId item_id);
 bool HasMask(ItemId item_id);
 
 /// Checks whether an item is usable.

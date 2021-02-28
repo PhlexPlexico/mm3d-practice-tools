@@ -49,15 +49,6 @@ static void Command_RunFast(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
     link->lin_vel = 27.f;
-    // game::CommonData& cdata = game::GetCommonData();
-    // for(int i = 0; i < 24; i++) {
-    //   rst::util::Print("%s: masks %i is %lu", __func__, i, (u32)cdata.save.inventory.masks[i]);
-    // }
-    // rst::util::Print("%s: array %i is %lu", __func__, 6, (u32)cdata.save.inventory.masks[1]);
-    // Inventory_MasksToggle(6);
-    // rst::util::Print("%s: all night mask %i is %lu", __func__, 6, (u32)cdata.save.inventory.masks[1]);
-    //cdata.save.inventory.items[5] = game::ItemId::Bomb;
-    //cdata.save.inventory.items[6] = game::ItemId::MoonTear;
   }
 }
 

@@ -17,7 +17,7 @@ static void DisableMenuToggles(ToggleMenu* menu) {
 }
 
 static void Inventory_ItemsMenuInit(void) {
-  game::InventoryData& inventory = game::GetCommonData().save.inventory;
+  //game::InventoryData& inventory = game::GetCommonData().save.inventory;
   InventoryItemsMenu.items[(u32)game::ItemId::Ocarina].on = game::HasOcarina();
   InventoryItemsMenu.items[(u32)game::ItemId::Arrow].on = game::HasItem(game::ItemId::Arrow);
   InventoryItemsMenu.items[(u32)game::ItemId::FireArrow].on =
@@ -49,13 +49,12 @@ static void Inventory_ItemsMenuInit(void) {
   InventoryItemsMenu.items[(u32)game::ItemId::GreatFairySword - 2].on =
       game::HasItem(game::ItemId::GreatFairySword);
   // Loop through bottles and check which ones we have.
-  int numBottles =
-      std::count_if(inventory.items.begin(), inventory.items.end(), game::ItemIsBottled);
-  for (int i = 0; i < numBottles; i++) {
-    InventoryItemsMenu.items[(u32)game::ItemId::Bottle + i - 3].on = true;
-  }
+  // u32 numBottles =
+  //     std::count_if(inventory.items.begin(), inventory.items.end(), game::ItemIsBottled);
+  // for (u32 i = 0; i < numBottles; i++) {
+  //   InventoryItemsMenu.items[(u32)game::ItemId::Bottle + i - 3].on = true;
+  // }
 }
-
 
 static void Inventory_MasksMenuInit(void) {
   InventoryMasksMenu.items[0].on = game::HasMask(game::ItemId::DekuMask);
@@ -84,10 +83,31 @@ static void Inventory_MasksMenuInit(void) {
   InventoryMasksMenu.items[23].on = game::HasMask(game::ItemId::GiantMask);
 }
 
+static void Inventory_SongsMenuInit(void) {
+  game::InventoryData& inventory = game::GetCommonData().save.inventory;
+  InventorySongsMenu.items[0].on = inventory.collect_register.sonata_of_awakening;
+  InventorySongsMenu.items[1].on = inventory.collect_register.goron_lullaby;
+  InventorySongsMenu.items[2].on = inventory.collect_register.new_wave_bossa_nova;
+  InventorySongsMenu.items[3].on = inventory.collect_register.elegy_of_emptiness;
+  InventorySongsMenu.items[4].on = inventory.collect_register.oath_to_order;
+  InventorySongsMenu.items[5].on = inventory.collect_register.sarias_song;
+  InventorySongsMenu.items[6].on = inventory.collect_register.song_of_time;
+  InventorySongsMenu.items[7].on = inventory.collect_register.song_of_healing;
+  InventorySongsMenu.items[8].on = inventory.collect_register.eponas_song;
+  InventorySongsMenu.items[9].on = inventory.collect_register.song_of_soaring;
+  InventorySongsMenu.items[10].on = inventory.collect_register.song_of_storms;
+  InventorySongsMenu.items[11].on = inventory.collect_register.suns_song;
+  InventorySongsMenu.items[12].on = inventory.collect_register.lullaby_intro;
+}
 
 void Inventory_ItemsMenuFunc(void) {
   Inventory_ItemsMenuInit();
   ToggleMenuShow(&InventoryItemsMenu);
+}
+
+void Inventory_SongsMenuFunc(void) {
+  Inventory_SongsMenuInit();
+  ToggleMenuShow(&InventorySongsMenu);
 }
 
 void Inventory_MasksMenuFunc(void) {
@@ -349,33 +369,79 @@ void Inventory_BottleSelect(s32 selected) {
 void Inventory_MasksToggle(s32 selected) {
   u32 selectedMask = game::MaskSlotsOrdered[selected];
   if (!game::HasMask(game::MaskSlots[selectedMask])) {
-    rst::util::Print("%s: We do not have the mask? Giving.", __func__);
     game::GiveMask(game::MaskSlots[selectedMask]);
     InventoryMasksMenu.items[selected].on = 1;
   } else {
-    rst::util::Print("%s: We do have the mask? Removing.", __func__);
     game::RemoveMask(selectedMask);
-    
     InventoryMasksMenu.items[selected].on = 0;
   }
 }
 
+void Inventory_SongsToggle(s32 selected) {
+  game::InventoryData::CollectRegister& song_list = game::GetCommonData().save.inventory.collect_register;
+  switch (selected) {
+    case (0):
+      song_list.sonata_of_awakening = !song_list.sonata_of_awakening;
+      break;
+    case (1):
+      song_list.goron_lullaby = !song_list.goron_lullaby;
+      break;
+    case (2):
+      song_list.new_wave_bossa_nova = !song_list.new_wave_bossa_nova;
+      break;
+    case (3):
+      song_list.elegy_of_emptiness = !song_list.elegy_of_emptiness;
+      break;
+    case (4):
+      song_list.oath_to_order = !song_list.oath_to_order;
+      break;
+    case (5):
+      song_list.sarias_song = !song_list.sarias_song;
+      break;
+    case (6):
+      song_list.song_of_time = !song_list.song_of_time;
+      break;
+    case (7):
+      song_list.song_of_healing = !song_list.song_of_healing;
+      break;
+    case (8):
+      song_list.eponas_song = !song_list.eponas_song;
+      break;
+    case (9):
+      song_list.song_of_soaring = !song_list.song_of_soaring;
+      break;
+    case (10):
+      song_list.song_of_storms = !song_list.song_of_storms;
+      break;
+    case (11):
+      song_list.suns_song = !song_list.suns_song;
+      break;
+    case (12):
+      song_list.lullaby_intro = !song_list.lullaby_intro;
+      if(song_list.lullaby_intro && song_list.goron_lullaby) {
+        song_list.goron_lullaby = 0;
+        InventorySongsMenu.items[1].on = 0;
+      }
+      break;    
+  }
+  InventorySongsMenu.items[selected].on = !InventorySongsMenu.items[selected].on;
+}
 
 Menu InventoryMenu = {
     .title = "Inventory",
-    .nbItems = 2,
+    .nbItems = 3,
     .items = {
         {.title = "Items", .action_type = METHOD, .method = Inventory_ItemsMenuFunc},
         {.title = "Masks", .action_type = METHOD, .method = Inventory_MasksMenuFunc},
-        //{.title = "Left Side Gear", .action_type = METHOD, .method = Inventory_LeftGearMenuFunc},
-        //{.title = "Ocarina Songs", .action_type = METHOD, .method = Inventory_SongsMenuFunc},
+        //{.title = "Gear", .action_type = METHOD, .method = Inventory_GearMenuFunc},
+        {.title = "Ocarina Songs", .action_type = METHOD, .method = Inventory_SongsMenuFunc},
         //{.title = "Amounts", .action_type = METHOD, .method = Inventory_AmountsMenuFunc},
     }
 };
 
 ToggleMenu InventoryItemsMenu = {
     .title="Items",
-    .nbItems=21,
+    .nbItems=15,
     .items= {
         {.on=0, .title="Ocarina", .method = Inventory_ItemsToggle},
         {.on=0, .title="Hero's Bow", .method = Inventory_ItemsToggle},
@@ -429,6 +495,26 @@ ToggleMenu InventoryMasksMenu = {
         {.on=0, .title="Blast Mask", .method = Inventory_MasksToggle},
         {.on=0, .title="Mask Of Scents", .method = Inventory_MasksToggle},
         {.on=0, .title="Giant's Mask", .method = Inventory_MasksToggle},
+    }
+};
+
+ToggleMenu InventorySongsMenu = {
+    .title="Songs",
+    .nbItems=13,
+    .items= {
+        {.on=0, .title="Sonata Of Awakening", .method = Inventory_SongsToggle},
+        {.on=0, .title="Goron Lullaby", .method = Inventory_SongsToggle},
+        {.on=0, .title="New Wave Bossa Nova", .method = Inventory_SongsToggle},
+        {.on=0, .title="Elegy of Emptiness", .method = Inventory_SongsToggle},
+        {.on=0, .title="Oath To Order", .method = Inventory_SongsToggle},
+        {.on=0, .title="Sarias Song (does nothing)", .method = Inventory_SongsToggle},
+        {.on=0, .title="Song of Time", .method = Inventory_SongsToggle},
+        {.on=0, .title="Song of Healing", .method = Inventory_SongsToggle},
+        {.on=0, .title="Epona's Song", .method = Inventory_SongsToggle},
+        {.on=0, .title="Song of Soaring", .method = Inventory_SongsToggle},
+        {.on=0, .title="Song of Storms", .method = Inventory_SongsToggle},
+        {.on=0, .title="Suns Song (does nothing)", .method = Inventory_SongsToggle},
+        {.on=0, .title="Lullaby Intro", .method = Inventory_SongsToggle}
     }
 };
 

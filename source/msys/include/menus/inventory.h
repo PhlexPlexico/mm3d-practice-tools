@@ -6,13 +6,13 @@ extern Menu InventoryMenu;
 extern ToggleMenu InventoryItemsMenu;
 extern ToggleMenu InventoryBottlesMenu;
 extern ToggleMenu InventoryMasksMenu;
+extern ToggleMenu InventorySongsMenu;
 extern AmountMenu InventoryAmountsMenu;
 
-//void Inventory_ItemsMenuFunc(void);
-void Inventory_ItemsToggle(s32);
-void Inventory_MasksToggle(s32);
+// void Inventory_ItemsMenuFunc(void);
+//void Inventory_ItemsToggle(s32);
+//void Inventory_MasksToggle(s32);
 // void Inventory_BottleSelect(s32);
-
 enum BottleContents { //Bottle Choices
     Empty_Bottle = 0,
     Red_Potion,

@@ -61,8 +61,6 @@ void RemoveItem(ItemId item_id) {
   items[(u32)item_id] = ItemId::None;
 }
 
-
-
 void GiveItem(ItemId item_id) {
   auto* gctx = rst::GetContext().gctx;
   auto& items = GetCommonData().save.inventory.items;
@@ -86,7 +84,6 @@ bool HasMask(ItemId item_id) {
 
 void RemoveMask(u32 mask_index) {
   auto& masks = GetCommonData().save.inventory.masks;
-  rst::util::Print("%s: Mask selected is %u and it is in the array %u", __func__, mask_index, (u32)masks[mask_index]);
   masks[mask_index] = ItemId::None;
 }
 

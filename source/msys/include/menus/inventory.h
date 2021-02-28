@@ -5,12 +5,12 @@
 extern Menu InventoryMenu;
 extern ToggleMenu InventoryItemsMenu;
 extern ToggleMenu InventoryBottlesMenu;
-
+extern ToggleMenu InventoryMasksMenu;
 extern AmountMenu InventoryAmountsMenu;
 
 //void Inventory_ItemsMenuFunc(void);
 void Inventory_ItemsToggle(s32);
-// void Inventory_BottlesMenuFunc(s32);
+void Inventory_MasksToggle(s32);
 // void Inventory_BottleSelect(s32);
 
 enum BottleContents { //Bottle Choices

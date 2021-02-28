@@ -56,9 +56,43 @@ static void Inventory_ItemsMenuInit(void) {
   }
 }
 
+
+static void Inventory_MasksMenuInit(void) {
+  InventoryMasksMenu.items[0].on = game::HasMask(game::ItemId::DekuMask);
+  InventoryMasksMenu.items[1].on = game::HasMask(game::ItemId::GoronMask);
+  InventoryMasksMenu.items[2].on = game::HasMask(game::ItemId::ZoraMask);
+  InventoryMasksMenu.items[3].on = game::HasMask(game::ItemId::FierceDeityMask);
+  InventoryMasksMenu.items[4].on = game::HasMask(game::ItemId::MaskOfTruth);
+  InventoryMasksMenu.items[5].on = game::HasMask(game::ItemId::KafeiMask);
+  InventoryMasksMenu.items[6].on = game::HasMask(game::ItemId::AllNightMask);
+  InventoryMasksMenu.items[7].on = game::HasMask(game::ItemId::BunnyHood);
+  InventoryMasksMenu.items[8].on = game::HasMask(game::ItemId::KeatonMask);
+  InventoryMasksMenu.items[9].on = game::HasMask(game::ItemId::GaroMask);
+  InventoryMasksMenu.items[10].on = game::HasMask(game::ItemId::RomaniMask);
+  InventoryMasksMenu.items[11].on = game::HasMask(game::ItemId::CircusLeaderMask);
+  InventoryMasksMenu.items[12].on = game::HasMask(game::ItemId::PostmanHat);
+  InventoryMasksMenu.items[13].on = game::HasMask(game::ItemId::CoupleMask);
+  InventoryMasksMenu.items[14].on = game::HasMask(game::ItemId::GreatFairyMask);
+  InventoryMasksMenu.items[15].on = game::HasMask(game::ItemId::GibdoMask);
+  InventoryMasksMenu.items[16].on = game::HasMask(game::ItemId::DonGeroMask);
+  InventoryMasksMenu.items[17].on = game::HasMask(game::ItemId::KamaroMask);
+  InventoryMasksMenu.items[18].on = game::HasMask(game::ItemId::CaptainHat);
+  InventoryMasksMenu.items[19].on = game::HasMask(game::ItemId::StoneMask);
+  InventoryMasksMenu.items[20].on = game::HasMask(game::ItemId::BremenMask);
+  InventoryMasksMenu.items[21].on = game::HasMask(game::ItemId::BlastMask);
+  InventoryMasksMenu.items[22].on = game::HasMask(game::ItemId::MaskOfScents);
+  InventoryMasksMenu.items[23].on = game::HasMask(game::ItemId::GiantMask);
+}
+
+
 void Inventory_ItemsMenuFunc(void) {
   Inventory_ItemsMenuInit();
   ToggleMenuShow(&InventoryItemsMenu);
+}
+
+void Inventory_MasksMenuFunc(void) {
+  Inventory_MasksMenuInit();
+  ToggleMenuShow(&InventoryMasksMenu);
 }
 
 void Inventory_ItemsToggle(s32 selected) {
@@ -66,18 +100,17 @@ void Inventory_ItemsToggle(s32 selected) {
   std::array<game::ItemId, 24> items = inventory.items;
   switch (selected) {
   case ((s32)game::ItemId::Bomb - 1):
-    if (!InventoryItemsMenu.items[(u32)game::ItemId::Bomb - 1].on) {
+    if (!game::HasItem(game::ItemId::Bomb)) {
       game::GiveItem(game::ItemId::BombBag);
       game::GiveItem(game::ItemId::Bomb);
       InventoryItemsMenu.items[(u32)game::ItemId::Bomb - 1].on = 1;
     } else {
       game::RemoveItem(game::ItemId::Bomb);
-      //inventory.item_counts[(u32)game::ItemId::Bomb] = 0x00;
       InventoryItemsMenu.items[(u32)game::ItemId::Bomb - 1].on = 0;
     }
     break;
   case ((u32)game::ItemId::Bombchu - 1):
-    if (!InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on) {
+    if (!game::HasItem(game::ItemId::Bombchu)) {
       game::GiveItem(game::ItemId::Bombchu);
       InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on = 1;
     } else {
@@ -313,12 +346,27 @@ void Inventory_BottleSelect(s32 selected) {
   }
 }
 
+void Inventory_MasksToggle(s32 selected) {
+  u32 selectedMask = game::MaskSlotsOrdered[selected];
+  if (!game::HasMask(game::MaskSlots[selectedMask])) {
+    rst::util::Print("%s: We do not have the mask? Giving.", __func__);
+    game::GiveMask(game::MaskSlots[selectedMask]);
+    InventoryMasksMenu.items[selected].on = 1;
+  } else {
+    rst::util::Print("%s: We do have the mask? Removing.", __func__);
+    game::RemoveMask(selectedMask);
+    
+    InventoryMasksMenu.items[selected].on = 0;
+  }
+}
+
+
 Menu InventoryMenu = {
     .title = "Inventory",
-    .nbItems = 1,
+    .nbItems = 2,
     .items = {
         {.title = "Items", .action_type = METHOD, .method = Inventory_ItemsMenuFunc},
-        //{.title = "Right Side Gear", .action_type = METHOD, .method = Inventory_RightGearMenuFunc},
+        {.title = "Masks", .action_type = METHOD, .method = Inventory_MasksMenuFunc},
         //{.title = "Left Side Gear", .action_type = METHOD, .method = Inventory_LeftGearMenuFunc},
         //{.title = "Ocarina Songs", .action_type = METHOD, .method = Inventory_SongsMenuFunc},
         //{.title = "Amounts", .action_type = METHOD, .method = Inventory_AmountsMenuFunc},
@@ -350,6 +398,37 @@ ToggleMenu InventoryItemsMenu = {
         {.on=0, .title="Bottle #4", .method = Inventory_BottlesMenuFunc},
         {.on=0, .title="Bottle #5", .method = Inventory_BottlesMenuFunc},
         {.on=0, .title="Bottle #6", .method = Inventory_BottlesMenuFunc},
+    }
+};
+
+ToggleMenu InventoryMasksMenu = {
+    .title="Masks",
+    .nbItems=24,
+    .items= {
+        {.on=0, .title="Deku Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Goron Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Zora Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Fierce Deity Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Mask Of Truth", .method = Inventory_MasksToggle},
+        {.on=0, .title="Kafei Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="All Night Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Bunny Hood", .method = Inventory_MasksToggle},
+        {.on=0, .title="Keaton Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Garo Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Romani's Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Circus Leader Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Postman Hat", .method = Inventory_MasksToggle},
+        {.on=0, .title="Couple's Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Great Fairy Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Gibdo Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Don Gero Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Kamaro Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Captain Hat", .method = Inventory_MasksToggle},
+        {.on=0, .title="Stone Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Bremen Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Blast Mask", .method = Inventory_MasksToggle},
+        {.on=0, .title="Mask Of Scents", .method = Inventory_MasksToggle},
+        {.on=0, .title="Giant's Mask", .method = Inventory_MasksToggle},
     }
 };
 

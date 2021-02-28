@@ -50,12 +50,12 @@ static void Command_RunFast(void) {
   if (link) {
     link->lin_vel = 27.f;
     game::CommonData& cdata = game::GetCommonData();
-    for(int i = 0; i < 24; i++) {
-      rst::util::Print("%s: array %i is %lu", __func__, i, (u32)cdata.save.inventory.items[i]);
-    }
-    rst::util::Print("%s: array %i is %lu", __func__, 6, (u32)cdata.save.inventory.items[6]);
-    Inventory_ItemsToggle(6);
-    rst::util::Print("%s: array %i is %lu", __func__, 6, (u32)cdata.save.inventory.items[6]);
+    // for(int i = 0; i < 24; i++) {
+    //   rst::util::Print("%s: array %i is %lu", __func__, i, (u32)cdata.save.inventory.items[i]);
+    // }
+    // rst::util::Print("%s: array %i is %lu", __func__, 6, (u32)cdata.save.inventory.items[6]);
+    // Inventory_ItemsToggle(6);
+    // rst::util::Print("%s: array %i is %lu", __func__, 6, (u32)cdata.save.inventory.items[6]);
     //cdata.save.inventory.items[5] = game::ItemId::Bomb;
     //cdata.save.inventory.items[6] = game::ItemId::MoonTear;
   }

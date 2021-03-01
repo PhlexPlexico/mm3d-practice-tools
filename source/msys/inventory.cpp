@@ -56,6 +56,23 @@ static void Inventory_ItemsMenuInit(void) {
   // }
 }
 
+static void Inventory_SongsMenuInit(void) {
+  game::InventoryData& inventory = game::GetCommonData().save.inventory;
+  InventorySongsMenu.items[0].on = inventory.collect_register.sonata_of_awakening;
+  InventorySongsMenu.items[1].on = inventory.collect_register.goron_lullaby;
+  InventorySongsMenu.items[2].on = inventory.collect_register.new_wave_bossa_nova;
+  InventorySongsMenu.items[3].on = inventory.collect_register.elegy_of_emptiness;
+  InventorySongsMenu.items[4].on = inventory.collect_register.oath_to_order;
+  InventorySongsMenu.items[5].on = inventory.collect_register.sarias_song;
+  InventorySongsMenu.items[6].on = inventory.collect_register.song_of_time;
+  InventorySongsMenu.items[7].on = inventory.collect_register.song_of_healing;
+  InventorySongsMenu.items[8].on = inventory.collect_register.eponas_song;
+  InventorySongsMenu.items[9].on = inventory.collect_register.song_of_soaring;
+  InventorySongsMenu.items[10].on = inventory.collect_register.song_of_storms;
+  InventorySongsMenu.items[11].on = inventory.collect_register.suns_song;
+  InventorySongsMenu.items[12].on = inventory.collect_register.lullaby_intro;
+}
+
 static void Inventory_MasksMenuInit(void) {
   InventoryMasksMenu.items[0].on = game::HasMask(game::ItemId::DekuMask);
   InventoryMasksMenu.items[1].on = game::HasMask(game::ItemId::GoronMask);
@@ -81,23 +98,6 @@ static void Inventory_MasksMenuInit(void) {
   InventoryMasksMenu.items[21].on = game::HasMask(game::ItemId::BlastMask);
   InventoryMasksMenu.items[22].on = game::HasMask(game::ItemId::MaskOfScents);
   InventoryMasksMenu.items[23].on = game::HasMask(game::ItemId::GiantMask);
-}
-
-static void Inventory_SongsMenuInit(void) {
-  game::InventoryData& inventory = game::GetCommonData().save.inventory;
-  InventorySongsMenu.items[0].on = inventory.collect_register.sonata_of_awakening;
-  InventorySongsMenu.items[1].on = inventory.collect_register.goron_lullaby;
-  InventorySongsMenu.items[2].on = inventory.collect_register.new_wave_bossa_nova;
-  InventorySongsMenu.items[3].on = inventory.collect_register.elegy_of_emptiness;
-  InventorySongsMenu.items[4].on = inventory.collect_register.oath_to_order;
-  InventorySongsMenu.items[5].on = inventory.collect_register.sarias_song;
-  InventorySongsMenu.items[6].on = inventory.collect_register.song_of_time;
-  InventorySongsMenu.items[7].on = inventory.collect_register.song_of_healing;
-  InventorySongsMenu.items[8].on = inventory.collect_register.eponas_song;
-  InventorySongsMenu.items[9].on = inventory.collect_register.song_of_soaring;
-  InventorySongsMenu.items[10].on = inventory.collect_register.song_of_storms;
-  InventorySongsMenu.items[11].on = inventory.collect_register.suns_song;
-  InventorySongsMenu.items[12].on = inventory.collect_register.lullaby_intro;
 }
 
 void Inventory_ItemsMenuFunc(void) {
@@ -366,17 +366,6 @@ void Inventory_BottleSelect(s32 selected) {
   }
 }
 
-void Inventory_MasksToggle(s32 selected) {
-  u32 selectedMask = game::MaskSlotsOrdered[selected];
-  if (!game::HasMask(game::MaskSlots[selectedMask])) {
-    game::GiveMask(game::MaskSlots[selectedMask]);
-    InventoryMasksMenu.items[selected].on = 1;
-  } else {
-    game::RemoveMask(selectedMask);
-    InventoryMasksMenu.items[selected].on = 0;
-  }
-}
-
 void Inventory_SongsToggle(s32 selected) {
   game::InventoryData::CollectRegister& song_list = game::GetCommonData().save.inventory.collect_register;
   switch (selected) {
@@ -427,13 +416,124 @@ void Inventory_SongsToggle(s32 selected) {
   InventorySongsMenu.items[selected].on = !InventorySongsMenu.items[selected].on;
 }
 
+void Inventory_MasksToggle(s32 selected) {
+  u32 selectedMask = game::MaskSlotsOrdered[selected];
+  if (!game::HasMask(game::MaskSlots[selectedMask])) {
+    game::GiveMask(game::MaskSlots[selectedMask]);
+    InventoryMasksMenu.items[selected].on = 1;
+  } else {
+    game::RemoveMask(selectedMask);
+    InventoryMasksMenu.items[selected].on = 0;
+  }
+}
+
+void Inventory_RemainsMenuFunc() {
+  game::InventoryData::CollectRegister& remains = game::GetCommonData().save.inventory.collect_register;
+  InventoryRemainsMenu.items[0].on = remains.odolwas_remains;
+  InventoryRemainsMenu.items[1].on = remains.gohts_remains;
+  InventoryRemainsMenu.items[2].on = remains.gyorgs_remains;
+  InventoryRemainsMenu.items[3].on = remains.twinmolds_remains;
+  ToggleMenuShow(&InventoryRemainsMenu);
+}
+
+void Inventory_RemainsToggle(s32 selected) {
+  game::InventoryData::CollectRegister& remains = game::GetCommonData().save.inventory.collect_register;
+  switch (selected) {
+    case 0:
+      remains.odolwas_remains = !remains.odolwas_remains;
+      break;
+    case 1:
+      remains.gohts_remains = !remains.gohts_remains;
+      break;
+    case 2:
+      remains.gyorgs_remains = !remains.gyorgs_remains;
+      break;
+    case 3:
+      remains.twinmolds_remains = !remains.twinmolds_remains;
+      break;
+  }
+  InventoryRemainsMenu.items[selected].on = !InventoryRemainsMenu.items[selected].on;
+}
+
+void Inventory_SwordMenuFunc() {
+  game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
+  InventorySwordsMenu.items[0].on = swordShield.sword == game::SwordType::NoSword ? 1 : 0;
+  InventorySwordsMenu.items[1].on = swordShield.sword == game::SwordType::KokiriSword ? 1 : 0;
+  InventorySwordsMenu.items[2].on = swordShield.sword == game::SwordType::RazorSword ? 1 : 0;
+  InventorySwordsMenu.items[3].on = swordShield.sword == game::SwordType::GildedSword ? 1 : 0;
+  ToggleMenuShow(&InventorySwordsMenu);
+}
+
+void Inventory_SwordsToggle(s32 selected) {
+  game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
+  switch (selected) {
+    case 0:
+      swordShield.sword = game::SwordType::NoSword;
+      InventorySwordsMenu.items[1].on = 0;
+      InventorySwordsMenu.items[2].on = 0;
+      InventorySwordsMenu.items[3].on = 0;
+      break;
+    case 1:
+      swordShield.sword = game::SwordType::KokiriSword;
+      InventorySwordsMenu.items[0].on = 0;
+      InventorySwordsMenu.items[2].on = 0;
+      InventorySwordsMenu.items[3].on = 0;
+      break;
+    case 2:
+      swordShield.sword = game::SwordType::RazorSword;
+      InventorySwordsMenu.items[0].on = 0;
+      InventorySwordsMenu.items[1].on = 0;
+      InventorySwordsMenu.items[3].on = 0;
+      break;
+    case 3:
+      swordShield.sword = game::SwordType::GildedSword;
+      InventorySwordsMenu.items[0].on = 0;
+      InventorySwordsMenu.items[1].on = 0;
+      InventorySwordsMenu.items[2].on = 0;
+      break;
+  }
+  InventorySwordsMenu.items[selected].on = !InventorySwordsMenu.items[selected].on;
+}
+
+void Inventory_ShieldMenuFunc() {
+  game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
+  InventoryShieldsMenu.items[0].on = swordShield.shield == game::ShieldType::NoShield ? 1 : 0;
+  InventoryShieldsMenu.items[1].on = swordShield.shield == game::ShieldType::HeroShield ? 1 : 0;
+  InventoryShieldsMenu.items[2].on = swordShield.shield == game::ShieldType::MirrorShield ? 1 : 0;
+  ToggleMenuShow(&InventoryShieldsMenu);
+}
+
+void Inventory_ShieldsToggle(s32 selected) {
+  game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
+  switch (selected) {
+    case 0:
+      swordShield.shield = game::ShieldType::NoShield;
+      InventoryShieldsMenu.items[1].on = 0;
+      InventoryShieldsMenu.items[2].on = 0;
+      break;
+    case 1:
+      swordShield.shield = game::ShieldType::HeroShield;
+      InventoryShieldsMenu.items[0].on = 0;
+      InventoryShieldsMenu.items[2].on = 0;
+      break;
+    case 2:
+      swordShield.shield = game::ShieldType::MirrorShield;
+      InventoryShieldsMenu.items[0].on = 0;
+      InventoryShieldsMenu.items[1].on = 0;
+      break;
+  }
+  InventoryShieldsMenu.items[selected].on = !InventoryShieldsMenu.items[selected].on;
+}
+
 Menu InventoryMenu = {
     .title = "Inventory",
-    .nbItems = 3,
+    .nbItems = 6,
     .items = {
         {.title = "Items", .action_type = METHOD, .method = Inventory_ItemsMenuFunc},
         {.title = "Masks", .action_type = METHOD, .method = Inventory_MasksMenuFunc},
-        //{.title = "Gear", .action_type = METHOD, .method = Inventory_GearMenuFunc},
+        {.title = "Shield", .action_type = METHOD, .method = Inventory_ShieldMenuFunc},
+        {.title = "Sword", .action_type = METHOD, .method = Inventory_SwordMenuFunc},
+        {.title = "Remains", .action_type = METHOD, .method = Inventory_RemainsMenuFunc},
         {.title = "Ocarina Songs", .action_type = METHOD, .method = Inventory_SongsMenuFunc},
         //{.title = "Amounts", .action_type = METHOD, .method = Inventory_AmountsMenuFunc},
     }
@@ -517,6 +617,39 @@ ToggleMenu InventorySongsMenu = {
         {.on=0, .title="Lullaby Intro", .method = Inventory_SongsToggle}
     }
 };
+
+ToggleMenu InventoryRemainsMenu = {
+    .title="Remains",
+    .nbItems=4,
+    .items= {
+        {.on=0, .title="Odolwa's Remains", .method = Inventory_RemainsToggle},
+        {.on=0, .title="Goht's Remains", .method = Inventory_RemainsToggle},
+        {.on=0, .title="Gyorg's Remains", .method = Inventory_RemainsToggle},
+        {.on=0, .title="Twinmold's Remains", .method = Inventory_RemainsToggle}
+    }
+};
+
+ToggleMenu InventorySwordsMenu = {
+    .title="Swords",
+    .nbItems=4,
+    .items= {
+        {.on=0, .title="No Sword", .method = Inventory_SwordsToggle},
+        {.on=0, .title="Kokiri Sword", .method = Inventory_SwordsToggle},
+        {.on=0, .title="Razor Sword", .method = Inventory_SwordsToggle},
+        {.on=0, .title="Gilded Sword", .method = Inventory_SwordsToggle}
+    }
+};
+
+ToggleMenu InventoryShieldsMenu = {
+    .title="Swords",
+    .nbItems=3,
+    .items= {
+        {.on=0, .title="No Shield", .method = Inventory_ShieldsToggle},
+        {.on=0, .title="Hero's Shield", .method = Inventory_ShieldsToggle},
+        {.on=0, .title="Mirror Shield", .method = Inventory_ShieldsToggle},
+    }
+};
+
 
 ToggleMenu InventoryBottlesMenu = {
     .title="Choose Bottle Contents",

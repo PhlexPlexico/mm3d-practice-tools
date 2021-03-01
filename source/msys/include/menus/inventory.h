@@ -7,6 +7,9 @@ extern ToggleMenu InventoryItemsMenu;
 extern ToggleMenu InventoryBottlesMenu;
 extern ToggleMenu InventoryMasksMenu;
 extern ToggleMenu InventorySongsMenu;
+extern ToggleMenu InventoryRemainsMenu;
+extern ToggleMenu InventorySwordsMenu;
+extern ToggleMenu InventoryShieldsMenu;
 extern AmountMenu InventoryAmountsMenu;
 
 // void Inventory_ItemsMenuFunc(void);

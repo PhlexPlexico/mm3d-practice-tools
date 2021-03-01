@@ -140,7 +140,6 @@ static Command commandList[] = {
     {"Frame Advance", 0, 0, {0}, Command_FrameAdvance, COMMAND_PRESS_TYPE, 0, 0},
     {"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
     {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
-    {"Toggle Freeze Time", 0, 0, {0}, Command_ToggleFreeze, COMMAND_PRESS_ONCE_TYPE, 0, 0},
 };
 
 static void Commands_ListInitDefaults(void) {
@@ -181,13 +180,9 @@ static void Commands_ListInitDefaults(void) {
   commandList[10].inputs[0] = BUTTON_DOWN;
   commandList[10].strict = 0;
 
-  commandList[13].comboLen = 2;  // Freeze/resume time.
-  commandList[13].inputs[0] = BUTTON_LEFT;
-  commandList[13].inputs[1] = (BUTTON_LEFT | BUTTON_A);
-  commandList[13].strict = 0;
 
   for (u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i) {
-    if (i != 0 && i != 1 && i != 3 && i != 4 && i != 7 && i != 8 && i != 9 && i != 10 && i != 13) {
+    if (i != 0 && i != 1 && i != 3 && i != 4 && i != 7 && i != 8 && i != 9 && i != 10) {
       commandList[i].comboLen = 0;
       commandList[i].strict = 0;
     }

@@ -12,7 +12,7 @@ extern ToggleMenu InventorySwordsMenu;
 extern ToggleMenu InventoryShieldsMenu;
 extern AmountMenu InventoryAmountsMenu;
 
-// void Inventory_ItemsMenuFunc(void);
+//void RemoveItemFromButtons(ItemId);
 //void Inventory_ItemsToggle(s32);
 //void Inventory_MasksToggle(s32);
 // void Inventory_BottleSelect(s32);

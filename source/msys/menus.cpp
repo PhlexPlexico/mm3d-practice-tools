@@ -51,7 +51,7 @@ Menu pz3DMenu{
         // { .title="Scene", .action_type=MENU, .menu=&SceneMenu },
         { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
         { .title="Inventory", .action_type=MENU, .menu=&InventoryMenu },
-        { .title="Equips (TODO)", .action_type=MENU, .menu=&EquipsMenu },
+        { .title="Equips", .action_type=MENU, .menu=&EquipsMenu },
         // // { "File", .action_type=MENU, .menu=&FileMenu },
         { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
         // { .title="Debug", .action_type=MENU, .menu=&DebugMenu },

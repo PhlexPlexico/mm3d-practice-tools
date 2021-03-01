@@ -1,6 +1,7 @@
 #include "msys/include/menu.h"
 #include "msys/include/menus/equips.h"
 #include "msys/include/draw.h"
+#include "game/common_data.h"
 
 static const char* const EquipButtonNames[] = {
     "B Button",
@@ -11,7 +12,7 @@ static const char* const EquipButtonNames[] = {
 };
 
 static void Equips_ModifyButton(u32 button){
-
+    game::EquipmentData& equips = game::GetCommonData().save.equipment;
     Draw_Lock();
     Draw_ClearFramebuffer();
     Draw_FlushFramebuffer();
@@ -22,7 +23,7 @@ static void Equips_ModifyButton(u32 button){
         Draw_Lock();
 
         Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Select item for the %s:", EquipButtonNames[button]);
-        //Draw_DrawFormattedString(30, 30, COLOR_WHITE, "%03u", gSaveContext.equips.buttonItems[button] & 0xFF);
+        Draw_DrawFormattedString(30, 30, COLOR_WHITE, "%03u", equips.data[0].item_btns[button]);
 
         Draw_FlushFramebuffer();
         Draw_Unlock();
@@ -32,16 +33,16 @@ static void Equips_ModifyButton(u32 button){
             break;
         }
         else if(pressed & BUTTON_UP){
-            //gSaveContext.equips.buttonItems[button]++;
+            equips.data[0].item_btns[button] = (game::ItemId)((u64)equips.data[0].item_btns[button] + (u64)1);
         }
         else if(pressed & BUTTON_DOWN){
-            //gSaveContext.equips.buttonItems[button]--;
+            equips.data[0].item_btns[button] = (game::ItemId)((u64)equips.data[0].item_btns[button] - (u64)1);
         }
         else if(pressed & BUTTON_LEFT){
-            //gSaveContext.equips.buttonItems[button] += 10;
+            equips.data[0].item_btns[button] = (game::ItemId)((u64)equips.data[0].item_btns[button] + (u64)10);
         }
         else if(pressed & BUTTON_RIGHT){
-            //gSaveContext.equips.buttonItems[button] -= 10;
+            equips.data[0].item_btns[button] = (game::ItemId)((u64)equips.data[0].item_btns[button] - (u64)10);
         }
 
     } while (true);

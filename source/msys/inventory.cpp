@@ -10,6 +10,17 @@ static game::ItemId SelectedBottle;
 static u32 SelectedBottleIndex;
 static u32 BottleNumber;
 
+void RemoveItemFromButtons(game::ItemId item_id) {
+  game::EquipmentData& equips = game::GetCommonData().save.equipment;
+  for (u64 button = 0; button < equips.data[0].item_btns.size(); button++) {
+    if (item_id == equips.data[0].item_btns[button]) {
+      equips.data[0].item_btns[button] = game::ItemId::None;
+      break;
+    }
+  }
+}
+
+
 static void DisableMenuToggles(ToggleMenu* menu) {
     for (u32 i = 0; i < menu->nbItems - 1; ++i) {
         menu->items[i].on = 0;
@@ -127,6 +138,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::Bomb);
       InventoryItemsMenu.items[(u32)game::ItemId::Bomb - 1].on = 0;
+      RemoveItemFromButtons(game::ItemId::Bomb);
     }
     break;
   case ((u32)game::ItemId::Bombchu - 1):
@@ -137,6 +149,7 @@ void Inventory_ItemsToggle(s32 selected) {
       game::RemoveItem(game::ItemId::Bombchu);
       inventory.item_counts[(u32)game::ItemId::Bombchu] = 0x00;
       InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on = 0;
+      RemoveItemFromButtons(game::ItemId::Bombchu);
     }
     break;
   case ((u32)game::ItemId::DekuStick - 1):
@@ -146,6 +159,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::DekuStick);
       InventoryItemsMenu.items[(u32)game::ItemId::DekuStick - 1].on = 0;
+      RemoveItemFromButtons(game::ItemId::DekuStick);
     }
     break;
   case ((u32)game::ItemId::DekuNuts - 1):
@@ -155,6 +169,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::DekuNuts);
       InventoryItemsMenu.items[(u32)game::ItemId::DekuNuts - 1].on = 0;
+      RemoveItemFromButtons(game::ItemId::DekuNuts);
     }
     break;
   case ((u32)game::ItemId::MagicBean - 1):
@@ -164,6 +179,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::MagicBean);
       InventoryItemsMenu.items[(u32)game::ItemId::MagicBean - 1].on = 0;
+      RemoveItemFromButtons(game::ItemId::MagicBean);
     }
     break;
   case ((u32)game::ItemId::PowderKeg - 2):
@@ -173,6 +189,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::PowderKeg);
       InventoryItemsMenu.items[(u32)game::ItemId::PowderKeg - 2].on = 0;
+      RemoveItemFromButtons(game::ItemId::PowderKeg);
     }
     break;
   case ((u32)game::ItemId::PictographBox - 2):
@@ -191,6 +208,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::LensOfTruth);
       InventoryItemsMenu.items[(u32)game::ItemId::LensOfTruth - 2].on = 0;
+      RemoveItemFromButtons(game::ItemId::LensOfTruth);
     }
     break;
   case ((u32)game::ItemId::Hookshot - 2):
@@ -200,6 +218,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::Hookshot);
       InventoryItemsMenu.items[(u32)game::ItemId::Hookshot - 2].on = 0;
+      RemoveItemFromButtons(game::ItemId::Hookshot);
     }
     break;
   case ((u32)game::ItemId::GreatFairySword - 2):
@@ -209,6 +228,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem(game::ItemId::GreatFairySword);
       InventoryItemsMenu.items[(u32)game::ItemId::GreatFairySword - 2].on = 0;
+      RemoveItemFromButtons(game::ItemId::GreatFairySword);
     }
     break;
   case ((u32)game::ItemId::Bottle - 3):
@@ -308,6 +328,7 @@ void Inventory_ItemsToggle(s32 selected) {
     } else {
       game::RemoveItem((game::ItemId)selected);
       InventoryItemsMenu.items[selected].on = 0;
+      RemoveItemFromButtons((game::ItemId)selected);
     }
     break;
   }
@@ -424,6 +445,7 @@ void Inventory_MasksToggle(s32 selected) {
   } else {
     game::RemoveMask(selectedMask);
     InventoryMasksMenu.items[selected].on = 0;
+    RemoveItemFromButtons(game::MaskSlots[selectedMask]);
   }
 }
 

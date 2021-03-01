@@ -161,7 +161,7 @@ struct Player : public Actor {
 
   bool SetTalkActor(u8 new_fn1_idx, Actor* actor);
 
-  char field_1F8;
+  char visible_shield_type;
   FormParamIndex form_param_idx;
   u8 item_btn_slot;
   Action current_action;
@@ -360,8 +360,10 @@ struct Player : public Actor {
   float lin_vel;
   u16 player_angle;
   u16 field_11E36;
-  u32 field_11E38;
-  u8 gap_11E3C;
+  u16 field_11E38;
+  u8 sword_attack_type;
+  u8 sword_active_timer;
+  u8 sword_active;
   char field_11E3D[1];
   char field_111E3E;
   u8 field_11E3F;
@@ -485,6 +487,7 @@ struct Player : public Actor {
 };
 static_assert(rst::util::OffsetOf(&Player::transform_mask_action) == 0x200);
 static_assert(rst::util::OffsetOf(&Player::field_12CCE) == 0x12CCE);
+static_assert(rst::util::OffsetOf(&Player::sword_active) == 0x11E3C);
 // TODO: complete the struct and add a size assertion.
 
 enum class AllowExistingMagicUsage { No, Yes };

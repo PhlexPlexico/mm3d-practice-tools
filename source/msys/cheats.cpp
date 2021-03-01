@@ -86,8 +86,11 @@ static void Cheats_TimeDecreaseByOne(void) {
   cdata.save.extra_time_speed--;
 }
 
-static void Cheats_UseItemsEverywhere(void) {
-  // TODO?
+static void Cheats_ISG(void) {
+  game::GlobalContext* gctx = rst::GetContext().gctx;
+  game::act::Player* player = gctx->GetPlayerActor();
+  player->sword_active_timer = 0x01;
+  player->sword_active = 0x01;
 }
 
 static void TimeAdvance_6AM(void) {
@@ -147,10 +150,7 @@ Menu CheatsMenu = {
         {.title = "Change Time of Day", .action_type = MENU, .menu = &TimeChangeMenu},
         {.title = "Change Flow of Time", .action_type = MENU, .menu = &TimeSpeedMenu},
         {.title = "Change Day", .action_type = MENU, .menu = &DayChangeMenu},
-        {.title = "Usable Items (TODO)",
-         .action_type = METHOD,
-         .method = Cheats_UseItemsEverywhere
-         }
+        {.title = "ISG", .action_type = METHOD, .method = Cheats_ISG}
     }
 };
 

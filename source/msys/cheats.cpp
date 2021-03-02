@@ -2,7 +2,7 @@
 #include "common/context.h"
 #include "game/common_data.h"
 #include "include/menu.h"
-
+#include "common/hidstate.h"
 
 static void Cheats_Health(void) {
   game::CommonData& cdata = game::GetCommonData();
@@ -87,10 +87,12 @@ static void Cheats_TimeDecreaseByOne(void) {
 }
 
 static void Cheats_ISG(void) {
-  game::GlobalContext* gctx = rst::GetContext().gctx;
-  game::act::Player* player = gctx->GetPlayerActor();
-  player->sword_active_timer = 0x01;
-  player->sword_active = 0x01;
+  rst::AdvanceState& advState = rst::GetAdvState();
+  advState.useISG = !advState.useISG;
+  // game::GlobalContext* gctx = rst::GetContext().gctx;
+  // game::act::Player* player = gctx->GetPlayerActor();
+  // player->sword_active_timer = 0x01;
+  // player->sword_active = 0x01;
 }
 
 static void TimeAdvance_6AM(void) {

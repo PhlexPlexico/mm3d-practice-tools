@@ -176,6 +176,13 @@ RST_HOOK void Calc(game::State* state) {
   Command_UpdateCommands(inputs.cur.val);
   frame_advance();
   drawWatches();
+  if(advState.useISG) {
+    game::act::Player* player = context.gctx->GetPlayerActor();
+    if (player) {
+      player->sword_active_timer = 0x01;
+      player->sword_active = 0x01;
+    } 
+  }
   // End routines.
 }
 

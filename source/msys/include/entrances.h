@@ -893,7 +893,8 @@ const EntrancesByScene Entrances_Road_To_Ikana = {
     .items = {
         {0xA000, "from Termina Field"},
         {0xA010, "from Ikana Canyon"},
-        {0xA020, "from Ikana Graveyard"}
+        {0xA020, "from Ikana Graveyard"},
+        {0xA030, "from Quill Statue"}
     }
 };
 

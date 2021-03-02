@@ -45,7 +45,7 @@
 
 Menu pz3DMenu{
     .title="MM3D Practice Menu",
-    .nbItems=6,
+    .nbItems=7,
     .items{
         { .title="Warps (TODO)", .action_type=MENU, .menu=&WarpsMenu },
         // { .title="Scene", .action_type=MENU, .menu=&SceneMenu },
@@ -54,7 +54,7 @@ Menu pz3DMenu{
         { .title="Equips", .action_type=MENU, .menu=&EquipsMenu },
         // // { "File", .action_type=MENU, .menu=&FileMenu },
         { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
-        // { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
+        { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
         { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands }
     }
 };

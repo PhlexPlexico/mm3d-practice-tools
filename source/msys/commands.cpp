@@ -11,6 +11,7 @@
 #include "msys/include/menus/warps.h"
 #include "msys/include/menus/watches.h"
 #include "msys/include/menus/inventory.h"
+#include "game/static_context.h"
 
 rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
@@ -48,7 +49,8 @@ static void Command_Fall(void) {  // TODO: Doesn't work
 static void Command_RunFast(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
-    link->lin_vel = 27.f;
+    //link->lin_vel = 27.f;
+    link->visible_shield_type = 1;
   }
 }
 
@@ -127,7 +129,7 @@ static void Command_ToggleFreeze(void) {
 static Command commandList[] = {
     {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
-    {"Fall (TODO)", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
+    {"Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
     {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
     {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},

@@ -103,6 +103,7 @@ add_executable(newcode
   msys/abi.cpp
   msys/cheats.cpp
   msys/commands.cpp
+  msys/debug.cpp
   msys/draw.cpp
   msys/equips.cpp
   msys/entrances.cpp

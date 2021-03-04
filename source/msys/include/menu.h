@@ -2,6 +2,7 @@
 *   This file is a modified part of Luma3DS
 *   Copyright (C) 2016-2019 Aurora Wright, TuxSH
 *   Modified 2020 Gamestabled
+*   Modified 2021 PhlexPlexico
 *
 *   This program is free software: you can redistribute it and/or modify
 *   it under the terms of the GNU General Public License as published by
@@ -34,8 +35,11 @@
 #define MIN(x,y) (x < y ? x : y)
 #define MAX(x,y) (x > y ? x : y)
 
-#define HID_PAD           (REG32(0x10146000) ^ 0xFFF) // WE SHOULD NOT BE USING THIS
-//#define HID_PAD (REG32(0x007b2d34) ^ 0xFFF) // Shared HID Memory address.
+inline u32 GetCurrentPadState() {
+  return *reinterpret_cast<volatile u32*>(0x729000 + 0x1C);
+}
+
+#define HID_PAD GetCurrentPadState() // Shared HID Memory address! Thanks @leoetlino :)
 
 #define BUTTON_A          (1 << 0)
 #define BUTTON_B          (1 << 1)

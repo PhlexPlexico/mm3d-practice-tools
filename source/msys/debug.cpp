@@ -140,10 +140,10 @@ static void DebugActors_ShowActors(void) {
       Draw_FlushFramebuffer();
       Draw_Unlock();
     }
-    // else if(pressed & BUTTON_X)
-    // {
-    //     Actor_Kill(actorList[selected].instance);
-    // }
+    else if(pressed & BUTTON_X)
+    {
+        actorList[selected].instance->Free();
+    }
     else if (pressed & BUTTON_DOWN) {
       selected++;
     } else if (pressed & BUTTON_UP) {

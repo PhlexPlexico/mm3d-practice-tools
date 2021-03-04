@@ -22,13 +22,6 @@ struct AdvanceState {
   bool useISG = false;
 };
 
-typedef struct ActorHeapNode {
-    u16 magic;
-    u16 free;
-    u32 size;
-    struct ActorHeapNode* next;
-    struct ActorHeapNode* prev;
-} ActorHeapNode;
 
 typedef union {
   s32 val;

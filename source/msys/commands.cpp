@@ -12,6 +12,7 @@
 #include "msys/include/menus/watches.h"
 #include "msys/include/menus/inventory.h"
 #include "game/static_context.h"
+#include "msys/include/menus/debug.h"
 
 rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
@@ -49,8 +50,7 @@ static void Command_Fall(void) {  // TODO: Doesn't work
 static void Command_RunFast(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
-    //link->lin_vel = 27.f;
-    link->visible_shield_type = 1;
+    link->lin_vel = 27.f;
   }
 }
 

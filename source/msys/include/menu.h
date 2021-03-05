@@ -36,9 +36,9 @@
 #define MAX(x,y) (x > y ? x : y)
 
 inline u32 GetCurrentPadState() {
-  return *reinterpret_cast<volatile u32*>(0x729000 + 0x1C);
+  auto hid_shared_mem = *reinterpret_cast<uintptr_t*>(0x007b2d34);
+  return *reinterpret_cast<volatile u32*>(hid_shared_mem + 0x1C);
 }
-
 #define HID_PAD GetCurrentPadState() // Shared HID Memory address! Thanks @leoetlino :)
 
 #define BUTTON_A          (1 << 0)

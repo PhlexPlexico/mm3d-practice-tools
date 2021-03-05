@@ -112,24 +112,20 @@ static void Command_FrameAdvance(void) {
 // static void Command_RecordMacro(void);
 // static void Command_PlayMacro(void);
 // static void Command_CollisionView(void);
-static void Command_HitboxView(void) {
-  // Possible TODO?
-  // gStaticContext.collisionDisplay = !gStaticContext.collisionDisplay;
-}
+// static void Command_HitboxView(void) {
+//   // Possible TODO?
+//   // gStaticContext.collisionDisplay = !gStaticContext.collisionDisplay;
+// }
 
 static void Command_ToggleWatches(void) {
   advState.showWatches = !advState.showWatches;
   toggleWatches();
 }
 
-static void Command_ToggleFreeze(void) {
-  advState.timeFreeze = !advState.timeFreeze;
-}
-
 static Command commandList[] = {
     {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
-    {"Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
+    {"Fast Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
     {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
     {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
@@ -140,7 +136,7 @@ static Command commandList[] = {
     // {"Next Position", 0, 0, { 0 }, Command_NextPos, COMMAND_PRESS_TYPE, 0},
     {"Pause/Unpause", 0, 0, {0}, Command_PauseUnpause, COMMAND_PRESS_TYPE, 0, 0},
     {"Frame Advance", 0, 0, {0}, Command_FrameAdvance, COMMAND_PRESS_TYPE, 0, 0},
-    {"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
+    //{"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
     {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
 };
 
@@ -156,8 +152,16 @@ static void Commands_ListInitDefaults(void) {
   commandList[1].inputs[1] = (BUTTON_X | BUTTON_A);
   commandList[1].strict = 0;
 
-  commandList[3].comboLen = 1;  // Run Fast
-  commandList[3].inputs[0] = BUTTON_Y;
+  commandList[2].comboLen = 4;  // Fast Fall
+  commandList[2].inputs[0] = BUTTON_L1;
+  commandList[2].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[2].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+  commandList[2].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_Y);
+  commandList[2].strict = 0;
+
+  commandList[3].comboLen = 2;  // Run Fast
+  commandList[3].inputs[0] = BUTTON_X;
+  commandList[3].inputs[1] = (BUTTON_X | BUTTON_Y);
   commandList[3].strict = 0;
 
   commandList[4].comboLen = 2;  // Goto File Select
@@ -165,30 +169,54 @@ static void Commands_ListInitDefaults(void) {
   commandList[4].inputs[1] = (BUTTON_Y | BUTTON_A);
   commandList[4].strict = 0;
 
-  commandList[7].comboLen = 2;  // Store Pos
+  commandList[5].comboLen = 4;  // Reload Scene
+  commandList[5].inputs[0] = BUTTON_L1;
+  commandList[5].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[5].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+  commandList[5].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_A);
+  commandList[5].strict = 0;
+
+  commandList[6].comboLen = 4;  // Void Out
+  commandList[6].inputs[0] = BUTTON_L1;
+  commandList[6].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[6].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+  commandList[6].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_B);
+  commandList[6].strict = 0;
+
+  commandList[7].comboLen = 3;  // Store Pos
   commandList[7].inputs[0] = BUTTON_L1;
-  commandList[7].inputs[1] = BUTTON_LEFT;
+  commandList[7].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[7].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_LEFT);
   commandList[7].strict = 0;
 
-  commandList[8].comboLen = 1;  // Load Pos
-  commandList[8].inputs[0] = BUTTON_RIGHT;
+  commandList[8].comboLen = 3;  // Load Pos
+  commandList[8].inputs[0] = BUTTON_L1;
+  commandList[8].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[8].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_RIGHT);
   commandList[8].strict = 0;
 
-  commandList[9].comboLen = 1;  // Pause/Unpause
-  commandList[9].inputs[0] = BUTTON_UP;
+  commandList[9].comboLen = 3;  // Pause/Unpause
+  commandList[9].inputs[0] = BUTTON_L1;
+  commandList[9].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[9].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_UP);
   commandList[9].strict = 0;
 
   commandList[10].comboLen = 1;  // Frame Advance
-  commandList[10].inputs[0] = BUTTON_DOWN;
+  commandList[10].inputs[0] = BUTTON_UP;
   commandList[10].strict = 0;
 
+  commandList[11].comboLen = 3;  // Frame Advance
+  commandList[11].inputs[0] = BUTTON_L1;
+  commandList[11].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+  commandList[11].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_START);
+  commandList[11].strict = 0;
 
-  for (u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i) {
-    if (i != 0 && i != 1 && i != 3 && i != 4 && i != 7 && i != 8 && i != 9 && i != 10) {
-      commandList[i].comboLen = 0;
-      commandList[i].strict = 0;
-    }
-  }
+  // for (u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i) {
+  //   if (i == 12 || i == 13) {
+  //     commandList[i].comboLen = 0;
+  //     commandList[i].strict = 0;
+  //   }
+  // }
 }
 
 static u32 commandInit = 0;

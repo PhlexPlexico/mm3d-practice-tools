@@ -17,7 +17,6 @@ struct AdvanceState {
   bool pauseUnpause = false;
   bool frameAdvance = false;
   bool menuExitFlag = false;
-  bool timeFreeze = false;
   bool showWatches = false;
   bool useISG = false;
 };

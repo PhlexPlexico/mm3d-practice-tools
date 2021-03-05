@@ -233,7 +233,7 @@ void ToggleMenuShow(ToggleMenu *menu) //displays a toggle menu, analogous to ros
         }
         Draw_DrawFormattedString(10, 10, COLOR_TITLE, menu->title);
 
-        for (s32 i = 0; i < TOGGLE_MENU_MAX_SHOW && page * TOGGLE_MENU_MAX_SHOW + i < menu->nbItems; ++i)
+        for (s32 i = 0; i < TOGGLE_MENU_MAX_SHOW && (u32)page * TOGGLE_MENU_MAX_SHOW + i < menu->nbItems; ++i)
         {
             s32 j = page * TOGGLE_MENU_MAX_SHOW + i;
             const char* checkbox = (menu->items[j].on ? "(x) " : "( ) ");
@@ -275,16 +275,16 @@ void ToggleMenuShow(ToggleMenu *menu) //displays a toggle menu, analogous to ros
             selected -= TOGGLE_MENU_MAX_SHOW;
         }
         else if(pressed & BUTTON_RIGHT){
-            if(selected + TOGGLE_MENU_MAX_SHOW < menu->nbItems)
+            if((u32)selected + TOGGLE_MENU_MAX_SHOW < menu->nbItems)
                 selected += TOGGLE_MENU_MAX_SHOW;
-            else if((menu->nbItems - 1) / TOGGLE_MENU_MAX_SHOW == page)
+            else if((menu->nbItems - 1) / TOGGLE_MENU_MAX_SHOW == (u32)page)
                 selected %= TOGGLE_MENU_MAX_SHOW;
             else selected = menu->nbItems - 1;
         }
 
         if(selected < 0)
             selected = menu->nbItems - 1;
-        else if(selected >= menu->nbItems) selected = 0;
+        else if((u32)selected >= menu->nbItems) selected = 0;
 
         pagePrev = page;
         page = selected / TOGGLE_MENU_MAX_SHOW;
@@ -310,7 +310,7 @@ void AmountMenuShow(AmountMenu* menu){ //displays an amount menu TODO: seems mes
         }
         Draw_DrawFormattedString(10, 10, COLOR_TITLE, menu->title);
 
-        for (s32 i = 0; i < AMOUNT_MENU_MAX_SHOW && page * AMOUNT_MENU_MAX_SHOW + i < menu->nbItems; ++i)
+        for (s32 i = 0; i < AMOUNT_MENU_MAX_SHOW && (u32)page * AMOUNT_MENU_MAX_SHOW + i < menu->nbItems; ++i)
         {
             s32 j = page * AMOUNT_MENU_MAX_SHOW + i;
             Draw_DrawString(70, 30 + i * SPACING_Y, COLOR_WHITE, menu->items[j].title);
@@ -363,9 +363,9 @@ void AmountMenuShow(AmountMenu* menu){ //displays an amount menu TODO: seems mes
         }
         else if(pressed & BUTTON_RIGHT && !chosen)
         {
-            if(selected + AMOUNT_MENU_MAX_SHOW < menu->nbItems)
+            if((u32)selected + AMOUNT_MENU_MAX_SHOW < menu->nbItems)
                 selected += AMOUNT_MENU_MAX_SHOW;
-            else if((menu->nbItems - 1) / AMOUNT_MENU_MAX_SHOW == page)
+            else if((menu->nbItems - 1) / AMOUNT_MENU_MAX_SHOW == (u32)page)
                 selected %= AMOUNT_MENU_MAX_SHOW;
             else selected = menu->nbItems - 1;
         }
@@ -375,7 +375,7 @@ void AmountMenuShow(AmountMenu* menu){ //displays an amount menu TODO: seems mes
         }
         if(selected < 0)
             selected = menu->nbItems - 1;
-        else if(selected >= menu->nbItems) selected = 0;
+        else if((u32)selected >= menu->nbItems) selected = 0;
 
         pagePrev = page;
         page = selected / AMOUNT_MENU_MAX_SHOW;
@@ -402,19 +402,19 @@ u32 KeyboardFill(char * buf, u32 len){
 
 
         for(u32 i = 0; i < 10; ++i){
-            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30, selected == i ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[i]);
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30, (u32)selected == i ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[i]);
         }
         for(u32 i = 0; i < 10; ++i){
             u32 j = 10 + i;
-            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 2 * SPACING_Y, selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 2 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
         }
         for(u32 i = 0; i < 10; ++i){
             u32 j = 20 + i;
-            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 4 * SPACING_Y, selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 4 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
         }
         for(u32 i = 0; i < 10; ++i){
             u32 j = 30 + i;
-            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 6 * SPACING_Y, selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 6 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
         }
         Draw_DrawString(30, 30 + 7 * SPACING_Y, COLOR_RED, buf);
 
@@ -426,7 +426,7 @@ u32 KeyboardFill(char * buf, u32 len){
         u32 pressed = waitInputWithTimeout(1000);
         if(pressed & BUTTON_B){
             idx--;
-            if(idx < 0) idx = 0;
+            if((s32)idx < 0) idx = 0;
             buf[idx] = '\0';
             Draw_Lock();
             Draw_ClearFramebuffer();

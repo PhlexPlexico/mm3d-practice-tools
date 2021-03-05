@@ -2,7 +2,15 @@
 #include "common/context.h"
 #include "game/common_data.h"
 #include "include/menu.h"
+#include "include/draw.h"
 #include "common/hidstate.h"
+
+static const char* const LinkModifyNames[] = {
+  "max health (* by 16 for a total heart)",
+  "magic upgrades",
+  "razor sword hp",
+  "current rupees"
+};
 
 static void Cheats_Health(void) {
   game::CommonData& cdata = game::GetCommonData();
@@ -89,10 +97,6 @@ static void Cheats_TimeDecreaseByOne(void) {
 static void Cheats_ISG(void) {
   rst::AdvanceState& advState = rst::GetAdvState();
   advState.useISG = !advState.useISG;
-  // game::GlobalContext* gctx = rst::GetContext().gctx;
-  // game::act::Player* player = gctx->GetPlayerActor();
-  // player->sword_active_timer = 0x01;
-  // player->sword_active = 0x01;
 }
 
 static void TimeAdvance_6AM(void) {
@@ -141,9 +145,98 @@ static void Cheats_GoToDay4(void) {
   cdata.save.total_day = 5;
 }
 
+static void Cheats_Modify_Link(LinkData whatToModify, u16* ptrToModify) {
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
+
+  do
+  {
+      Draw_Lock();
+
+      Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Current %s:", LinkModifyNames[whatToModify]);
+      Draw_DrawFormattedString(30, 30, COLOR_WHITE, "%u", *ptrToModify);
+
+      Draw_FlushFramebuffer();
+      Draw_Unlock();
+
+      u32 pressed = waitInputWithTimeout(1000);
+      if(pressed & (BUTTON_B | BUTTON_A)){
+          break;
+      }
+      else if(pressed & BUTTON_UP){
+          *ptrToModify+=1;
+      }
+      else if(pressed & BUTTON_DOWN){
+          *ptrToModify-=1;
+      }
+      else if(pressed & BUTTON_LEFT){
+          *ptrToModify += 10;
+      }
+      else if(pressed & BUTTON_RIGHT){
+          *ptrToModify -= 10;
+      }
+
+  } while (true);
+}
+
+static void Cheats_Modify_Link_Magic(LinkData whatToModify, s8* ptrToModify) {
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
+
+  do
+  {
+      Draw_Lock();
+
+      Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Current %s:", LinkModifyNames[whatToModify]);
+      Draw_DrawFormattedString(30, 30, COLOR_WHITE, "%d", *ptrToModify);
+
+      Draw_FlushFramebuffer();
+      Draw_Unlock();
+
+      u32 pressed = waitInputWithTimeout(1000);
+      if(pressed & (BUTTON_B | BUTTON_A)){
+          break;
+      }
+      else if(pressed & BUTTON_UP){
+          *ptrToModify+=1;
+      }
+      else if(pressed & BUTTON_DOWN){
+        if (*ptrToModify < 1) {
+          *ptrToModify = 0;
+        } else {
+          *ptrToModify-=1;
+        }
+      }
+  } while (true);
+}
+
+static void Cheats_ModifyHealth(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  Cheats_Modify_Link(HEALTH, &cdata.save.player.health_max);
+}
+
+static void Cheats_ModifyMagic(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  Cheats_Modify_Link_Magic(MAGIC, &cdata.save.player.magic_num_upgrades);
+}
+
+static void Cheats_ModifyRazor(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  Cheats_Modify_Link(RAZOR_SWORD, &cdata.save.player.razor_sword_hp);
+}
+
+static void Cheats_ModifyRupees(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  Cheats_Modify_Link(RUPEE, &cdata.save.player.rupee_count);
+}
+
 Menu CheatsMenu = {
     .title = "Cheats",
-    .nbItems = 8,
+    .nbItems = 9,
     .items = {
         {.title = "Refill Health", .action_type = METHOD, .method = Cheats_Health},
         {.title = "Refill Magic", .action_type = METHOD, .method = Cheats_Magic},
@@ -152,7 +245,8 @@ Menu CheatsMenu = {
         {.title = "Change Time of Day", .action_type = MENU, .menu = &TimeChangeMenu},
         {.title = "Change Flow of Time", .action_type = MENU, .menu = &TimeSpeedMenu},
         {.title = "Change Day", .action_type = MENU, .menu = &DayChangeMenu},
-        {.title = "ISG", .action_type = METHOD, .method = Cheats_ISG}
+        {.title = "ISG", .action_type = METHOD, .method = Cheats_ISG},
+        {.title = "Edit Link's Info", .action_type = MENU, .menu = &LinkAmountInfo},
     }
 };
 
@@ -202,5 +296,16 @@ Menu DayChangeMenu = {
     {.title="Day 2", .action_type = METHOD, .method = Cheats_GoToDay2},
     {.title="Day 3", .action_type = METHOD, .method = Cheats_GoToDay3},
     {.title="Day 4", .action_type = METHOD, .method = Cheats_GoToDay4}
+  }
+};
+
+Menu LinkAmountInfo = {
+  .title = "Player Data",
+  .nbItems = 4,
+  .items = {
+    {.title="Total Health", .action_type = METHOD, .method = Cheats_ModifyHealth},
+    {.title="Magic Upgrades", .action_type = METHOD, .method = Cheats_ModifyMagic},
+    {.title="Razor Sword Hits Remaining", .action_type = METHOD, .method = Cheats_ModifyRazor},
+    {.title="Modify Rupee Count", .action_type = METHOD, .method = Cheats_ModifyRupees}
   }
 };

@@ -115,22 +115,9 @@ add_executable(newcode
   msys/svc_loader.s
   msys/warps.cpp
   msys/watches.cpp
-  # msys/svc_menus.s
-  # rst/camera.cpp
-  # rst/camera.h
-  # rst/fixes/boss.cpp
-  # rst/fixes/boss.h
-  # rst/fixes/boss.s
   rst/fixes/obj_stone_tower_block.cpp
   rst/fixes/ocarina.cpp
-  # rst/fixes/time.cpp
-  # rst/fixes.cpp
-  # rst/fixes.h
-  # rst/input.cpp
-  # rst/link.cpp
-  # rst/link.h
   rst/main.cpp
-  # rst/message.cpp
   rst/trampolines.s
 )
 set_target_properties(newcode PROPERTIES SUFFIX ".elf")

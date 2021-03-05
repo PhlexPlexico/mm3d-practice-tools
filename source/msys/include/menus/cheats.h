@@ -9,3 +9,11 @@ extern Menu CheatsItemsMenu;
 extern Menu TimeChangeMenu;
 extern Menu TimeSpeedMenu;
 extern Menu DayChangeMenu;
+extern Menu LinkAmountInfo;
+
+enum LinkData {
+    HEALTH = 0,
+    MAGIC,
+    RAZOR_SWORD,
+    RUPEE
+};

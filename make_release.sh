@@ -47,7 +47,7 @@ build () {
   rm -r $RST_ROOT/bak || true
 }
 
-
+git submodule update --init
 build v100
 
 if [ -z ${RST_DEV+x} ]; then

@@ -124,10 +124,10 @@ static void Command_ToggleWatches(void) {
 
 static Command commandList[] = {
     {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
-    {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 0},
+    {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 1},
     {"Fast Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
-    {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 0},
-    {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 1},
+    {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 1},
     {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Store Position", 0, 0, {0}, Command_StorePos, COMMAND_PRESS_TYPE, 0, 0},
@@ -150,7 +150,7 @@ static void Commands_ListInitDefaults(void) {
   commandList[1].comboLen = 2;  // Levitate
   commandList[1].inputs[0] = BUTTON_X;
   commandList[1].inputs[1] = (BUTTON_X | BUTTON_A);
-  commandList[1].strict = 0;
+  commandList[1].strict = 1;
 
   commandList[2].comboLen = 4;  // Fast Fall
   commandList[2].inputs[0] = BUTTON_L1;
@@ -162,12 +162,12 @@ static void Commands_ListInitDefaults(void) {
   commandList[3].comboLen = 2;  // Run Fast
   commandList[3].inputs[0] = BUTTON_X;
   commandList[3].inputs[1] = (BUTTON_X | BUTTON_Y);
-  commandList[3].strict = 0;
+  commandList[3].strict = 1;
 
   commandList[4].comboLen = 2;  // Goto File Select
   commandList[4].inputs[0] = BUTTON_Y;
   commandList[4].inputs[1] = (BUTTON_Y | BUTTON_A);
-  commandList[4].strict = 0;
+  commandList[4].strict = 1;
 
   commandList[5].comboLen = 4;  // Reload Scene
   commandList[5].inputs[0] = BUTTON_L1;
@@ -220,8 +220,6 @@ static void Commands_ListInitDefaults(void) {
 }
 
 static u32 commandInit = 0;
-// TODO - reference the inputted commands from restoration?
-// Even better - grab a new shared HID handle and use that on the thread. Safer?
 void Command_UpdateCommands(u32 curInputs) {  // curInputs should be all the held and pressed
                                               // buttons
   if (!commandInit) {

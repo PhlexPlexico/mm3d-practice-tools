@@ -169,12 +169,18 @@ static void Cheats_Modify_Link(LinkData whatToModify, u16* ptrToModify) {
           *ptrToModify+=1;
       }
       else if(pressed & BUTTON_DOWN){
+        if (*ptrToModify < 1)
+          *ptrToModify = 0;
+        else
           *ptrToModify-=1;
       }
-      else if(pressed & BUTTON_LEFT){
-          *ptrToModify += 10;
-      }
       else if(pressed & BUTTON_RIGHT){
+        *ptrToModify += 10;
+      }
+      else if(pressed & BUTTON_LEFT){
+        if (*ptrToModify < 10)
+          *ptrToModify = 0;
+        else
           *ptrToModify -= 10;
       }
 

@@ -38,7 +38,6 @@ build () {
     flips -b $RST_ROOT/bak/code.bin $RST_ROOT/code.bin $RELEASE_DIR/$TARGET_VERSION/code.bps
   fi
   cp $RST_ROOT/code.bin $RST_ROOT/source/build/patched_code.bin
-  cp $RST_ROOT/source/build/patched_code.bin $RST_ROOT/source/build/patched_code_faster_aim.bin
   cp $RST_ROOT/exheader*.bin $RELEASE_DIR/$TARGET_VERSION/
 
   # Clean up
@@ -51,24 +50,29 @@ make_patch_for_secondary_version () {
   TARGET_VERSION=$1
   mkdir $RELEASE_DIR/$TARGET_VERSION
   cp $RELEASE_DIR/v100/exheader*.bin $RELEASE_DIR/$TARGET_VERSION/
-  flips -b $RST_ROOT/$TARGET_VERSION/code.bin $RST_ROOT/source/build/patched_code.bin $RELEASE_DIR/$TARGET_VERSION/code.bps &
-  flips -b $RST_ROOT/$TARGET_VERSION/code.bin $RST_ROOT/source/build/patched_code_faster_aim.bin $RELEASE_DIR/$TARGET_VERSION/code_faster_aim.bps &
+  flips -b $RST_ROOT/$TARGET_VERSION/code.bin $RST_ROOT/source/build/patched_code.bin $RELEASE_DIR/$TARGET_VERSION/code.bps
   wait
 }
 
-git submodule update --init
-build v100
+if test -f "./v100/code.bin"; then
+  git submodule update --init
+  build v100
+else
+  print_status "Code.bin is missing from v100. Please include to create."
+fi
 
 if [ -z ${RST_DEV+x} ]; then
-
-
-  make_patch_for_secondary_version v101 &
-  make_patch_for_secondary_version v110 &
-  wait
-  print_status "packing"
-
   mv $RELEASE_DIR/v100/exheader.bin $RELEASE_DIR/v100/exheader_citra.bin
   mv $RELEASE_DIR/v100/exheader_legacy.bin $RELEASE_DIR/v100/exheader.bin
+  if test -f "./v101/code.bin"; then
+    make_patch_for_secondary_version v101 &
+  fi
+  if test -f "./v110/code.bin"; then
+    make_patch_for_secondary_version v110 &
+  fi
+  wait
+  print_status "packing"
+  
   pushd $RELEASE_DIR
   7z a mm3d_project_restoration_${VERSION}.7z .
   popd

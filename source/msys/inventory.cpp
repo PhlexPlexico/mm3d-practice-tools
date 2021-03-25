@@ -527,6 +527,7 @@ void Inventory_ShieldMenuFunc() {
 
 void Inventory_ShieldsToggle(s32 selected) {
   game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
+  // TODO: Get player actor change shield animation type.
   switch (selected) {
     case 0:
       swordShield.shield = game::ShieldType::NoShield;

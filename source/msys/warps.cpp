@@ -242,7 +242,7 @@ const WarpsPlacesMenuEntry placesMenuEntries[] = {
     {"Moon", &WarpsMoon},
 };
 
-const s32 WarpsPlacesMenuSize = 7;
+const s32 WarpsPlacesMenuSize = 13;
 
 void WarpsPlacesMenuShow(void){
     s32 selected = 0;

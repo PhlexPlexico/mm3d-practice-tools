@@ -47,11 +47,24 @@ build () {
   rm -r $RST_ROOT/bak || true
 }
 
+make_patch_for_secondary_version () {
+  TARGET_VERSION=$1
+  mkdir $RELEASE_DIR/$TARGET_VERSION
+  cp $RELEASE_DIR/v100/exheader*.bin $RELEASE_DIR/$TARGET_VERSION/
+  flips -b $RST_ROOT/$TARGET_VERSION/code.bin $RST_ROOT/source/build/patched_code.bin $RELEASE_DIR/$TARGET_VERSION/code.bps &
+  flips -b $RST_ROOT/$TARGET_VERSION/code.bin $RST_ROOT/source/build/patched_code_faster_aim.bin $RELEASE_DIR/$TARGET_VERSION/code_faster_aim.bps &
+  wait
+}
+
 git submodule update --init
 build v100
 
 if [ -z ${RST_DEV+x} ]; then
 
+
+  make_patch_for_secondary_version v101 &
+  make_patch_for_secondary_version v110 &
+  wait
   print_status "packing"
 
   mv $RELEASE_DIR/v100/exheader.bin $RELEASE_DIR/v100/exheader_citra.bin

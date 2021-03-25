@@ -26,7 +26,7 @@ The aim of this project is to create an environment for a player so that they ca
   * `common/`: small utilities.
   * `game/`: implementation for the known parts of *Majora's Mask 3D*. Contains headers and some reimplementation of game functions.
   * `rst/`: *Project Restoration*/*MM3D Practice Patch* code.
-  * `msys/`: The rest of the practice patch code.
+  * `msys/`: The menu system for the practice patch.
 * `hooks/`: configuration for patches and hooks (for Magikoopa).
 * `loader/`: Code loader (from [Magikoopa](https://github.com/RicBent/Magikoopa)).
 
@@ -36,13 +36,15 @@ Sometimes you will find *Project Restoration* extensions and new code under `sou
 - Ensure you have the latest version of Luma3DS installed.
 - Grab the latest [release](https://github.com/PhlexPlexico/mm3d-practice-tools/releases) from the releases page.
 - For 3DS Users:
-  - USA: Place `code.ips` and `exheader.bin` in `/luma/titles/0004000000125500/`
-  - JPN: Place `code.ips` and `exheader.bin` in `/luma/titles/00040000000D6E00/`
-  - EU: Place `code.ips` and `exheader.bin` in `/luma/titles/0004000000125600/`
+  - USA: Place `code.bps` and `exheader.bin` in `/luma/titles/0004000000125500/`
+  - JPN: Place `code.bps` and `exheader.bin` in `/luma/titles/00040000000D6E00/`
+  - EU: Place `code.bps` and `exheader.bin` in `/luma/titles/0004000000125600/`
 - For Citra Users:
   - Right click Majora's Mask 3D and Open Mods Location. 
   - Place `code.bps` and `exheader_citra.bin` in the folder that was opened.
   - Rename `exheader_citra.bin` to `exheader.bin`
+
+For version 1.1 please take from the v110 folder. If neither work. please try v101 for the files!
 
 ## [Usage](./USAGE.md)
 

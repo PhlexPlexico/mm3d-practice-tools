@@ -528,19 +528,24 @@ void Inventory_ShieldMenuFunc() {
 void Inventory_ShieldsToggle(s32 selected) {
   game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
   // TODO: Get player actor change shield animation type.
+  //game::act::Player player = rst::GetContext().GetPlayerActor();//gctx->GetPlayerActor();
+  game::act::Player* player = rst::GetContext().gctx->GetPlayerActor();
   switch (selected) {
     case 0:
       swordShield.shield = game::ShieldType::NoShield;
+      player->visible_shield_type = 0;
       InventoryShieldsMenu.items[1].on = 0;
       InventoryShieldsMenu.items[2].on = 0;
       break;
     case 1:
       swordShield.shield = game::ShieldType::HeroShield;
+      player->visible_shield_type = 1;
       InventoryShieldsMenu.items[0].on = 0;
       InventoryShieldsMenu.items[2].on = 0;
       break;
     case 2:
       swordShield.shield = game::ShieldType::MirrorShield;
+      player->visible_shield_type = 2;
       InventoryShieldsMenu.items[0].on = 0;
       InventoryShieldsMenu.items[1].on = 0;
       break;

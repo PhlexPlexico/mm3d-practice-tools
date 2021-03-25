@@ -3,7 +3,7 @@
 This is a project that gives a [Rosalina](https://github.com/LumaTeam/Luma3DS)-like menu, which is packed with features that are kindly imported from the likes of [kz](https://github.com/krimtonz/kz) and [OoT3D Practice Patch](https://github.com/gamestabled/oot3d_practice_menu) in hopes of streamlining practice, and make the discovery of bugs easier to accomplish. There are also a few improvements that have been borrowed from [Project Restoration](https://github.com/leoetlino/project-restoration) (plus a bunch of its source for methods and in game functions!).
 
 ## Shoutouts
- - Gamestabled for the initial [OoT3D Practice Patch (gz3d)](https://github.com/gamestabled/oot3d_practice)
+ - Gamestabled for the initial [OoT3D Practice Patch](https://github.com/gamestabled/oot3d_practice)
  - [Leo](https://github.com/leoetlino) for the source of Project Restoration, plus all the pestering he's had to put up with me and my questions! Without Restoration, this would have been a hell of a lot harder to implement.
  - N3rdsWithGame for the initial idea of Frame Advance and his repos for basic implementation/notes from years before about making game patches for MM3D and OoT3D.
  - Megahirtz for testing, and implementing all of warp locations!

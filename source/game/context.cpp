@@ -51,4 +51,8 @@ void GlobalContext::EmitLastDamageSound(const act::Actor& actor) {
   rst::util::GetPointer<void(GlobalContext*, const act::Actor&)>(0x389AC0)(this, actor);
 }
 
+void GlobalContext::VoidPlayer() {
+  rst::util::GetPointer<void()>(0x230ec8)();
+}
+
 }  // namespace game

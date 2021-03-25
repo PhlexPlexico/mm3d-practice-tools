@@ -150,6 +150,23 @@ enum class ItemId : u8 {
   None = 0xff,
 };
 
+const ItemId MaskSlots[] = {
+  ItemId::PostmanHat, ItemId::AllNightMask, ItemId::StoneMask, ItemId::BlastMask,
+  ItemId::GreatFairyMask, ItemId::DekuMask, ItemId::KeatonMask, ItemId::BremenMask,
+  ItemId::BunnyHood, ItemId::DonGeroMask, ItemId::MaskOfScents, ItemId::GoronMask,
+  ItemId::RomaniMask, ItemId::CircusLeaderMask, ItemId::KafeiMask, ItemId::CoupleMask,
+  ItemId::MaskOfTruth, ItemId::ZoraMask, ItemId::KamaroMask, ItemId::GibdoMask, ItemId::GaroMask,
+  ItemId::CaptainHat, ItemId::GiantMask, ItemId::FierceDeityMask
+};
+
+// Ordered from inventory.cpp.
+const u32 MaskSlotsOrdered[] = {
+  5, 11, 17, 23, 16, 14,
+  1, 8, 6, 20, 12, 13,
+  0, 15, 4, 19, 9, 18,
+  21, 2, 7, 3, 10, 22
+};
+
 constexpr bool ItemIsBottled(ItemId item) {
   return ItemId::Bottle <= item && item <= ItemId::MysteryMilkSpoiled;
 }
@@ -204,8 +221,11 @@ enum class MaskId : u8 {
 
 bool HasOcarina();
 bool HasItem(ItemId item_id);
+void GiveItem(ItemId item_id);
+void RemoveItem(ItemId item_id);
 bool HasMask(ItemId item_id);
-
+void GiveMask(ItemId item_id);
+void RemoveMask(u32 mask_index);
 /// Checks whether an item is usable.
 ///
 /// Calls the global context "update usable buttons" function to determine whether an item is

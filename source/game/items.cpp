@@ -56,9 +56,35 @@ bool HasItem(ItemId item_id) {
   return std::any_of(items.begin(), items.end(), [&](ItemId id) { return item_id == id; });
 }
 
+void RemoveItem(ItemId item_id) {
+  auto& items = GetCommonData().save.inventory.items;
+  items[(u32)item_id] = ItemId::None;
+}
+
+void GiveItem(ItemId item_id) {
+  auto* gctx = rst::GetContext().gctx;
+  auto& items = GetCommonData().save.inventory.items;
+  rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
+          gctx, item_id);
+  items[(u32)item_id] = item_id;
+}
+
+void GiveMask(ItemId item_id) {
+  auto* gctx = rst::GetContext().gctx;
+  auto& masks = GetCommonData().save.inventory.masks;
+  rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
+          gctx, item_id);
+  masks[(u32)item_id] = item_id;
+}
+
 bool HasMask(ItemId item_id) {
   const auto& masks = GetCommonData().save.inventory.masks;
   return std::any_of(masks.begin(), masks.end(), [&](ItemId id) { return item_id == id; });
+}
+
+void RemoveMask(u32 mask_index) {
+  auto& masks = GetCommonData().save.inventory.masks;
+  masks[mask_index] = ItemId::None;
 }
 
 bool CanUseItemUnsafe(ItemId item_id) {

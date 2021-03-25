@@ -6,6 +6,7 @@
 #include "game/camera.h"
 #include "game/common_data.h"
 #include "game/context.h"
+#include "game/memory.h"
 #include "game/pad.h"
 #include "game/player.h"
 #include "game/sound.h"
@@ -13,18 +14,25 @@
 #include "game/ui.h"
 #include "game/ui/screens/gear_screen.h"
 #include "game/ui/screens/schedule_screen.h"
+#include "msys/include/MyThread.h"
+#include "msys/include/draw.h"
+#include "msys/include/menu.h"
+#include "msys/include/menus/commands.h"
+#include "msys/include/menus/watches.h"
 
 namespace rst {
 
 advance_input_t inputs = {};
+bool frameBufferInit = true;
+bool showTitle = true;
+AdvanceState& advState = GetAdvState();
 
 namespace {
 
 void Init(Context& context) {
-  //link::Init();
-
+  // link::Init();
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
-  game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_QUEST_CLEAR);
+  game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_PREDEMO_OMEN);
   context.has_initialised = true;
 }
 
@@ -62,7 +70,6 @@ static bool IsStartOrSelectPressed() {
                                   game::pad::Button::Start, game::pad::Button::Select);
 }
 
-
 static void UiOcarinaScreenUpdate() {
   if (!game::ui::CheckCurrentScreen(game::ui::ScreenType::Ocarina))
     return;
@@ -89,153 +96,116 @@ void scan_shared_hid_inputs() {
 }
 
 static void toggle_advance() {
-  AdvanceState& advState = GetAdvState();
   scan_shared_hid_inputs();
-  if ((inputs.pressed.val == (s32)(384)) && (advState.advance_ctx_t.advance_state == advState.NORMAL || advState.advance_ctx_t.advance_state == advState.LATCHED)) {
-    //util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
+
+  // util::Print("%s: %d pressed is pressed and we are NOT normal. UNPAUSING", __func__,
+  // inputs.cur.val);
+  if (advState.pauseUnpause && advState.advance_ctx_t.advance_state == advState.NORMAL &&
+      !advState.advance_ctx_t.d_down_latched) {
+    // util::Print("%s: Down is pressed and we are normal. Pausing", __func__);
     advState.advance_ctx_t.advance_state = advState.PAUSED;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if ((inputs.pressed.val == (s32)(384)) && advState.advance_ctx_t.advance_state != advState.NORMAL) {
-    //util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
+  } else if (advState.pauseUnpause && advState.advance_ctx_t.advance_state != advState.NORMAL &&
+             !advState.advance_ctx_t.d_down_latched) {
+    // util::Print("%s: Down is pressed and we are NOT normal. UNPAUSING", __func__);
     advState.advance_ctx_t.advance_state = advState.NORMAL;
     advState.advance_ctx_t.d_down_latched = 1;
-  } else if (advState.advance_ctx_t.advance_state == advState.NORMAL && (inputs.pressed.d_right)) {
-    //util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
+  } else if (advState.frameAdvance && advState.advance_ctx_t.advance_state == advState.NORMAL) {
+    // util::Print("%s: RIGHT is pressed and we are normal. LATCHING?", __func__);
     advState.advance_ctx_t.advance_state = advState.LATCHED;
-  } else if (inputs.pressed.val == (s32)(384)) {
+  } else if (!advState.pauseUnpause) {
     advState.advance_ctx_t.d_down_latched = 0;
   }
 }
 
 static void frame_advance() {
-  AdvanceState& advState = GetAdvState();
   // Check to advance
   toggle_advance();
-  if(advState.advance_ctx_t.advance_state == advState.STEP) {
-        if(inputs.pressed.d_right) {
-            advState.advance_ctx_t.advance_state = advState.LATCHED;
-        } else {
-            advState.advance_ctx_t.advance_state = advState.PAUSED;
-        }
-    }
-
-  while (advState.advance_ctx_t.advance_state == advState.PAUSED) {
-    toggle_advance();
-    if (advState.advance_ctx_t.advance_state == advState.LATCHED && !inputs.pressed.d_right) {
+  if (advState.advance_ctx_t.advance_state == advState.STEP) {
+    if (advState.frameAdvance) {
+      advState.advance_ctx_t.advance_state = advState.LATCHED;
+      util::Print("%s: We are now latched!", __func__);
+    } else {
       advState.advance_ctx_t.advance_state = advState.PAUSED;
     }
-    if (advState.advance_ctx_t.advance_state == advState.PAUSED && inputs.pressed.d_right) {
+  }
+
+  advState.pauseUnpause = false;
+  advState.frameAdvance = false;
+
+  while (advState.advance_ctx_t.advance_state == advState.PAUSED ||
+         advState.advance_ctx_t.advance_state == advState.LATCHED) {
+    scan_shared_hid_inputs();
+    Command_UpdateCommands(inputs.cur.val);
+    toggle_advance();
+    if (advState.advance_ctx_t.advance_state == advState.LATCHED && !advState.frameAdvance) {
+      util::Print("%s: We are now paused! Our state? %d", __func__,
+                  advState.advance_ctx_t.advance_state);
+      advState.advance_ctx_t.advance_state = advState.PAUSED;
+    }
+    if (advState.advance_ctx_t.advance_state == advState.PAUSED && advState.frameAdvance) {
       advState.advance_ctx_t.advance_state = advState.STEP;
     }
+    advState.pauseUnpause = false;
+    advState.frameAdvance = false;
     svcSleepThread(16e6);
   }
 }
 
-static void freeze_unfreeze_time() {
-  auto* gctx = GetContext().gctx;
-  if (!gctx || gctx->type != game::StateType::Play)
-    return;
-
-  const bool zr = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR);
-  const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
-  const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
-  game::CommonData& cdata = game::GetCommonData();
-  if(zr && dpleft) {
-    cdata.save.extra_time_speed = -2;
-  }
-  if(zr && dpright) {
-    cdata.save.extra_time_speed += 1;
-  }
-  
-}
-
-static void daychanger() {
-  auto* gctx = GetContext().gctx;
-  if (!gctx || gctx->type != game::StateType::Play)
-    return;
-
-  const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
-  const bool dpleft = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Left);
-  const bool dpright = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Right);
-  game::CommonData& cdata = game::GetCommonData();
-
-  // Advance day, if max days, loop back to 1.
-  if(zl && dpright) {
-    if(cdata.save.day <= cdata.save.total_day+1){
-      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day, cdata.save.day);
-      cdata.save.day++;
-      return;
-    } else {
-      cdata.save.day = 0;
-    }
-  }
-  // Advance day, if max days, loop back to 1.
-  if(zl && dpleft) {
-    if(cdata.save.day >= -1){
-      util::Print("%s: Total days are %d, current day is %d", __func__, cdata.save.total_day, cdata.save.day);
-      cdata.save.day--;
-      return;
-    } else {
-      cdata.save.day = 0;
-    }
-  }
-}
-
-static void store_pos() {
-  auto* gctx = GetContext().gctx;
-  if (!gctx || gctx->type != game::StateType::Play)
-    return;
-
-  AdvanceState& advState = GetAdvState();
-
-  const bool zl = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZL);
-  const bool dpup = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Up);
-  const bool dpdown = gctx->pad_state.input.buttons.IsSet(game::pad::Button::Down);
-  auto* player = gctx->GetPlayerActor();
-
-  // Store player position.
-  if(zl && dpup) {
-    advState.advance_ctx_t.storedPos = player->pos;
-    advState.advance_ctx_t.storedAngle = player->angle;
-  }
-  // Restore all positions to our stored positions and angle.
-  if(zl && dpdown) {
-    player->pos = advState.advance_ctx_t.storedPos;
-    player->initial_pos = advState.advance_ctx_t.storedPos;
-    player->target_pos = advState.advance_ctx_t.storedPos;
-    player->angle = advState.advance_ctx_t.storedAngle;
-  }
-}
-
+// Main entry hook in game loop.
 RST_HOOK void Calc(game::State* state) {
   Context& context = GetContext();
   context.gctx = nullptr;
+
   if (!context.has_initialised && state->type == game::StateType::FirstGame)
     Init(context);
-
+  if (state->type == game::StateType::FileSelect)
+    showTitle = true;
+  else
+    showTitle = false;
   if (state->type != game::StateType::Play)
     return;
-
+  //
   context.gctx = static_cast<game::GlobalContext*>(state);
-
   // Move in improvements from Project Restoration
   UiOcarinaScreenUpdate();
   // End improvments.
-
   // Begin routines for MM3D Practice Patches.
+  // Rest of functionality is included in Commands, menu, watches, etc. 
+  // In msys/
+  scan_shared_hid_inputs();
+  Command_UpdateCommands(inputs.cur.val);
   frame_advance();
-  freeze_unfreeze_time();
-  daychanger();
-  store_pos();
+  drawWatches();
+  if(advState.useISG) {
+    game::act::Player* player = context.gctx->GetPlayerActor();
+    if (player) {
+      player->sword_active_timer = 0x01;
+      player->sword_active = 0x01;
+    } 
+  }
   // End routines.
-
-  if (false)
+  if (false) {
     PrintDebug(context.gctx);
+    if (state->pad_state.input.new_buttons.IsSet(game::pad::Button::ZR)) {
+      game::Allocator::Instance().PrintDebugInfo();
+    }
+  }
+}
+
+RST_HOOK void DrawMenu() {
+  if (frameBufferInit) {
+    Draw_SetupFramebuffer();
+    frameBufferInit = false;
+  }
+  if (showTitle) {
+    Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
+    Draw_FlushFramebufferTop();
+  }
 }
 
 RST_HOOK void PreActorCalcHook() {
-  
-  //FixOwlStatueActivationTrigger();
+  // FixOwlStatueActivationTrigger();
 }
 
 // RST_HOOK void PostActorCalcHook() {
@@ -253,7 +223,7 @@ RST_HOOK void UiScheduleTriggerHook() {
   const bool select = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Select);
   if (!zr && select)
     game::ui::OpenScreen(game::ui::ScreenType::Items);
-  if (!zr && start && game::GetCommonData().save.inventory.collect_register & 0x40000)
+  if (!zr && start && game::GetCommonData().save.inventory.collect_register.bombers_notebook)
     game::ui::OpenScreen(game::ui::ScreenType::Schedule);
   if (zr && start)
     game::ui::OpenScreen(game::ui::ScreenType::Quest);
@@ -264,7 +234,6 @@ RST_HOOK void UiScheduleTriggerHook() {
     gctx->pad_state.input.buttons.Clear(game::pad::Button::Select);
     gctx->pad_state.input.new_buttons.Clear(game::pad::Button::Select);
   }
-    
 }
 
 }  // namespace rst

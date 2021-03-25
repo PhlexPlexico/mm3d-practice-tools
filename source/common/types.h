@@ -46,3 +46,4 @@ using Vec3s = TVec3<s16>;
 
 // Put hook functions in .init as they are always kept by the linker.
 #define RST_HOOK [[gnu::section(".init")]] [[gnu::used]]
+

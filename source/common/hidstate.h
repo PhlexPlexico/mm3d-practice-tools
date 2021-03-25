@@ -14,7 +14,13 @@ struct AdvanceState {
     game::act::PosRot storedPos;
     u16 storedAngle;
   } advance_ctx_t;
+  bool pauseUnpause = false;
+  bool frameAdvance = false;
+  bool menuExitFlag = false;
+  bool showWatches = false;
+  bool useISG = false;
 };
+
 
 typedef union {
   s32 val;
@@ -97,7 +103,7 @@ typedef struct {
   btn_t old;
 } advance_input_t;
 
-extern "C" void svcSleepThread(u64);
+//extern "C" void svcSleepThread(u64);
 extern "C" advance_input_t inputs;
 AdvanceState& GetAdvState();
 #define shared_hid (*(hid_mem_t**)shared_hid_addr)

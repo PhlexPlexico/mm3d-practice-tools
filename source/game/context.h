@@ -171,6 +171,8 @@ struct GlobalContext : State {
 
   void EmitLastDamageSound(const act::Actor& actor);
 
+  void VoidPlayer();
+
   SceneId scene;
   u16 field_14A;
   u8 gap_14C[200];
@@ -283,6 +285,7 @@ struct GlobalContext : State {
   u32 field_C4FC;
   u8 gap_C500[40];
   u8 field_C528;
+  // Void flag.
   u8 field_C529_one_to_clear_input;
   u8 gap_C52A[4];
   u16 next_entrance;

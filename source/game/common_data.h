@@ -9,6 +9,33 @@
 
 namespace game {
 
+enum class SwordType : u16 {
+  NoSword = 0,
+  KokiriSword = 1,
+  RazorSword = 2,
+  GildedSword = 3,
+};
+
+enum class ShieldType : u16 {
+  NoShield = 0,
+  HeroShield = 1,
+  MirrorShield = 2,
+};
+
+enum class BombBag : u32 {
+  NoBag = 0,
+  BombBag20 = 1,
+  BombBag30 = 2,
+  BombBag40 = 3,
+};
+
+enum class Quiver : u32 {
+  NoQuiver = 0,
+  Quiver30 = 1,
+  Quiver40 = 2,
+  Quiver50 = 3,
+};
+
 struct __attribute__((packed)) __attribute__((aligned(2))) PlayerData {
   u32 field_11C;
   u8 gap_120[2];
@@ -54,10 +81,10 @@ union FormEquipmentData {
 struct EquipmentData {
   FormEquipmentData data[4];
   char field_14;
-  char anonymous_24;
-  char anonymous_25;
-  char anonymous_26;
-  char anonymous_27;
+  ItemId item_on_y_readonly;
+  ItemId item_on_x_readonly;
+  ItemId item_on_i_readonly;
+  ItemId item_on_ii_readonly;
   char field_19;
   char field_1A;
   char field_1B;
@@ -73,7 +100,13 @@ struct EquipmentData {
   char field_25;
   char field_26;
   char field_27;
-  u16 anonymous_28;
+  union SwordShield {
+    u16 raw;
+
+    BitField<0, 4, SwordType> sword;
+    BitField<4, 8, ShieldType> shield;
+  };
+  SwordShield sword_shield;
 };
 
 struct InventoryData {
@@ -82,8 +115,46 @@ struct InventoryData {
   std::array<u8, 24> item_counts;
   u8 field_48[24];
   u8 field_60[24];
-  int non_equip_register;
-  int collect_register;
+  union InventoryCountRegister {
+    u32 raw;
+
+    BitField<0, 3, Quiver> quiver_upgrade;
+    BitField<3, 3, BombBag> bomb_bag_upgrade;
+    BitField<6, 6, u32> pad_1;
+    BitField<12, 2, u32> wallet_upgrade;
+    BitField<14, 3, u32> pad_2;
+    BitField<17, 3, u32> stick_upgrades;
+    BitField<20, 3, u32> nut_upgrade;
+    BitField<23, 9, u32> pad_3;
+  };
+  InventoryCountRegister inventory_count_register;
+  union CollectRegister {
+    u32 raw;
+    
+    BitField<0, 1, u32> odolwas_remains;
+    BitField<1, 1, u32> gohts_remains;
+    BitField<2, 1, u32> gyorgs_remains;
+    BitField<3, 1, u32> twinmolds_remains;
+    BitField<4, 2, u32> pad_1;
+    BitField<6, 1, u32> sonata_of_awakening;
+    BitField<7, 1, u32> goron_lullaby;
+    BitField<8, 1, u32> new_wave_bossa_nova;
+    BitField<9, 1, u32> elegy_of_emptiness;
+    BitField<10, 1, u32> oath_to_order;
+    BitField<11, 1, u32> sarias_song;
+    BitField<12, 1, u32> song_of_time;
+    BitField<13, 1, u32> song_of_healing;
+    BitField<14, 1, u32> eponas_song;
+    BitField<15, 1, u32> song_of_soaring;
+    BitField<16, 1, u32> song_of_storms;
+    BitField<17, 1, u32> suns_song;
+    BitField<18, 1, u32> bombers_notebook;
+    BitField<19, 5, u32> pad_2;
+    BitField<24, 1, u32> lullaby_intro;
+    BitField<25, 3, u32> pad_3;
+    BitField<28, 4, u32> heart_container_pieces;
+  };
+  CollectRegister collect_register;
   char anonymous_33[1];
   char anonymous_34[3];
   u8 gap200[6];
@@ -100,12 +171,13 @@ struct InventoryData {
   char gap98[60];
 };
 static_assert(sizeof(InventoryData) == 0xD4);
-static_assert(offsetof(InventoryData, non_equip_register) == 0x78);
+static_assert(offsetof(InventoryData, inventory_count_register) == 0x78);
 
 struct SaveData {
   MaskId mask;
   bool has_completed_intro;
   char unused;
+  // Possible cutscene ID?
   char anonymous_0;
   bool is_night;
   /// Number of extra time units to add per game tick (0 normally; -1 with ISoT)
@@ -162,7 +234,13 @@ struct SaveData {
   int anonymous_57;
   int anonymous_58;
   u8 gap11EC[36];
-  int anonymous_59;
+  union SkulltulaRegister {
+    int raw;
+
+    BitField<0, 16, int> swamp_count;
+    BitField<16, 16, int> ocean_count;
+  };
+  SkulltulaRegister skulltulas_collected;
   int anonymous_60;
   u8 gap1218[4];
   int anonymous_61;
@@ -475,19 +553,22 @@ struct CommonDataSub12 {
   int field_14;
 };
 
-struct CommonDataSub13 {
-  u32 field_C;
-  u32 field_10;
-  u32 field_14;
-  u16 field_18;
-  u16 field_1A;
-  u16 field_1C;
-  char field_1E;
-  char field_1F;
-  u32 field_20;
-  u32 field_24;
-  u32 field_28;
-};
+struct RespawnData {
+  Vec3 pos; 
+  s16 yaw;
+  s16 player_params;
+  s16 entrance_index;
+  u8 room_index;
+  s8 data;
+  u32 temp_swch_flags_maybe;
+  u8 field_1;
+  u8 btn_y_can_use_item;
+  u8 btn_x_can_use_item;
+  u8 btn_i_can_use_item;
+  //u32 stored_mask_id_maybe;
+  u32 temp_collect_flags_maybe;
+}; 
+static_assert(sizeof(RespawnData) == 0x20);
 
 enum class UsableButton : u8 {
   B = 0,
@@ -571,7 +652,7 @@ struct CommonData {
   int setup;
   int setup2;
   int field_13624;
-  CommonDataSub13 sub13s[8];
+  RespawnData sub13s[8];
   u32 field_13728;
   int field_1372C;
   char field_13730;

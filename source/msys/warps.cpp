@@ -113,7 +113,7 @@ WarpsSceneMenu WarpsPlacesTownsMenu = {
     .title="Clock Town Entrances",
     .nbItems = 19,
     .scenes={
-        {"00: South Clock Town", &Entrances_Mayors_Residence},
+        {"00: Mayor's Residence", &Entrances_Mayors_Residence},
         {"08: Honey and Darling's", &Entrances_Honey_And_Darlings_Shop},
         {"0E: Curiousity Shop", &Entrances_Curiosity_Shop},
         {"24: Milk Bar", &Entrances_Milk_Bar},

@@ -101,6 +101,7 @@
         "mprealsupport": "cpp",
         "matrixfunctions": "cpp",
         "vips8": "cpp",
-        "*.inc": "c"
+        "*.inc": "c",
+        "filesystem": "cpp"
     }
 }

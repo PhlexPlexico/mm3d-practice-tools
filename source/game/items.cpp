@@ -51,6 +51,36 @@ bool HasOcarina() {
   return items[0] == ItemId::Ocarina;
 }
 
+bool HasBottle(ItemId bottle_contents) {
+  const auto& bottles = GetCommonData().save.inventory.bottles;
+  return std::any_of(bottles.begin(), bottles.end(), [&](ItemId id) { return bottle_contents == id && bottle_contents != game::ItemId::None; });
+}
+
+void RemoveBottle(u32 bottle_index) {
+  auto& bottles = GetCommonData().save.inventory.bottles;
+  bottles[bottle_index] = ItemId::None;
+}
+
+void GiveBottle(u32 bottle_index, ItemId item_id) {
+  auto& bottles = GetCommonData().save.inventory.bottles;
+  game::EquipmentData& mappedEquips = GetCommonData().save.equipment;
+  if (mappedEquips.data[0].item_btn_y == bottles[bottle_index]) {
+    mappedEquips.data[0].item_btn_y = item_id;
+  } else if (mappedEquips.data[0].item_btn_x == bottles[bottle_index]) {
+    mappedEquips.data[0].item_btn_x = item_id;
+  } else if (mappedEquips.data[0].item_btn_i == bottles[bottle_index]) {
+    mappedEquips.data[0].item_btn_i = item_id;
+  } else if (mappedEquips.data[0].item_btn_ii == bottles[bottle_index]) {
+    mappedEquips.data[0].item_btn_ii = item_id;
+  }
+  bottles[bottle_index] = item_id;
+  // This pointer fills the next empty bottle.
+  // rst::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(0x233BEC)(
+  //         gctx, item_id);
+  
+}
+
+
 bool HasItem(ItemId item_id) {
   const auto& items = GetCommonData().save.inventory.items;
   return std::any_of(items.begin(), items.end(), [&](ItemId id) { return item_id == id; });

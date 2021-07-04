@@ -7,7 +7,7 @@
 
 
 static game::ItemId SelectedBottle;
-static u32 SelectedBottleIndex;
+static u32 SelectedBottleItemIndex;
 static u32 BottleNumber;
 
 void RemoveItemFromButtons(game::ItemId item_id) {
@@ -28,7 +28,7 @@ static void DisableMenuToggles(ToggleMenu* menu) {
 }
 
 static void Inventory_ItemsMenuInit(void) {
-  //game::InventoryData& inventory = game::GetCommonData().save.inventory;
+  game::InventoryData& inventory = game::GetCommonData().save.inventory;
   InventoryItemsMenu.items[(u32)game::ItemId::Ocarina].on = game::HasOcarina();
   InventoryItemsMenu.items[(u32)game::ItemId::Arrow].on = game::HasItem(game::ItemId::Arrow);
   InventoryItemsMenu.items[(u32)game::ItemId::FireArrow].on =
@@ -60,11 +60,9 @@ static void Inventory_ItemsMenuInit(void) {
   InventoryItemsMenu.items[(u32)game::ItemId::GreatFairySword - 2].on =
       game::HasItem(game::ItemId::GreatFairySword);
   // Loop through bottles and check which ones we have.
-  // u32 numBottles =
-  //     std::count_if(inventory.items.begin(), inventory.items.end(), game::ItemIsBottled);
-  // for (u32 i = 0; i < numBottles; i++) {
-  //   InventoryItemsMenu.items[(u32)game::ItemId::Bottle + i - 3].on = true;
-  // }
+  for (u32 i = 15; i < 22; i++) {
+    InventoryItemsMenu.items[i].on = game::HasBottle(inventory.bottles[i-15]);
+  }
 }
 
 static void Inventory_SongsMenuInit(void) {
@@ -335,55 +333,38 @@ void Inventory_ItemsToggle(s32 selected) {
 }
 
 static void Inventory_BottlesMenuInit(void) {
-  //game::CommonData& cdata = game::GetCommonData();
-  for (u32 i = (u32)game::ItemId::RedPotion; i < (u32)game::ItemId::MoonTear; ++i) {
-    if (game::HasItem(SelectedBottle)) {
-      InventoryBottlesMenu.items[i].on = game::HasItem((game::ItemId)i);
-      // Can only have one thing in a selected bottle, no need to continue.
-      // break;
+  u32 curIndex = 0;
+  for (u32 i = (u32)game::ItemId::Bottle; i < (u32)game::ItemId::MoonTear; ++i) {
+    if (i == (u32)SelectedBottle) {
+      InventoryBottlesMenu.items[curIndex].on = 1;
+    } else {
+      InventoryBottlesMenu.items[curIndex].on = 0;
     }
+    ++curIndex;
   }
-  InventoryBottlesMenu.items[BottleContents::None].on = !game::HasItem(SelectedBottle);
 }
 
 void Inventory_BottlesMenuFunc(s32 selected) {
   game::CommonData& cdata = game::GetCommonData();
   // Get the selected bottle.
-  u32 bottle_number = selected - 14;
-  u32 current_bottle = 0;
-  // Loop through to the specific selected bottle.
-  for (u32 i = cdata.save.inventory.items.size(); i < cdata.save.inventory.items.size(); i++) {
-    if (game::ItemIsBottled(cdata.save.inventory.items[i])) {
-      if (current_bottle != bottle_number) {
-        current_bottle++;
-      } else if (current_bottle == bottle_number) {
-        SelectedBottle = cdata.save.inventory.items[i];
-        SelectedBottleIndex = i;
-        BottleNumber = current_bottle;
-        break;
-      } else {
-        SelectedBottleIndex = 255;
-        SelectedBottle = game::ItemId::None;
-      }
-    }
-    
-  }
+  BottleNumber = selected - 15;
+  SelectedBottle = cdata.save.inventory.bottles[BottleNumber];
+  SelectedBottleItemIndex = selected;
   Inventory_BottlesMenuInit();
   ToggleMenuShow(&InventoryBottlesMenu);
 }
 
 void Inventory_BottleSelect(s32 selected) {
-  game::CommonData& cdata = game::GetCommonData();
-  if (selected != BottleContents::None) {  // selected a bottled content
-    cdata.save.inventory.items[SelectedBottleIndex] =
-        game::ItemId((u32)game::ItemId::Bottle + (u32)selected);
+  u32 newItem = (u32)game::ItemId::Bottle + (u32)selected;
+  DisableMenuToggles(&InventoryBottlesMenu);
+  if (selected != 22) {  // selected a bottled content
+    game::GiveBottle(BottleNumber, (game::ItemId)newItem);
     InventoryBottlesMenu.items[selected].on = 1;
-    InventoryItemsMenu.items[14 + BottleNumber].on = 1;
+    InventoryItemsMenu.items[SelectedBottleItemIndex].on = 1;
   } else {  // erase the bottle
-    cdata.save.inventory.items[SelectedBottleIndex] = game::ItemId::None;
-    DisableMenuToggles(&InventoryBottlesMenu);
-    InventoryBottlesMenu.items[InventoryBottlesMenu.nbItems - 1].on = 1;
-    InventoryItemsMenu.items[14 + BottleNumber].on = 0;
+    game::RemoveBottle(BottleNumber);
+    InventoryBottlesMenu.items[selected].on = 1;
+    InventoryItemsMenu.items[SelectedBottleItemIndex].on = 0;
   }
 }
 
@@ -569,7 +550,7 @@ Menu InventoryMenu = {
 
 ToggleMenu InventoryItemsMenu = {
     .title="Items",
-    .nbItems=15,
+    .nbItems=22,
     .items= {
         {.on=0, .title="Ocarina", .method = Inventory_ItemsToggle},
         {.on=0, .title="Hero's Bow", .method = Inventory_ItemsToggle},
@@ -592,6 +573,7 @@ ToggleMenu InventoryItemsMenu = {
         {.on=0, .title="Bottle #4", .method = Inventory_BottlesMenuFunc},
         {.on=0, .title="Bottle #5", .method = Inventory_BottlesMenuFunc},
         {.on=0, .title="Bottle #6", .method = Inventory_BottlesMenuFunc},
+        {.on=0, .title="Bottle #7", .method = Inventory_BottlesMenuFunc},
     }
 };
 
@@ -681,7 +663,7 @@ ToggleMenu InventoryShieldsMenu = {
 
 ToggleMenu InventoryBottlesMenu = {
     .title="Choose Bottle Contents",
-    .nbItems = 14,
+    .nbItems = 23,
     .items={
         {.on=0, .title="Empty Bottle", .method = Inventory_BottleSelect},
         {.on=0, .title="Red Potion", .method = Inventory_BottleSelect},

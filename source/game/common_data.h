@@ -112,7 +112,8 @@ struct EquipmentData {
 struct InventoryData {
   std::array<ItemId, 24> items;
   std::array<ItemId, 24> masks;
-  std::array<u8, 24> item_counts;
+  std::array<ItemId, 7> bottles;
+  std::array<u8, 17> item_counts;
   u8 field_48[24];
   u8 field_60[24];
   union InventoryCountRegister {
@@ -191,7 +192,7 @@ struct SaveData {
   /// 0x0000 is midnight, 0x4000 is 6am, 0x8000 is noon, 0xc000 is 6pm.
   u16 time;
   u16 anonymous_3;
-  u16 anonymous_4;
+  u16 rupee_accumulator;
   act::Player::Form player_form;
   char anonymous_5;
   char field_20;
@@ -235,7 +236,7 @@ struct SaveData {
   int anonymous_58;
   u8 gap11EC[36];
   union SkulltulaRegister {
-    int raw;
+    u32 raw;
 
     BitField<0, 16, int> swamp_count;
     BitField<16, 16, int> ocean_count;
@@ -567,7 +568,7 @@ struct RespawnData {
   u8 btn_i_can_use_item;
   //u32 stored_mask_id_maybe;
   u32 temp_collect_flags_maybe;
-}; 
+};
 static_assert(sizeof(RespawnData) == 0x20);
 
 enum class UsableButton : u8 {

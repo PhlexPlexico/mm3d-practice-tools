@@ -220,6 +220,9 @@ enum class MaskId : u8 {
 };
 
 bool HasOcarina();
+bool HasBottle(ItemId bottle_contents);
+void RemoveBottle(u32 bottle_index);
+void GiveBottle(u32 bottle_index, ItemId item_id);
 bool HasItem(ItemId item_id);
 void GiveItem(ItemId item_id);
 void RemoveItem(ItemId item_id);

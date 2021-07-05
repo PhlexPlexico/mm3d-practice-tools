@@ -145,7 +145,6 @@ void Inventory_ItemsToggle(s32 selected) {
       InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on = 1;
     } else {
       game::RemoveItem(game::ItemId::Bombchu);
-      inventory.item_counts[(u32)game::ItemId::Bombchu] = 0x00;
       InventoryItemsMenu.items[(u32)game::ItemId::Bombchu - 1].on = 0;
       RemoveItemFromButtons(game::ItemId::Bombchu);
     }

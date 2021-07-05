@@ -22,46 +22,46 @@ static void Cheats_Magic(void) {
   cdata.save.player.magic = cdata.magic_max;
 }
 
-// 13 = arrow
-// 18 = bombs
-// 19 bombchus
-// 20 is sticks!!!
-// 21 is nuts
-// 22 is beans
-// 24 powder keg
+// 6 = arrow
+// 11 = bombs
+// 12 bombchus
+// 13 is sticks!!!
+// 14 is nuts
+// 15 is beans
+// 17 powder keg
 static void Cheats_Sticks(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  cdata.save.inventory.item_counts[20] = 0x63;
-}
-
-static void Cheats_Nuts(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  cdata.save.inventory.item_counts[21] = 0x63;
-}
-
-static void Cheats_Bombs(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  cdata.save.inventory.item_counts[18] = 0x63;
-}
-
-static void Cheats_Arrows(void) {
   game::CommonData& cdata = game::GetCommonData();
   cdata.save.inventory.item_counts[13] = 0x63;
 }
 
+static void Cheats_Nuts(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.inventory.item_counts[14] = 0x63;
+}
+
+static void Cheats_Bombs(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.inventory.item_counts[11] = 0x63;
+}
+
+static void Cheats_Arrows(void) {
+  game::CommonData& cdata = game::GetCommonData();
+  cdata.save.inventory.item_counts[6] = 0x63;
+}
+
 static void Cheats_Bombchus(void) {
   game::CommonData& cdata = game::GetCommonData();
-  cdata.save.inventory.item_counts[19] = 0x63;
+  cdata.save.inventory.item_counts[12] = 0x63;
 }
 
 static void Cheats_Beans(void) {
   game::CommonData& cdata = game::GetCommonData();
-  cdata.save.inventory.item_counts[22] = 0x63;
+  cdata.save.inventory.item_counts[15] = 0x63;
 }
 
 static void Cheats_PowderKegs(void) {
   game::CommonData& cdata = game::GetCommonData();
-  cdata.save.inventory.item_counts[24] = 0x63;
+  cdata.save.inventory.item_counts[17] = 0x63;
 }
 
 static void Cheats_Rupees(void) {

@@ -186,10 +186,14 @@ RST_HOOK void Calc(game::State* state) {
   }
   // End routines.
   if (false) {
-    PrintDebug(context.gctx);
-    if (state->pad_state.input.new_buttons.IsSet(game::pad::Button::ZR)) {
-      game::Allocator::Instance().PrintDebugInfo();
+    game::act::Player* player = context.gctx->GetPlayerActor();
+    if (player) {
+      rst::util::Print("\nSword active timer is %u\nSword Active is %u\nsword active pointer %p\nSword attack type %u\nSword attack type  ptr %p", player->sword_active_timer, player->sword_active, &(player->field_11DF4), player->sword_attack_type, &(player->sword_attack_type));
     }
+    // PrintDebug(context.gctx);
+    // if (state->pad_state.input.new_buttons.IsSet(game::pad::Button::ZR)) {
+    //   game::Allocator::Instance().PrintDebugInfo();
+    // }
   }
 }
 
@@ -200,6 +204,7 @@ RST_HOOK void DrawMenu() {
   }
   if (showTitle) {
     Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
+    Draw_DrawFormattedStringTop(90, 30, COLOR_RED, "Please Read The README Before Continuing!");
     Draw_FlushFramebufferTop();
   }
 }

@@ -1,0 +1,49 @@
+patch_in_isg:
+  type: patch
+  addr: 0x1D32E0
+  data: 00 F0 20 E3
+
+patch_in_isg2:
+  type: patch
+  addr: 0x1D32E4
+  data: 00 F0 20 E3
+
+patch_in_isg3:
+  type: patch
+  addr: 0x1D32E8
+  data: 00 F0 20 E3
+
+patch_in_isg4:
+  type: patch
+  addr: 0x1D32F0
+  data: 00 F0 20 E3
+
+patch_in_isg5:
+  type: patch
+  addr: 0x1D32F4
+  data: 00 F0 20 E3
+
+patch_in_isg6:
+  type: patch
+  addr: 0x1DBEA4
+  data: 00 F0 20 E3
+
+patch_in_isg7:
+  type: patch
+  addr: 0x1DBEA8
+  data: 00 F0 20 E3
+
+patch_in_isg8:
+  type: patch
+  addr: 0x1DBEAC
+  data: 00 F0 20 E3
+
+patch_in_isg9:
+  type: patch
+  addr: 0x1DBEB0
+  data: 00 F0 20 E3
+
+patch_in_isg10:
+  type: patch
+  addr: 0x1DBEB4
+  data: 00 F0 20 E3

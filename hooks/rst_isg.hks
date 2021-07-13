@@ -1,9 +1,9 @@
 patch_in_isg:
   type: patch
   addr: 0x1D32E0
-  data: 04 F0 1F E5 F8 32 1D 00
+  data: 010000EA
 
 patch_in_isg_2:
   type: patch
   addr: 0x1DBEA4
-  data: 04 F0 1F E5 B8 BE 1D 00
+  data: 010000EA

@@ -43,3 +43,8 @@ SVC_BEGIN svcControlProcessMemory
 	pop {r4-r5}
 	bx  lr
 SVC_END
+
+SVC_BEGIN svcSendSyncRequest
+	svc 0x32
+	bx  lr
+SVC_END

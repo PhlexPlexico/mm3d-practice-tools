@@ -71,20 +71,26 @@ add_executable(newcode
   game/ui/screens/main_screen.h
   game/ui/screens/schedule_screen.h
   game/ui/screens/screen.h
+  msys/include/3ds/errf.h
+  msys/include/3ds/env.h
   msys/include/3ds/font.h
   msys/include/3ds/gfx.h
+  msys/include/3ds/ipc.h
   msys/include/3ds/os.h
   msys/include/3ds/result.h
   msys/include/3ds/svc.h
   msys/include/3ds/srv.h
   msys/include/3ds/synchronization.h
+  msys/include/3ds/thread.h
   msys/include/3ds/types.h
   msys/include/3ds/sys/lock.h
   msys/include/3ds/services/gspgpu.h
+  msys/include/3ds/services/fs.h
   msys/include/csvc.h
   msys/include/draw.h
   msys/include/entrances.h
   msys/include/fmt.h
+  msys/include/internal.h
   msys/include/menu.h
   msys/include/menus.h
   msys/include/MyThread.h
@@ -109,6 +115,7 @@ add_executable(newcode
   msys/draw.cpp
   msys/equips.cpp
   msys/entrances.cpp
+  msys/fs.cpp
   msys/inventory.cpp
   msys/menu.cpp
   msys/menus.cpp

@@ -52,7 +52,7 @@ For version 1.1 please take from the v110 folder. If neither work. please try v1
 #### Preparing your environment
 - Put the original code.bin and exheader.bin files in the v100, v101 and v110 folders respectively. You must dump those binaries from the ExeFS yourself; those are **not** provided in this repository for copyright reasons.
 - You will need the following build tools available on your PATH:
-  - This [fork](https://github.com/leoetlino/Magikoopa) of Magikoopa for command line patching.
+  - This [fork](https://github.com/phlexplexico/Magikoopa) of Magikoopa for command line patching and SD card access.
   - Ninja (ninja - small build system closest in spirit to Make).
   - [Flips](https://github.com/Alcaro/Flips)
   - [devkitPro](https://devkitpro.org/wiki/Getting_Started)

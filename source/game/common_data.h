@@ -65,7 +65,7 @@ struct __attribute__((packed)) __attribute__((aligned(2))) PlayerData {
   char field_31;
 };
 static_assert(sizeof(PlayerData) == 0x32);
-static_assert(rst::util::OffsetOf(&PlayerData::magic) == 0x1F);
+static_assert(offsetof(PlayerData, magic) == 0x1F);
 
 union FormEquipmentData {
   std::array<ItemId, 5> item_btns;

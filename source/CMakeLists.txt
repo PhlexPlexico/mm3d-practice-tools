@@ -83,9 +83,15 @@ add_executable(newcode
   msys/include/3ds/synchronization.h
   msys/include/3ds/thread.h
   msys/include/3ds/types.h
+  msys/include/3ds/allocator/mappable.h
+  msys/include/3ds/applets/swkbd.h
   msys/include/3ds/sys/lock.h
-  msys/include/3ds/services/gspgpu.h
+  msys/include/3ds/services/apt.h
   msys/include/3ds/services/fs.h
+  msys/include/3ds/services/gspgpu.h
+  msys/include/3ds/services/ptmsysm.h
+  msys/include/3ds/services/srvpm.h
+  msys/include/3ds/util/utf.h
   msys/include/csvc.h
   msys/include/draw.h
   msys/include/entrances.h
@@ -108,20 +114,33 @@ add_executable(newcode
   msys/include/menus/scene.h
   msys/include/menus/warps.h
   msys/include/menus/watches.h
-  msys/abi.cpp
+  msys/3ds/abi.cpp
+  msys/3ds/apt.cpp
+  msys/3ds/draw.cpp
+  msys/3ds/fs.cpp
+  msys/3ds/gspgpu.cpp
+  msys/3ds/MyThread.cpp
+  msys/3ds/synchronization.cpp
+  msys/3ds/srv.cpp
+  msys/3ds/svc_loader.s
+  msys/3ds/allocator/mappable.cpp
+  msys/3ds/applets/swkbd.cpp
+  msys/3ds/services/ptmsysm.cpp
+  msys/3ds/util/utf/decode_utf8.cpp
+  msys/3ds/util/utf/decode_utf16.cpp
+  msys/3ds/util/utf/encode_utf8.cpp
+  msys/3ds/util/utf/encode_utf16.cpp
+  msys/3ds/util/utf/utf8_to_utf16.cpp
+  msys/3ds/util/utf/utf16_to_utf8.cpp
   msys/cheats.cpp
   msys/commands.cpp
   msys/debug.cpp
-  msys/draw.cpp
   msys/equips.cpp
   msys/entrances.cpp
-  msys/fs.cpp
   msys/inventory.cpp
   msys/menu.cpp
   msys/menus.cpp
-  msys/MyThread.cpp
-  msys/synchronization.cpp
-  msys/svc_loader.s
+  
   msys/warps.cpp
   msys/watches.cpp
   rst/fixes/obj_stone_tower_block.cpp

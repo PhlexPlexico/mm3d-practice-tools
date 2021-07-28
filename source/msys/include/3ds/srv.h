@@ -1,4 +1,5 @@
-/**
+extern "C" {
+    /**
  * @file srv.h
  * @brief Service API.
  */
@@ -141,3 +142,5 @@ Result srvIsServiceRegistered(bool* registeredOut, const char* name);
  * @param name Name of the port to check.
  */
 Result srvIsPortRegistered(bool* registeredOut, const char* name);
+
+}

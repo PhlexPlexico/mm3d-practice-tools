@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file ipc.h
  * @brief Inter Process Communication helpers
  */
@@ -115,4 +116,6 @@ static inline u32 IPC_Desc_PXIBuffer(size_t size, unsigned buffer_id, bool is_re
 static inline u32 IPC_Desc_Buffer(size_t size, IPC_BufferRights rights)
 {
 	return (size << 4) | 0x8 | rights;
+}
+
 }

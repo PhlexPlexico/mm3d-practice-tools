@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file types.h
  * @brief Various system types.
  */
@@ -77,3 +78,5 @@ typedef struct {
 	u32 fpscr;        ///< fpscr.
 	u32 fpexc;        ///< fpexc.
 } FpuRegisters;
+
+}

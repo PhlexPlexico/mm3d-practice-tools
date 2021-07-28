@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file result.h
  * @brief 3DS result code tools
  */
@@ -189,3 +190,5 @@ enum
 	RD_TOO_LARGE            = RD_INVALID_RESULT_VALUE - 22,
 	RD_INVALID_SELECTION    = RD_INVALID_RESULT_VALUE - 23,
 };
+
+}

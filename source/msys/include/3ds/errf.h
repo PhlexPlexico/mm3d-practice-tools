@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file errf.h
  * @brief Error Display API
  */
@@ -120,3 +121,5 @@ Result ERRF_ThrowResultWithMessage(Result failure, const char* message);
  * @sa threadOnException
  */
 void ERRF_ExceptionHandler(ERRF_ExceptionInfo* excep, CpuRegisters* regs) __attribute__((noreturn));
+
+}

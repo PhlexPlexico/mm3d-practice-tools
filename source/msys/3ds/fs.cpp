@@ -1,13 +1,14 @@
-#include <string.h>
-#include "msys/include/3ds/types.h"
-#include "msys/include/3ds/result.h"
-#include "msys/include/3ds/svc.h"
-#include "msys/include/3ds/srv.h"
-#include "msys/include/3ds/synchronization.h"
-#include "msys/include/3ds/services/fs.h"
-#include "msys/include/3ds/ipc.h"
-#include "msys/include/3ds/env.h"
-#include "msys/include/internal.h"
+extern "C" {
+	#include <string.h>
+#include "../include/3ds/types.h"
+#include "../include/3ds/result.h"
+#include "../include/3ds/svc.h"
+#include "../include/3ds/srv.h"
+#include "../include/3ds/synchronization.h"
+#include "../include/3ds/services/fs.h"
+#include "../include/3ds/ipc.h"
+#include "../include/3ds/env.h"
+#include "../include/internal.h"
 
 #define FS_MAX_EXEMPT_ARCHIVE_HANDLES 16
 
@@ -1889,4 +1890,6 @@ Result FSDIR_GetPriority(Handle handle, u32* priority)
 	if(priority) *priority = cmdbuf[2];
 
 	return cmdbuf[1];
+}
+
 }

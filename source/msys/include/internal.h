@@ -1,4 +1,5 @@
-#pragma once
+extern "C" {
+	#pragma once
 #include <sys/reent.h>
 #include "3ds/types.h"
 #include "3ds/result.h"
@@ -34,4 +35,5 @@ typedef struct
 static inline ThreadVars* getThreadVars(void)
 {
 	return (ThreadVars*)getThreadLocalStorage();
+}
 }

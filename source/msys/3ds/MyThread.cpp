@@ -24,8 +24,8 @@
 *         reasonable ways as different from the original version.
 */
 
-#include "msys/include/MyThread.h"
-#include "msys/include/3ds/srv.h"
+#include "../include/MyThread.h"
+#include "../include/3ds/srv.h"
 
 static void _thread_begin(void* arg)
 {

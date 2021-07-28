@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file env.h
  * @brief Homebrew environment information.
  */
@@ -70,4 +71,6 @@ static inline const char* envGetSystemArgList(void) {
 static inline u32 envGetSystemRunFlags(void) {
 	extern u32 __system_runflags;
 	return __system_runflags;
+}
+
 }

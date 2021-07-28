@@ -25,15 +25,15 @@
 *         reasonable ways as different from the original version.
 */
 
-#include "include/fmt.h"
-#include "include/draw.h"
-#include "include/3ds/font.h"
-#include "include/utils.h"
-#include "include/3ds/svc.h"
-#include "include/3ds/synchronization.h"
+#include "../include/fmt.h"
+#include "../include/draw.h"
+#include "../include/3ds/font.h"
+#include "../include/utils.h"
+#include "../include/3ds/svc.h"
+#include "../include/3ds/synchronization.h"
 #include <string.h>
-#include "include/fonts/ascii_font.h"
-#include "../common/utils.h"
+#include "../include/fonts/ascii_font.h"
+#include "../../common/utils.h"
 
 static u8* FRAMEBUFFER[6];
 
@@ -225,14 +225,14 @@ void Draw_SetupFramebuffer(void)
 
 void Draw_FlushFramebuffer(void)
 {
-    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, FRAMEBUFFER[0], FB_BOTTOM_SIZE);
-    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, FRAMEBUFFER[1], FB_BOTTOM_SIZE);
+    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)FRAMEBUFFER[0], FB_BOTTOM_SIZE);
+    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)FRAMEBUFFER[1], FB_BOTTOM_SIZE);
 }
 
 void Draw_FlushFramebufferTop(void)
 {
-    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, FRAMEBUFFER[2], FB_TOP_SIZE);
-    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, FRAMEBUFFER[3], FB_TOP_SIZE);
-    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, FRAMEBUFFER[4], FB_TOP_SIZE);
-    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, FRAMEBUFFER[5], FB_TOP_SIZE);
+    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)FRAMEBUFFER[2], FB_TOP_SIZE);
+    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)FRAMEBUFFER[3], FB_TOP_SIZE);
+    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)FRAMEBUFFER[4], FB_TOP_SIZE);
+    svcFlushProcessDataCache(CUR_PROCESS_HANDLE, (u32)FRAMEBUFFER[5], FB_TOP_SIZE);
 }

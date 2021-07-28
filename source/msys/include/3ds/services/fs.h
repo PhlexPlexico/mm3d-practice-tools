@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file fs.h
  * @brief Filesystem Services
  */
@@ -1094,3 +1095,5 @@ Result FSDIR_SetPriority(Handle handle, u32 priority);
  * @param priority Pointer to output the priority to.
  */
 Result FSDIR_GetPriority(Handle handle, u32* priority);
+
+}

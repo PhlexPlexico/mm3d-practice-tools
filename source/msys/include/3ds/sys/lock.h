@@ -1,4 +1,5 @@
-#ifndef __SYS_LOCK_H__
+extern "C" {
+	#ifndef __SYS_LOCK_H__
 #define __SYS_LOCK_H__
 
 // #include <_ansi.h>
@@ -64,3 +65,4 @@ CLASS _LOCK_RECURSIVE_T NAME = {1,0,0};
 	__libc_lock_release_recursive(&(NAME))
 
 #endif // __SYS_LOCK_H__
+}

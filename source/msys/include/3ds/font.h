@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file font.h
  * @brief Shared font support.
  */
@@ -234,3 +235,5 @@ charWidthInfo_s* fontGetCharWidthInfo(CFNT_s* font, int glyphIndex);
 void fontCalcGlyphPos(fontGlyphPos_s* out, CFNT_s* font, int glyphIndex, u32 flags, float scaleX, float scaleY);
 
 ///@}
+
+}

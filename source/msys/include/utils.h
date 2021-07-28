@@ -1,4 +1,5 @@
-/*
+extern "C" {
+    /*
 *   This file is part of Luma3DS
 *   Copyright (C) 2016-2019 Aurora Wright, TuxSH
 *
@@ -57,3 +58,4 @@ static inline void *decodeARMBranch(const void *src)
 }
 
 Result OpenProcessByName(const char *name, Handle *h);
+}

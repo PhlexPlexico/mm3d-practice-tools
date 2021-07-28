@@ -1,4 +1,5 @@
-/**
+extern "C" {
+	/**
  * @file gfx.h
  * @brief LCD Screens manipulation
  *
@@ -65,7 +66,7 @@ void gfxInitDefault(void);
  * @note Even if the double buffering is disabled, it will allocate two buffer per screen.
  * @note You should always call @ref gfxExit once done to free the memory and services
  */
-void gfxInit(GSPGPU_FramebufferFormats topFormat, GSPGPU_FramebufferFormats bottomFormat, bool vrambuffers);
+void gfxInit(GSPGPU_FramebufferFormat topFormat, GSPGPU_FramebufferFormat bottomFormat, bool vrambuffers);
 
 /**
  * @brief Closes the gsp service and frees the framebuffers.
@@ -94,14 +95,14 @@ bool gfxIs3D(void);
  * @param screen The screen of which format should be changed
  * @param format One of the gsp pixel formats.
  */
-void gfxSetScreenFormat(gfxScreen_t screen, GSPGPU_FramebufferFormats format);
+void gfxSetScreenFormat(gfxScreen_t screen, GSPGPU_FramebufferFormat format);
 
 /**
  * @brief Gets a screen pixel format.
  * @param screen Screen to get the pixel format of.
  * @return the pixel format of the chosen screen set by ctrulib.
  */
-GSPGPU_FramebufferFormats gfxGetScreenFormat(gfxScreen_t screen);
+GSPGPU_FramebufferFormat gfxGetScreenFormat(gfxScreen_t screen);
 
 /**
  * @brief Sets whether to use ctrulib's double buffering
@@ -171,3 +172,5 @@ u8* gfxGetFramebuffer(gfxScreen_t screen, gfx3dSide_t side, u16* width, u16* hei
 extern u8* gfxTopLeftFramebuffers[2];
 extern u8* gfxTopRightFramebuffers[2];
 extern u8* gfxBottomFramebuffers[2];
+
+}

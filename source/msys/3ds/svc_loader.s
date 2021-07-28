@@ -48,3 +48,40 @@ SVC_BEGIN svcSendSyncRequest
 	svc 0x32
 	bx  lr
 SVC_END
+
+SVC_BEGIN svcCreateMemoryBlock
+	str r0, [sp, #-4]!
+	ldr r0, [sp, #4]
+	svc 0x1E
+	ldr r2, [sp], #4
+	str r1, [r2]
+	bx  lr
+SVC_END
+
+SVC_BEGIN svcArbitrateAddressNoTimeout
+	svc 0x22
+	bx  lr
+SVC_END
+
+SVC_BEGIN svcReleaseMutex
+	svc 0x14
+	bx  lr
+SVC_END
+
+SVC_BEGIN svcUnmapMemoryBlock
+	svc 0x20
+	bx  lr
+SVC_END
+
+SVC_BEGIN svcMapMemoryBlock
+	svc 0x1F
+	bx  lr
+SVC_END
+
+SVC_BEGIN svcDuplicateHandle
+	str r0, [sp, #-0x4]!
+	svc 0x27
+	ldr r3, [sp], #4
+	str r1, [r3]
+	bx  lr
+SVC_END

@@ -1,4 +1,5 @@
-/*   This paricular file is licensed under the following terms: */
+extern "C" {
+    /*   This paricular file is licensed under the following terms: */
 
 /*
 *   This software is provided 'as-is', without any express or implied warranty. In no event will the authors be held liable
@@ -143,3 +144,4 @@ Result svcCopyHandle(Handle *out, Handle outProcess, Handle in, Handle inProcess
 */
 Result svcTranslateHandle(u32 *outKAddr, char *outClassName, Handle in);
 ///@}
+}

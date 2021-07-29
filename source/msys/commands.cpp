@@ -1,4 +1,6 @@
-#include "msys/include/3ds/services/fs.h"
+extern "C" {
+  #include <3ds/services/fs.h>
+}
 #include "msys/include/menus/commands.h"
 #include "msys/include/entrances.h"
 #include "common/context.h"

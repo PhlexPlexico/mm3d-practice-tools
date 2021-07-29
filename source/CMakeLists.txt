@@ -12,7 +12,7 @@ add_executable(newcode
   common/flags.h
   common/hidstate.h
   common/hidstate.cpp
-  common/svc.s
+  #common/svc.s
   common/types.h
   common/utils.h
   game/actor.cpp
@@ -71,26 +71,10 @@ add_executable(newcode
   game/ui/screens/main_screen.h
   game/ui/screens/schedule_screen.h
   game/ui/screens/screen.h
-  msys/include/3ds/errf.h
-  msys/include/3ds/env.h
-  msys/include/3ds/font.h
-  msys/include/3ds/gfx.h
-  msys/include/3ds/ipc.h
-  msys/include/3ds/os.h
-  msys/include/3ds/result.h
-  msys/include/3ds/svc.h
-  msys/include/3ds/srv.h
-  msys/include/3ds/synchronization.h
-  msys/include/3ds/thread.h
-  msys/include/3ds/types.h
-  msys/include/3ds/sys/lock.h
-  msys/include/3ds/services/gspgpu.h
-  msys/include/3ds/services/fs.h
   msys/include/csvc.h
   msys/include/draw.h
   msys/include/entrances.h
   msys/include/fmt.h
-  msys/include/internal.h
   msys/include/menu.h
   msys/include/menus.h
   msys/include/MyThread.h
@@ -108,20 +92,19 @@ add_executable(newcode
   msys/include/menus/scene.h
   msys/include/menus/warps.h
   msys/include/menus/watches.h
-  msys/abi.cpp
+  msys/3ds/abi.cpp
+  msys/3ds/draw.cpp
+  msys/3ds/MyThread.cpp
+  #msys/3ds/svc_loader.s
   msys/cheats.cpp
   msys/commands.cpp
   msys/debug.cpp
-  msys/draw.cpp
   msys/equips.cpp
   msys/entrances.cpp
-  msys/fs.cpp
   msys/inventory.cpp
   msys/menu.cpp
   msys/menus.cpp
-  msys/MyThread.cpp
-  msys/synchronization.cpp
-  msys/svc_loader.s
+  
   msys/warps.cpp
   msys/watches.cpp
   rst/fixes/obj_stone_tower_block.cpp
@@ -129,6 +112,36 @@ add_executable(newcode
   rst/main.cpp
   rst/trampolines.s
 )
+INCLUDE(FindPackageHandleStandardArgs)
+set(CTRULIB_PATHS $ENV{CTRULIB} libctru ctrulib ${DEVKITPRO}/libctru ${DEVKITPRO}/ctrulib)
+
+find_path(LIBCTRU_INCLUDE_DIR 3ds.h
+            PATHS ${CTRULIB_PATHS}
+            PATH_SUFFIXES include libctru/include )
+
+find_library(LIBCTRU_LIBRARY NAMES ctru libctru.a
+            PATHS ${CTRULIB_PATHS}
+            PATH_SUFFIXES lib libctru/lib )
+
+set(LIBCTRU_LIBRARIES ${LIBCTRU_LIBRARY} )
+set(LIBCTRU_INCLUDE_DIRS ${LIBCTRU_INCLUDE_DIR} )
+
+find_package_handle_standard_args(CTRULIB  DEFAULT_MSG
+LIBCTRU_LIBRARY LIBCTRU_INCLUDE_DIR)
+
+mark_as_advanced(LIBCTRU_INCLUDE_DIR LIBCTRU_LIBRARY )
+if(CTRULIB_FOUND)
+    set(CTRULIB ${LIBCTRU_INCLUDE_DIR}/..)
+    message(STATUS "setting CTRULIB to ${CTRULIB}")
+
+    add_library(3ds::ctrulib STATIC IMPORTED GLOBAL)
+    set_target_properties(3ds::ctrulib PROPERTIES
+    IMPORTED_LOCATION "${LIBCTRU_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${LIBCTRU_INCLUDE_DIR}"
+)
+endif()
+
+target_link_libraries(newcode PRIVATE 3ds::ctrulib)
 set_target_properties(newcode PROPERTIES SUFFIX ".elf")
 target_compile_options(newcode PRIVATE -fdiagnostics-color=always -Wall -Wextra -std=c++17 -fno-exceptions -fomit-frame-pointer -ffunction-sections)
 target_include_directories(newcode PRIVATE ./)

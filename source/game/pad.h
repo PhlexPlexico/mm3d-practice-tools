@@ -123,8 +123,8 @@ struct ControllerMgr {
 };
 #pragma pack(pop)
 static_assert(sizeof(ControllerMgr) == 0x10F0);
-static_assert(rst::util::OffsetOf(&ControllerMgr::state) == 0x1000);
-static_assert(rst::util::OffsetOf(&ControllerMgr::touchscreen_state) == 0x10ED);
+static_assert(offsetof(ControllerMgr, state) == 0x1000);
+static_assert(offsetof(ControllerMgr, touchscreen_state) == 0x10ED);
 
 ControllerMgr& GetControllerMgr();
 

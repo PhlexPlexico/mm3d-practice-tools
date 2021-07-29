@@ -468,9 +468,9 @@ struct Player : public Actor {
   u8 gap_12C48[134];
   s16 field_12CCE;
 };
-static_assert(rst::util::OffsetOf(&Player::transform_mask_action) == 0x200);
-static_assert(rst::util::OffsetOf(&Player::field_12CCE) == 0x12CCE);
-static_assert(rst::util::OffsetOf(&Player::sword_active) == 0x11E3C);
+static_assert(offsetof(Player, transform_mask_action) == 0x200);
+static_assert(offsetof(Player, field_12CCE) == 0x12CCE);
+static_assert(offsetof(Player, sword_active) == 0x11E3C);
 // TODO: complete the struct and add a size assertion.
 
 enum class AllowExistingMagicUsage { No, Yes };

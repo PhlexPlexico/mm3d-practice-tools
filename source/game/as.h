@@ -55,7 +55,7 @@ struct ActorUtil {
   u8 field_8A;
   u8 field_8B;
 };
-static_assert(rst::util::OffsetOf(&ActorUtil::gap_64) == 0x64);
+static_assert(offsetof(ActorUtil, gap_64) == 0x64);
 static_assert(sizeof(ActorUtil) == 0x8C);
 
 }  // namespace game::as

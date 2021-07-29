@@ -1,4 +1,5 @@
-/*
+extern "C" {
+    /*
 *   This file is part of Luma3DS
 *   Copyright (C) 2016-2019 Aurora Wright, TuxSH
 *
@@ -26,8 +27,11 @@
 
 #pragma once
 
-#include "3ds/svc.h"
-#include "3ds/result.h"
+extern "C" {
+    #include <3ds/svc.h>
+    #include <3ds/result.h>
+}
+
 #include "csvc.h"
 
 // For accessing physmem uncached (and directly)
@@ -57,3 +61,4 @@ static inline void *decodeARMBranch(const void *src)
 }
 
 Result OpenProcessByName(const char *name, Handle *h);
+}

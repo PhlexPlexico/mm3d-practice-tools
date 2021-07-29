@@ -23,13 +23,15 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
-
 #pragma once
+extern "C" {
 
-#include "3ds/types.h"
-#include "3ds/result.h"
-#include "3ds/svc.h"
-#include "3ds/synchronization.h"
+    #include <3ds/types.h>
+    #include <3ds/result.h>
+    #include <3ds/svc.h>
+    #include <3ds/synchronization.h>
+}
+
 
 #define THREAD_STACK_SIZE 0x1000
 

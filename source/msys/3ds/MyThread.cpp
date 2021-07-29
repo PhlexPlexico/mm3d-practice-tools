@@ -23,9 +23,12 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
+extern "C" { 
+    #include <3ds/types.h>
+    #include <3ds/srv.h>
+}
 
 #include "../include/MyThread.h"
-#include "../include/3ds/srv.h"
 
 static void _thread_begin(void* arg)
 {

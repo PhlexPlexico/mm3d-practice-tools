@@ -24,14 +24,17 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
-
+extern "C" {
+    
+    #include <3ds/font.h>
+    #include <3ds/types.h>
+    #include <3ds/svc.h>
+    #include <3ds/synchronization.h>
+}
+#include <string.h>
 #include "../include/fmt.h"
 #include "../include/draw.h"
-#include "../include/3ds/font.h"
 #include "../include/utils.h"
-#include "../include/3ds/svc.h"
-#include "../include/3ds/synchronization.h"
-#include <string.h>
 #include "../include/fonts/ascii_font.h"
 #include "../../common/utils.h"
 

@@ -26,8 +26,9 @@
  *         reasonable ways as different from the original version.
  */
 
-
-#include "msys/include/3ds/os.h"
+extern "C" {
+    #include <3ds/os.h>
+}
 #include "msys/include/menus.h"
 #include "msys/include/menu.h"
 #include "msys/include/draw.h"

@@ -17,7 +17,9 @@ extern "C" {
 
 #pragma once
 
-#include "3ds/types.h"
+extern "C" {
+    #include <3ds/types.h>
+}
 
 /// Operations for svcControlService
 typedef enum ServiceOp

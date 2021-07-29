@@ -25,11 +25,14 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
-
 #pragma once
+extern "C" {
 
-#include "3ds/types.h"
-#include "3ds/gfx.h"
+
+  #include <3ds/types.h>
+  #include <3ds/gfx.h>
+}
+
 
 #define FB_BOTTOM_VRAM_ADDR         ((void *)0x1F48F000) // cached
 #define FB_BOTTOM_VRAM_PA           0x1848F000
@@ -45,11 +48,11 @@
 #define SPACING_Y 11
 #define SPACING_X 6
 
-#define COLOR_TITLE RGB8(0x33, 0x33, 0xFF)
-#define COLOR_WHITE RGB8(0xFF, 0xFF, 0xFF)
-#define COLOR_RED   RGB8(0xFF, 0x00, 0x00)
-#define COLOR_GREEN RGB8(0x00, 0xFF, 0x00)
-#define COLOR_BLACK RGB8(0x00, 0x00, 0x00)
+#define COLOR_TITLE RGB565(0x00, 0x26, 0x1F)
+#define COLOR_WHITE RGB565(0x1F, 0x3F, 0x1F)
+#define COLOR_RED   RGB565(0x1F, 0x00, 0x00)
+#define COLOR_GREEN RGB565(0x00, 0x1F, 0x00)
+#define COLOR_BLACK RGB565(0x00, 0x00, 0x00)
 
 #define DRAW_MAX_FORMATTED_STRING_SIZE  512
 

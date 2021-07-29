@@ -25,13 +25,16 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
+extern "C" {
+    #include <3ds/types.h>
+    #include <3ds/srv.h>
+    #include <3ds/applets/swkbd.h>
+}
 
-#include "msys/include/3ds/srv.h"
 #include "msys/include/menu.h"
 #include "msys/include/draw.h"
 #include "msys/include/menus.h"
 #include "msys/include/utils.h"
-#include "msys/include/3ds/applets/swkbd.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -384,91 +387,94 @@ void AmountMenuShow(AmountMenu* menu){ //displays an amount menu TODO: seems mes
 }
 
 u32 KeyboardFill(char * buf, u32 len){
-    static SwkbdState swkbd;
-    swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, -1);
-    swkbdSetValidation(&swkbd, SWKBD_NOTEMPTY_NOTBLANK, SWKBD_FILTER_DIGITS | SWKBD_FILTER_AT | SWKBD_FILTER_PERCENT | SWKBD_FILTER_BACKSLASH | SWKBD_FILTER_PROFANITY, 2);
-    swkbdSetFeatures(&swkbd, SWKBD_MULTILINE);
-    swkbdSetHintText(&swkbd, "Please enter a memory address.");
-    swkbdInputText(&swkbd, buf, len);
-    return 0;
-    // const char* Upper = "1234567890QWERTYUIOPASDFGHJKL'ZXCVBNM,.+";
-    // const char* Lower = "1234567890qwertyuiopasdfghjkl'zxcvbnm,.+";
+    
+    //static SwkbdState swkbd;
+    //swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, -1);
+    //swkbdSetValidation(&swkbd, SWKBD_NOTEMPTY_NOTBLANK, SWKBD_FILTER_DIGITS | SWKBD_FILTER_AT | SWKBD_FILTER_PERCENT | SWKBD_FILTER_BACKSLASH | SWKBD_FILTER_PROFANITY, 2);
+    //swkbdSetFeatures(&swkbd, SWKBD_MULTILINE);
+    //swkbdSetHintText(&swkbd, "Please enter a memory address.");
+    //swkbdInputText(&swkbd, buf, len);
+    //return 0;
+    
+    
+    const char* Upper = "1234567890QWERTYUIOPASDFGHJKL'ZXCVBNM,.+";
+    const char* Lower = "1234567890qwertyuiopasdfghjkl'zxcvbnm,.+";
 
-    // const char* keys = Lower;
-    // s32 selected = 0;
-    // u32 idx = strlen(buf);
+    const char* keys = Lower;
+    s32 selected = 0;
+    u32 idx = strlen(buf);
 
-    // Draw_Lock();
-    // Draw_ClearFramebuffer();
-    // Draw_FlushFramebuffer();
-    // Draw_Unlock();
+    Draw_Lock();
+    Draw_ClearFramebuffer();
+    Draw_FlushFramebuffer();
+    Draw_Unlock();
 
-    // do
-    // {
-    //     Draw_Lock();
-    //     Draw_DrawString(10, 10, COLOR_TITLE, "Edit Watch Name");
+    do
+    {
+        Draw_Lock();
+        Draw_DrawString(10, 10, COLOR_TITLE, "Edit Watch Name");
 
 
-    //     for(u32 i = 0; i < 10; ++i){
-    //         Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30, (u32)selected == i ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[i]);
-    //     }
-    //     for(u32 i = 0; i < 10; ++i){
-    //         u32 j = 10 + i;
-    //         Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 2 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
-    //     }
-    //     for(u32 i = 0; i < 10; ++i){
-    //         u32 j = 20 + i;
-    //         Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 4 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
-    //     }
-    //     for(u32 i = 0; i < 10; ++i){
-    //         u32 j = 30 + i;
-    //         Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 6 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
-    //     }
-    //     Draw_DrawString(30, 30 + 7 * SPACING_Y, COLOR_RED, buf);
+        for(u32 i = 0; i < 10; ++i){
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30, (u32)selected == i ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[i]);
+        }
+        for(u32 i = 0; i < 10; ++i){
+            u32 j = 10 + i;
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 2 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
+        }
+        for(u32 i = 0; i < 10; ++i){
+            u32 j = 20 + i;
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 4 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
+        }
+        for(u32 i = 0; i < 10; ++i){
+            u32 j = 30 + i;
+            Draw_DrawFormattedString(30 + (i * 2 * SPACING_X), 30 + 6 * SPACING_Y, (u32)selected == j ? COLOR_GREEN : COLOR_WHITE, "%c ", keys[j]);
+        }
+        Draw_DrawString(30, 30 + 7 * SPACING_Y, COLOR_RED, buf);
 
-    //     Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "L/R to switch case. Start to save and return.");
+        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "L/R to switch case. Start to save and return.");
 
-    //     Draw_FlushFramebuffer();
-    //     Draw_Unlock();
+        Draw_FlushFramebuffer();
+        Draw_Unlock();
 
-    //     u32 pressed = waitInputWithTimeout(1000);
-    //     if(pressed & BUTTON_B){
-    //         idx--;
-    //         if((s32)idx < 0) idx = 0;
-    //         buf[idx] = '\0';
-    //         Draw_Lock();
-    //         Draw_ClearFramebuffer();
-    //         Draw_FlushFramebuffer();
-    //         Draw_Unlock();
-    //     }
-    //     else if(pressed & BUTTON_A){
-    //         if(idx >= len) idx = len - 1;
-    //         buf[idx] = keys[selected];
-    //         idx++;
-    //         buf[idx] = '\0';
-    //     }
-    //     else if(pressed & (BUTTON_R1 | BUTTON_L1)){
-    //         keys = (keys == Lower) ? Upper : Lower;
-    //     }
-    //     else if(pressed & BUTTON_DOWN){
-    //         selected += 10;
-    //     }
-    //     else if(pressed & BUTTON_UP){
-    //         selected -= 10;
-    //     }
-    //     else if(pressed & BUTTON_RIGHT){
-    //         selected++;
-    //     }
-    //     else if(pressed & BUTTON_LEFT){
-    //         selected--;
-    //     }
-    //     else if(pressed & BUTTON_START){
-    //         break;
-    //     }    
+        u32 pressed = waitInputWithTimeout(1000);
+        if(pressed & BUTTON_B){
+            idx--;
+            if((s32)idx < 0) idx = 0;
+            buf[idx] = '\0';
+            Draw_Lock();
+            Draw_ClearFramebuffer();
+            Draw_FlushFramebuffer();
+            Draw_Unlock();
+        }
+        else if(pressed & BUTTON_A){
+            if(idx >= len) idx = len - 1;
+            buf[idx] = keys[selected];
+            idx++;
+            buf[idx] = '\0';
+        }
+        else if(pressed & (BUTTON_R1 | BUTTON_L1)){
+            keys = (keys == Lower) ? Upper : Lower;
+        }
+        else if(pressed & BUTTON_DOWN){
+            selected += 10;
+        }
+        else if(pressed & BUTTON_UP){
+            selected -= 10;
+        }
+        else if(pressed & BUTTON_RIGHT){
+            selected++;
+        }
+        else if(pressed & BUTTON_LEFT){
+            selected--;
+        }
+        else if(pressed & BUTTON_START){
+            break;
+        }    
 
-    //     if (selected >= 40) selected = 0;
-    //     if (selected < 0) selected = 39;
-    // } while(true); 
+        if (selected >= 40) selected = 0;
+        if (selected < 0) selected = 39;
+    } while(true); 
 
-    // return idx;
+    return idx;
 }

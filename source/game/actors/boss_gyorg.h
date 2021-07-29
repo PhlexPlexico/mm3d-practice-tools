@@ -107,11 +107,11 @@ struct BossGyorg : Actor {
   int field_F20;
   int field_F24;
 };
-static_assert(rst::util::OffsetOf(&BossGyorg::collision_eye) == 0xAC0);
-static_assert(rst::util::OffsetOf(&BossGyorg::collision_armor) == 0xB30);
-static_assert(rst::util::OffsetOf(&BossGyorg::collision_3) == 0xBF0);
-static_assert(rst::util::OffsetOf(&BossGyorg::collision) == 0xD50);
-static_assert(rst::util::OffsetOf(&BossGyorg::field_EB0) == 0xEB0);
+static_assert(offsetof(BossGyorg, collision_eye) == 0xAC0);
+static_assert(offsetof(BossGyorg, collision_armor) == 0xB30);
+static_assert(offsetof(BossGyorg, collision_3) == 0xBF0);
+static_assert(offsetof(BossGyorg, collision) == 0xD50);
+static_assert(offsetof(BossGyorg, field_EB0) == 0xEB0);
 static_assert(sizeof(BossGyorg) == 0xF28);
 
 }  // namespace game::act

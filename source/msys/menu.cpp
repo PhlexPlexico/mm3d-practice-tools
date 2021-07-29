@@ -25,8 +25,12 @@
 *         or requiring that modified versions of such material be marked in
 *         reasonable ways as different from the original version.
 */
+extern "C" {
+    #include <3ds/types.h>
+    #include <3ds/srv.h>
+    #include <3ds/applets/swkbd.h>
+}
 
-#include "msys/include/3ds/srv.h"
 #include "msys/include/menu.h"
 #include "msys/include/draw.h"
 #include "msys/include/menus.h"
@@ -383,6 +387,16 @@ void AmountMenuShow(AmountMenu* menu){ //displays an amount menu TODO: seems mes
 }
 
 u32 KeyboardFill(char * buf, u32 len){
+    
+    //static SwkbdState swkbd;
+    //swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, -1);
+    //swkbdSetValidation(&swkbd, SWKBD_NOTEMPTY_NOTBLANK, SWKBD_FILTER_DIGITS | SWKBD_FILTER_AT | SWKBD_FILTER_PERCENT | SWKBD_FILTER_BACKSLASH | SWKBD_FILTER_PROFANITY, 2);
+    //swkbdSetFeatures(&swkbd, SWKBD_MULTILINE);
+    //swkbdSetHintText(&swkbd, "Please enter a memory address.");
+    //swkbdInputText(&swkbd, buf, len);
+    //return 0;
+    
+    
     const char* Upper = "1234567890QWERTYUIOPASDFGHJKL'ZXCVBNM,.+";
     const char* Lower = "1234567890qwertyuiopasdfghjkl'zxcvbnm,.+";
 

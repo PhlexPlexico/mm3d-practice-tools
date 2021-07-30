@@ -35,6 +35,7 @@ extern "C" {
 
 #include "msys/include/menus/warps.h"
 #include "msys/include/menus/scene.h"
+#include "msys/include/menus/save.h"
 #include "msys/include/menus/cheats.h"
 #include "msys/include/menus/inventory.h"
 #include "msys/include/menus/equips.h"
@@ -46,7 +47,7 @@ extern "C" {
 
 Menu pz3DMenu{
     .title="MM3D Practice Menu",
-    .nbItems=7,
+    .nbItems=8,
     .items{
         { .title="Warps", .action_type=MENU, .menu=&WarpsMenu },
         { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
@@ -54,7 +55,8 @@ Menu pz3DMenu{
         { .title="Equips", .action_type=MENU, .menu=&EquipsMenu },
         { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
         { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
-        { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands }
+        { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands },
+        // { .title="Save Profile", .action_type=MENU, .menu=&SaveMenu }
     }
 };
 

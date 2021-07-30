@@ -16,10 +16,11 @@ extern "C" {
 #include "msys/include/menus/inventory.h"
 #include "game/static_context.h"
 #include "msys/include/menus/debug.h"
+#include "msys/include/file_functions.h"
 
 rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
-
+void save_test();
 static game::act::Player* GetPlayer() {
   context = rst::GetContext();
   return context.gctx->GetPlayerActor();
@@ -109,16 +110,8 @@ static void Command_PauseUnpause(void) {
 }
 
 static void Command_FrameAdvance(void) {
-  // Handle fsHandle = rst::util::GetPointer<Handle(void)>(0x012DA00)();
-  // fsUseSession(fsHandle);
-  // FS_Archive sdmcArchive = 0;
-  // u64 value = 0;
-  // FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
-  // FSUSER_OpenFile(&fsHandle, sdmcArchive, fsMakePath(PATH_ASCII, "/testagain.txt"), FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
-  // u32 bytesWritten = 0;
-  // FSFILE_Write(fsHandle, &bytesWritten, 0, &value, sizeof(u64), FS_WRITE_FLUSH | FS_WRITE_UPDATE_TIME);
-  // FSFILE_Close(fsHandle);
-  // FSUSER_CloseArchive(sdmcArchive);
+  // msys::check_or_create_profile_directory();
+  // save_test();
   advState.frameAdvance = true;
 }
 
@@ -153,7 +146,13 @@ static Command commandList[] = {
     {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
 };
 
+// void save_test() {
+//   msys::save_file(commandList);
+// }
 static void Commands_ListInitDefaults(void) {
+  // TODO: Open Check For File to write defaults to/from. If exists, load everything into the commands.
+  // Pointer is a function to safely get a file handle. Let libctru latch onto it.
+  
   commandList[0].comboLen = 3;  // Open Menu
   commandList[0].inputs[0] = BUTTON_L1;
   commandList[0].inputs[1] = (BUTTON_L1 | BUTTON_R1);

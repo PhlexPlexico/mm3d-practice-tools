@@ -110,8 +110,8 @@ static void Command_PauseUnpause(void) {
 }
 
 static void Command_FrameAdvance(void) {
-  // msys::check_or_create_profile_directory();
-  // save_test();
+  msys::File_CheckOrCreateProfileDirectory();
+  save_test();
   advState.frameAdvance = true;
 }
 
@@ -146,9 +146,12 @@ static Command commandList[] = {
     {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
 };
 
-// void save_test() {
-//   msys::save_file(commandList);
-// }
+void save_test() {
+  nlohmann::json tmpJson;
+  char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
+  msys::File_ReadCommandListFromJson(&tmpJson, path);
+  rst::util::Print("%s", tmpJson.dump().c_str());
+}
 static void Commands_ListInitDefaults(void) {
   // TODO: Open Check For File to write defaults to/from. If exists, load everything into the commands.
   // Pointer is a function to safely get a file handle. Let libctru latch onto it.

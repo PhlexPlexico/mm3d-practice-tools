@@ -8,9 +8,11 @@ extern "C" {
 #include "common/debug.h"
 namespace msys {
   using json = nlohmann::json;
-  bool check_or_create_profile_directory();
-  Handle get_handle();
-  void close_handle();
-  bool save_file(Command*);
-  json write_to_json(Command*);
+  bool File_CheckOrCreateProfileDirectory();
+  Handle File_GetHandle();
+  void File_CloseHandle();
+  bool File_SaveProfile(Command*);
+  json File_WriteCommandListToJson(Command*);
+  bool File_WriteStringFileToSd(const char*, char[]);
+  Result File_ReadCommandListFromJson(json*, char[]);
 }

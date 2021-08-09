@@ -126,7 +126,7 @@ static void Command_ToggleWatches(void) {
   toggleWatches();
 }
 
-static Command commandList[] = {
+Command commandList[] = {
     {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 1},
     {"Fast Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},

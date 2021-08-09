@@ -21,7 +21,7 @@ namespace msys {
     const char* jsonInChar = jsonToSave.dump(2).c_str();
     char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
     File_WriteStringFileToSd(jsonInChar, path);
-    return 0;
+    return 1;
   }
 
   Result File_SaveWatches(Watch* watches) {
@@ -31,7 +31,7 @@ namespace msys {
       rst::util::Print("%s", jsonInChar);
       char path[] = "/3ds/mm3d/mm3d-practice-patch/watches.json";
       File_WriteStringFileToSd(jsonInChar, path);
-      return 0;
+      return 1;
     } else {
       return -1;
     }
@@ -93,7 +93,7 @@ namespace msys {
       rst::util::Print("%s: Could not parse JSON. Please check file or create a new one.", __func__);
       return -3;
     }
-    return 0;
+    return 1;
   }
 
   Handle File_GetHandle() {
@@ -121,6 +121,6 @@ namespace msys {
     FSFILE_Close(fsHandle);
     FSUSER_CloseArchive(sdmcArchive);
     File_CloseHandle();
-    return 0;
+    return 1;
   }
 }  // namespace msys

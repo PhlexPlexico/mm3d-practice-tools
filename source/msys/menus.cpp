@@ -47,7 +47,7 @@ extern "C" {
 
 Menu pz3DMenu{
     .title="MM3D Practice Menu",
-    .nbItems=7//8,
+    .nbItems=8,
     .items{
         { .title="Warps", .action_type=MENU, .menu=&WarpsMenu },
         { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
@@ -56,7 +56,7 @@ Menu pz3DMenu{
         { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
         { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
         { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands },
-        // { .title="Save Profile", .action_type=MENU, .menu=&SaveMenu }
+        { .title="Save...", .action_type=MENU, .menu=&SaveMenu }
     }
 };
 

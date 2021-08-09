@@ -47,7 +47,7 @@ extern "C" {
 
 Menu pz3DMenu{
     .title="MM3D Practice Menu",
-    .nbItems=8,
+    .nbItems=7//8,
     .items{
         { .title="Warps", .action_type=MENU, .menu=&WarpsMenu },
         { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },

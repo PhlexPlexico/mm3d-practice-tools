@@ -1,13 +1,15 @@
 /**
  * From https://github.com/gamestabled/oot3d_practice_menu/blob/master/src/watches.c
+ * Modified 2021 PhlexPlexico
  **/
-
+#include <stdio.h>
+#include <string.h>
 #include "msys/include/menu.h"
 #include "msys/include/menus/watches.h"
 #include "msys/include/draw.h"
 #include "../common/hidstate.h"
-#include <stdio.h>
-#include <string.h>
+#include "msys/include/file_functions.h"
+
 
 Watch watches[WATCHES_MAX];
 
@@ -298,4 +300,28 @@ void drawWatches() {
     }
     if(isDisplayed)
         Draw_FlushFramebuffer();
+}
+
+void Watches_Init() {
+  if (msys::File_CheckOrCreateProfileDirectory()) {
+    nlohmann::json tmpJson;
+    char path[] = "/3ds/mm3d/mm3d-practice-patch/watches.json";
+    msys::File_ReadFromJsonFile(&tmpJson, path);
+    if (!tmpJson.empty()) {
+      u32 i = 0;
+      for (auto& [key, value] : tmpJson.items()) {
+        strncpy(watches[i].name, key.c_str(), WATCHES_MAXNAME + 1);
+        //NOTE: If this fails, we need to adjust the .get function here. Technically the JSON Library does not allow us to
+        // retrieve the uintptr_t value without freezing the entire system. If this somehow fails, we need to re-evaluate
+        // how to retrieve this value.
+        static_assert(sizeof(void*) == sizeof(uint32_t));
+        watches[i].addr = (void*)(uintptr_t)value["address"].get<uint32_t>();
+        watches[i].posX = (u32)value["posX"];
+        watches[i].posY = (u32)value["posY"];
+        watches[i].display = (u8)value["showOnScreen"];
+        watches[i].type = (WatchType)value["watchType"];
+        i++;
+      }
+    }
+  }
 }

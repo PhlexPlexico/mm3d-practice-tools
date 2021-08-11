@@ -126,24 +126,6 @@ static void Command_ToggleWatches(void) {
   toggleWatches();
 }
 
-Command commandList[] = {
-    {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
-    {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 1},
-    {"Fast Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
-    {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 1},
-    {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 1},
-    {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
-    {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
-    {"Store Position", 0, 0, {0}, Command_StorePos, COMMAND_PRESS_TYPE, 0, 0},
-    {"Load Position", 0, 0, {0}, Command_LoadPos, COMMAND_PRESS_TYPE, 0, 0},
-    // {"Previous Position", 0, 0, { 0 }, Command_PreviousPos, COMMAND_PRESS_TYPE, 0},
-    // {"Next Position", 0, 0, { 0 }, Command_NextPos, COMMAND_PRESS_TYPE, 0},
-    {"Pause/Unpause", 0, 0, {0}, Command_PauseUnpause, COMMAND_PRESS_TYPE, 0, 0},
-    {"Frame Advance", 0, 0, {0}, Command_FrameAdvance, COMMAND_PRESS_TYPE, 0, 0},
-    //{"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
-    {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
-};
-
 static void Commands_InsertCombos(u32 curCommand, nlohmann::basic_json<>* inputs) {
   u32 i = 0;
   for (nlohmann::json::iterator it = inputs->begin(); it != inputs->end(); ++it) {
@@ -157,7 +139,7 @@ static void Commands_ListInitDefaults(void) {
   if (msys::File_CheckOrCreateProfileDirectory()) {
     nlohmann::json tmpJson;
     char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
-    msys::File_ReadCommandListFromJson(&tmpJson, path);
+    msys::File_ReadFromJsonFile(&tmpJson, path);
     if (!tmpJson.empty()) {
       commandList[0].comboLen = (u32)tmpJson["Open Menu"]["comboLength"];
       Commands_InsertCombos(0, &tmpJson["Open Menu"]["inputs"]);
@@ -277,8 +259,36 @@ static void Commands_ListInitDefaults(void) {
       commandList[11].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_START);
       commandList[11].strict = 0;
     }
+    rst::util::Print("%s: Reset combo coming up!", __func__);
+    commandList[12].comboLen = 5; // Reset inputs.
+    commandList[12].inputs[0] = BUTTON_L1;
+    commandList[12].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+    commandList[12].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X);
+    commandList[12].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B);
+    commandList[12].inputs[4] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B | BUTTON_LEFT);
+    commandList[12].strict = 0;
   }
+  
 }
+
+Command commandList[] = {
+    {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 1},
+    {"Fast Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
+    {"Run Fast", 0, 0, {0}, Command_RunFast, COMMAND_HOLD_TYPE, 0, 1},
+    {"Go Back To File Select", 0, 0, {0}, Command_Reset, COMMAND_PRESS_ONCE_TYPE, 0, 1},
+    {"Reload Scene", 0, 0, {0}, Command_ReloadScene, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Store Position", 0, 0, {0}, Command_StorePos, COMMAND_PRESS_TYPE, 0, 0},
+    {"Load Position", 0, 0, {0}, Command_LoadPos, COMMAND_PRESS_TYPE, 0, 0},
+    // {"Previous Position", 0, 0, { 0 }, Command_PreviousPos, COMMAND_PRESS_TYPE, 0},
+    // {"Next Position", 0, 0, { 0 }, Command_NextPos, COMMAND_PRESS_TYPE, 0},
+    {"Pause/Unpause", 0, 0, {0}, Command_PauseUnpause, COMMAND_PRESS_TYPE, 0, 0},
+    {"Frame Advance", 0, 0, {0}, Command_FrameAdvance, COMMAND_PRESS_TYPE, 0, 0},
+    //{"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
+    {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
+    {"Reset Input", 0, 0, {0}, Commands_ListInitDefaults, COMMAND_PRESS_TYPE, 0, 0},
+};
 
 static u32 commandInit = 0;
 void Command_UpdateCommands(u32 curInputs) {  // curInputs should be all the held and pressed
@@ -475,9 +485,8 @@ void Commands_ShowCommands(void) {
       Draw_ClearFramebuffer();
     }
     Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Commands. Press START to restore defaults");
-
     for (s32 i = 0;
-         i < COMMAND_MENU_MAX_SHOW && page * COMMAND_MENU_MAX_SHOW + i < COMMAND_NUM_COMMANDS;
+         i < COMMAND_MENU_MAX_SHOW && page * COMMAND_MENU_MAX_SHOW + i < (COMMAND_NUM_COMMANDS-1);
          ++i) {
       char comboString[COMMAND_COMBO_MAX + 1];
       s32 j = page * COMMAND_MENU_MAX_SHOW + i;
@@ -487,7 +496,8 @@ void Commands_ShowCommands(void) {
                                commandList[j].comboLen >= 1 ? comboString[0] : ' ',
                                commandList[j].comboLen >= 2 ? comboString[1] : ' ',
                                commandList[j].comboLen >= 3 ? comboString[2] : ' ',
-                               commandList[j].comboLen >= 4 ? comboString[3] : ' ');
+                               commandList[j].comboLen >= 4 ? comboString[3] : ' ',
+                               commandList[j].comboLen >= 5 ? comboString[4] : ' ');
       Draw_DrawString(200, 30 + i * SPACING_Y, COLOR_WHITE,
                       commandList[j].strict ? "Strict " : "Relaxed");
       Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_TITLE, j == selected ? '>' : ' ');
@@ -513,13 +523,13 @@ void Commands_ShowCommands(void) {
       else if ((COMMAND_NUM_COMMANDS - 1) / COMMAND_MENU_MAX_SHOW == page)
         selected %= COMMAND_MENU_MAX_SHOW;
       else
-        selected = COMMAND_NUM_COMMANDS - 1;
+        selected = COMMAND_NUM_COMMANDS - 2;
     } else if (pressed & BUTTON_START) {
       Commands_ListInitDefaults();
     }
 
     if (selected < 0)
-      selected = COMMAND_NUM_COMMANDS - 1;
+      selected = COMMAND_NUM_COMMANDS - 2;
     else if (selected >= COMMAND_NUM_COMMANDS)
       selected = 0;
 

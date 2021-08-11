@@ -21,5 +21,5 @@ namespace msys {
   json File_WriteCommandListToJson(Command*);
   json File_WriteWatchesToJson(Watch*);
   Result File_WriteStringFileToSd(const char*, char[]);
-  Result File_ReadCommandListFromJson(json*, char[]);
+  Result File_ReadFromJsonFile(json*, char[]);
 }

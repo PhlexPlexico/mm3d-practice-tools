@@ -72,8 +72,13 @@ static void Save_WatchesToJson(void) {
       saved = (bool)msys::File_SaveWatches(watches);
       Draw_Lock();
       Draw_ClearFramebuffer();
-      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,
+      if (!saved) {
+        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 30, COLOR_RED,
+                    "Save not completed. Please ensure you have watches TO save!");
+      } else {
+        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,
                     "Save Complete! Press B to go back.");
+      }
       Draw_FlushFramebuffer();
       Draw_Unlock();
     }

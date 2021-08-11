@@ -109,16 +109,7 @@ static void Command_PauseUnpause(void) {
 }
 
 static void Command_FrameAdvance(void) {
-  // Handle fsHandle = rst::util::GetPointer<Handle(void)>(0x012DA00)();
-  // fsUseSession(fsHandle);
-  // FS_Archive sdmcArchive = 0;
-  // u64 value = 0;
-  // FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""));
-  // FSUSER_OpenFile(&fsHandle, sdmcArchive, fsMakePath(PATH_ASCII, "/testagain.txt"), FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
-  // u32 bytesWritten = 0;
-  // FSFILE_Write(fsHandle, &bytesWritten, 0, &value, sizeof(u64), FS_WRITE_FLUSH | FS_WRITE_UPDATE_TIME);
-  // FSFILE_Close(fsHandle);
-  // FSUSER_CloseArchive(sdmcArchive);
+  msys::File_SaveWatches(watches);
   advState.frameAdvance = true;
 }
 

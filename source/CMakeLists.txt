@@ -12,7 +12,6 @@ add_executable(newcode
   common/flags.h
   common/hidstate.h
   common/hidstate.cpp
-  #common/svc.s
   common/types.h
   common/utils.h
   game/actor.cpp
@@ -74,6 +73,7 @@ add_executable(newcode
   msys/include/csvc.h
   msys/include/draw.h
   msys/include/entrances.h
+  msys/include/file_functions.h
   msys/include/fmt.h
   msys/include/menu.h
   msys/include/menus.h
@@ -89,22 +89,23 @@ add_executable(newcode
   msys/include/menus/equips.h
   msys/include/menus/file.h
   msys/include/menus/inventory.h
+  msys/include/menus/save.h
   msys/include/menus/scene.h
   msys/include/menus/warps.h
   msys/include/menus/watches.h
   msys/3ds/abi.cpp
   msys/3ds/draw.cpp
   msys/3ds/MyThread.cpp
-  #msys/3ds/svc_loader.s
   msys/cheats.cpp
   msys/commands.cpp
   msys/debug.cpp
   msys/equips.cpp
+  msys/file_functions.cpp
   msys/entrances.cpp
   msys/inventory.cpp
   msys/menu.cpp
   msys/menus.cpp
-  
+  msys/save.cpp
   msys/warps.cpp
   msys/watches.cpp
   rst/fixes/obj_stone_tower_block.cpp
@@ -112,6 +113,8 @@ add_executable(newcode
   rst/main.cpp
   rst/trampolines.s
 )
+
+#Practice Patch Includes
 INCLUDE(FindPackageHandleStandardArgs)
 set(CTRULIB_PATHS $ENV{CTRULIB} libctru ctrulib ${DEVKITPRO}/libctru ${DEVKITPRO}/ctrulib)
 
@@ -142,8 +145,24 @@ if(CTRULIB_FOUND)
 endif()
 
 target_link_libraries(newcode PRIVATE 3ds::ctrulib)
+
+
+include(FetchContent)
+
+FetchContent_Declare(json
+  GIT_REPOSITORY https://github.com/ArthurSonzogni/nlohmann_json_cmake_fetchcontent
+  GIT_TAG v3.7.3)
+
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+  FetchContent_Populate(json)
+  add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
+endif()
+
+target_link_libraries(newcode PRIVATE nlohmann_json::nlohmann_json)
+#End Practice Patch Includes
 set_target_properties(newcode PROPERTIES SUFFIX ".elf")
-target_compile_options(newcode PRIVATE -fdiagnostics-color=always -Wall -Wextra -std=c++17 -fno-exceptions -fomit-frame-pointer -ffunction-sections)
+target_compile_options(newcode PRIVATE -fdiagnostics-color=always -Wall -Wno-type-limits -Wno-invalid-offsetof -Wextra -std=c++17 -fno-exceptions -fomit-frame-pointer -ffunction-sections)
 target_include_directories(newcode PRIVATE ./)
 
 target_include_directories(newcode SYSTEM PRIVATE lib/eigen/)

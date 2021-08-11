@@ -24,6 +24,7 @@ typedef struct Command {
     u32 waiting; //to prevent press types from re-executing. unused for other types
     u32 strict; //whether the button combo is strict or not
 } Command;
+extern Command commandList[];
 
 void Commands_ShowCommands(void);
 void Command_UpdateCommands(u32 inputs);

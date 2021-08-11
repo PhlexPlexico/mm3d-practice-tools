@@ -16,10 +16,11 @@ extern "C" {
 #include "msys/include/menus/inventory.h"
 #include "game/static_context.h"
 #include "msys/include/menus/debug.h"
+#include "msys/include/file_functions.h"
 
 rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
-
+void save_test();
 static game::act::Player* GetPlayer() {
   context = rst::GetContext();
   return context.gctx->GetPlayerActor();
@@ -109,7 +110,6 @@ static void Command_PauseUnpause(void) {
 }
 
 static void Command_FrameAdvance(void) {
-  msys::File_SaveWatches(watches);
   advState.frameAdvance = true;
 }
 
@@ -126,7 +126,7 @@ static void Command_ToggleWatches(void) {
   toggleWatches();
 }
 
-static Command commandList[] = {
+Command commandList[] = {
     {"Open Menu", 0, 0, {0}, Command_OpenMenu, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Levitate", 0, 0, {0}, Command_Levitate, COMMAND_HOLD_TYPE, 0, 1},
     {"Fast Fall", 0, 0, {0}, Command_Fall, COMMAND_HOLD_TYPE, 0, 0},
@@ -144,83 +144,140 @@ static Command commandList[] = {
     {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
 };
 
+static void Commands_InsertCombos(u32 curCommand, nlohmann::basic_json<>* inputs) {
+  u32 i = 0;
+  for (nlohmann::json::iterator it = inputs->begin(); it != inputs->end(); ++it) {
+    commandList[curCommand].inputs[i] = (u32)*it;
+    i++;
+  }
+}
+
+
 static void Commands_ListInitDefaults(void) {
-  commandList[0].comboLen = 3;  // Open Menu
-  commandList[0].inputs[0] = BUTTON_L1;
-  commandList[0].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[0].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_SELECT);
-  commandList[0].strict = 0;
+  if (msys::File_CheckOrCreateProfileDirectory()) {
+    nlohmann::json tmpJson;
+    char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
+    msys::File_ReadCommandListFromJson(&tmpJson, path);
+    if (!tmpJson.empty()) {
+      commandList[0].comboLen = (u32)tmpJson["Open Menu"]["comboLength"];
+      Commands_InsertCombos(0, &tmpJson["Open Menu"]["inputs"]);
+      commandList[0].strict = (u32)tmpJson["Open Menu"]["strict"];
 
-  commandList[1].comboLen = 2;  // Levitate
-  commandList[1].inputs[0] = BUTTON_X;
-  commandList[1].inputs[1] = (BUTTON_X | BUTTON_A);
-  commandList[1].strict = 1;
+      commandList[1].comboLen = (u32)tmpJson["Levitate"]["comboLength"];
+      Commands_InsertCombos(1, &tmpJson["Levitate"]["inputs"]);
+      commandList[1].strict = (u32)tmpJson["Levitate"]["strict"];
 
-  commandList[2].comboLen = 4;  // Fast Fall
-  commandList[2].inputs[0] = BUTTON_L1;
-  commandList[2].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[2].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
-  commandList[2].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_Y);
-  commandList[2].strict = 0;
+      commandList[2].comboLen = (u32)tmpJson["Fast Fall"]["comboLength"];
+      Commands_InsertCombos(2, &tmpJson["Fast Fall"]["inputs"]);
+      commandList[2].strict = (u32)tmpJson["Fast Fall"]["strict"];
 
-  commandList[3].comboLen = 2;  // Run Fast
-  commandList[3].inputs[0] = BUTTON_X;
-  commandList[3].inputs[1] = (BUTTON_X | BUTTON_Y);
-  commandList[3].strict = 1;
+      commandList[3].comboLen = (u32)tmpJson["Run Fast"]["comboLength"];
+      Commands_InsertCombos(3, &tmpJson["Run Fast"]["inputs"]);
+      commandList[3].strict = (u32)tmpJson["Run Fast"]["strict"];
 
-  commandList[4].comboLen = 2;  // Goto File Select
-  commandList[4].inputs[0] = BUTTON_Y;
-  commandList[4].inputs[1] = (BUTTON_Y | BUTTON_A);
-  commandList[4].strict = 1;
+      commandList[4].comboLen = (u32)tmpJson["Go Back To File Select"]["comboLength"];
+      Commands_InsertCombos(4, &tmpJson["Go Back To File Select"]["inputs"]);
+      commandList[4].strict = (u32)tmpJson["Go Back To File Select"]["strict"];
 
-  commandList[5].comboLen = 4;  // Reload Scene
-  commandList[5].inputs[0] = BUTTON_L1;
-  commandList[5].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[5].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
-  commandList[5].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_A);
-  commandList[5].strict = 0;
+      commandList[5].comboLen = (u32)tmpJson["Reload Scene"]["comboLength"];
+      Commands_InsertCombos(5, &tmpJson["Reload Scene"]["inputs"]);
+      commandList[5].strict = (u32)tmpJson["Reload Scene"]["strict"];
 
-  commandList[6].comboLen = 4;  // Void Out
-  commandList[6].inputs[0] = BUTTON_L1;
-  commandList[6].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[6].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
-  commandList[6].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_B);
-  commandList[6].strict = 0;
+      commandList[6].comboLen = (u32)tmpJson["Void Out"]["comboLength"];
+      Commands_InsertCombos(6, &tmpJson["Void Out"]["inputs"]);
+      commandList[6].strict = (u32)tmpJson["Void Out"]["strict"];
 
-  commandList[7].comboLen = 3;  // Store Pos
-  commandList[7].inputs[0] = BUTTON_L1;
-  commandList[7].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[7].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_LEFT);
-  commandList[7].strict = 0;
+      commandList[7].comboLen = (u32)tmpJson["Store Position"]["comboLength"];
+      Commands_InsertCombos(7, &tmpJson["Store Position"]["inputs"]);
+      commandList[7].strict = (u32)tmpJson["Store Position"]["strict"];
 
-  commandList[8].comboLen = 3;  // Load Pos
-  commandList[8].inputs[0] = BUTTON_L1;
-  commandList[8].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[8].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_RIGHT);
-  commandList[8].strict = 0;
+      commandList[8].comboLen = (u32)tmpJson["Load Position"]["comboLength"];
+      Commands_InsertCombos(8, &tmpJson["Load Position"]["inputs"]);
+      commandList[8].strict = (u32)tmpJson["Load Position"]["strict"];
 
-  commandList[9].comboLen = 3;  // Pause/Unpause
-  commandList[9].inputs[0] = BUTTON_L1;
-  commandList[9].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[9].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_UP);
-  commandList[9].strict = 0;
+      commandList[9].comboLen = (u32)tmpJson["Pause/Unpause"]["comboLength"];
+      Commands_InsertCombos(9, &tmpJson["Pause/Unpause"]["inputs"]);
+      commandList[9].strict = (u32)tmpJson["Pause/Unpause"]["strict"];
 
-  commandList[10].comboLen = 1;  // Frame Advance
-  commandList[10].inputs[0] = BUTTON_UP;
-  commandList[10].strict = 0;
+      commandList[10].comboLen = (u32)tmpJson["Frame Advance"]["comboLength"];
+      Commands_InsertCombos(10, &tmpJson["Frame Advance"]["inputs"]);
+      commandList[10].strict = (u32)tmpJson["Frame Advance"]["strict"];
 
-  commandList[11].comboLen = 3;  // Frame Advance
-  commandList[11].inputs[0] = BUTTON_L1;
-  commandList[11].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-  commandList[11].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_START);
-  commandList[11].strict = 0;
+      commandList[11].comboLen = (u32)tmpJson["Toggle Watches"]["comboLength"];
+      Commands_InsertCombos(11, &tmpJson["Toggle Watches"]["inputs"]);
+      commandList[11].strict = (u32)tmpJson["Toggle Watches"]["strict"];
+    } else {
+      commandList[0].comboLen = 3;  // Open Menu
+      commandList[0].inputs[0] = BUTTON_L1;
+      commandList[0].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[0].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_SELECT);
+      commandList[0].strict = 0;
 
-  // for (u32 i = 0; i < COMMAND_NUM_COMMANDS; ++i) {
-  //   if (i == 12 || i == 13) {
-  //     commandList[i].comboLen = 0;
-  //     commandList[i].strict = 0;
-  //   }
-  // }
+      commandList[1].comboLen = 2;  // Levitate
+      commandList[1].inputs[0] = BUTTON_X;
+      commandList[1].inputs[1] = (BUTTON_X | BUTTON_A);
+      commandList[1].strict = 1;
+
+      commandList[2].comboLen = 4;  // Fast Fall
+      commandList[2].inputs[0] = BUTTON_L1;
+      commandList[2].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[2].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+      commandList[2].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_Y);
+      commandList[2].strict = 0;
+
+      commandList[3].comboLen = 2;  // Run Fast
+      commandList[3].inputs[0] = BUTTON_X;
+      commandList[3].inputs[1] = (BUTTON_X | BUTTON_Y);
+      commandList[3].strict = 1;
+
+      commandList[4].comboLen = 2;  // Goto File Select
+      commandList[4].inputs[0] = BUTTON_Y;
+      commandList[4].inputs[1] = (BUTTON_Y | BUTTON_A);
+      commandList[4].strict = 1;
+
+      commandList[5].comboLen = 4;  // Reload Scene
+      commandList[5].inputs[0] = BUTTON_L1;
+      commandList[5].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[5].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+      commandList[5].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_A);
+      commandList[5].strict = 0;
+
+      commandList[6].comboLen = 4;  // Void Out
+      commandList[6].inputs[0] = BUTTON_L1;
+      commandList[6].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[6].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+      commandList[6].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_B);
+      commandList[6].strict = 0;
+
+      commandList[7].comboLen = 3;  // Store Pos
+      commandList[7].inputs[0] = BUTTON_L1;
+      commandList[7].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[7].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_LEFT);
+      commandList[7].strict = 0;
+
+      commandList[8].comboLen = 3;  // Load Pos
+      commandList[8].inputs[0] = BUTTON_L1;
+      commandList[8].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[8].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_RIGHT);
+      commandList[8].strict = 0;
+
+      commandList[9].comboLen = 3;  // Pause/Unpause
+      commandList[9].inputs[0] = BUTTON_L1;
+      commandList[9].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[9].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_UP);
+      commandList[9].strict = 0;
+
+      commandList[10].comboLen = 1;  // Frame Advance
+      commandList[10].inputs[0] = BUTTON_UP;
+      commandList[10].strict = 0;
+
+      commandList[11].comboLen = 3;  // Toggle Watches
+      commandList[11].inputs[0] = BUTTON_L1;
+      commandList[11].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[11].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_START);
+      commandList[11].strict = 0;
+    }
+  }
 }
 
 static u32 commandInit = 0;

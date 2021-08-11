@@ -16,4 +16,7 @@ bak/
 *.nam
 *.til
 
+#vscode
+.vscode/
+
 release/

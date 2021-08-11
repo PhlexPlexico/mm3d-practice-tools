@@ -30,7 +30,7 @@ AdvanceState& advState = GetAdvState();
 namespace {
 
 void Init(Context& context) {
-  // link::Init();
+  Watches_Init();
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
   game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_PREDEMO_OMEN);
   context.has_initialised = true;
@@ -124,7 +124,7 @@ static void frame_advance() {
   if (advState.advance_ctx_t.advance_state == advState.STEP) {
     if (advState.frameAdvance) {
       advState.advance_ctx_t.advance_state = advState.LATCHED;
-      util::Print("%s: We are now latched!", __func__);
+      //util::Print("%s: We are now latched!", __func__);
     } else {
       advState.advance_ctx_t.advance_state = advState.PAUSED;
     }
@@ -139,8 +139,8 @@ static void frame_advance() {
     Command_UpdateCommands(inputs.cur.val);
     toggle_advance();
     if (advState.advance_ctx_t.advance_state == advState.LATCHED && !advState.frameAdvance) {
-      util::Print("%s: We are now paused! Our state? %d", __func__,
-                  advState.advance_ctx_t.advance_state);
+      //util::Print("%s: We are now paused! Our state? %d", __func__,
+      //            advState.advance_ctx_t.advance_state);
       advState.advance_ctx_t.advance_state = advState.PAUSED;
     }
     if (advState.advance_ctx_t.advance_state == advState.PAUSED && advState.frameAdvance) {
@@ -176,7 +176,7 @@ RST_HOOK void Calc(game::State* state) {
   scan_shared_hid_inputs();
   Command_UpdateCommands(inputs.cur.val);
   frame_advance();
-  drawWatches();
+  //drawWatches();
   if(advState.useISG) {
     game::act::Player* player = context.gctx->GetPlayerActor();
     if (player) {
@@ -205,6 +205,9 @@ RST_HOOK void DrawMenu() {
     Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
     Draw_DrawFormattedStringTop(90, 30, COLOR_RED, "Please Read The README Before Continuing!");
     Draw_FlushFramebufferTop();
+  } else {
+    // Not as spazzy on the main screen.
+    drawWatches();
   }
 }
 

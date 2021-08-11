@@ -39,3 +39,4 @@ void WatchesMenuFunc(void);
 void Watches_ToggleWatches(void);
 void drawWatches();
 void toggleWatches();
+void Watches_Init();

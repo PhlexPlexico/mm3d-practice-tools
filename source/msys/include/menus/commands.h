@@ -2,10 +2,10 @@
 
 #include "msys/include/menu.h"
 
-#define COMMAND_COMBO_MAX 4
+#define COMMAND_COMBO_MAX 5
 #define COMMAND_COMBO_TIMEOUT 3
 #define COMMAND_MENU_MAX_SHOW 18
-#define COMMAND_NUM_COMMANDS 12
+#define COMMAND_NUM_COMMANDS 13
 
 typedef enum {
     COMMAND_HOLD_TYPE, //command works as long as combo is held

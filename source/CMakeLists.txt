@@ -87,7 +87,6 @@ add_executable(newcode
   msys/include/menus/commands.h
   msys/include/menus/debug.h
   msys/include/menus/equips.h
-  msys/include/menus/file.h
   msys/include/menus/inventory.h
   msys/include/menus/save.h
   msys/include/menus/scene.h

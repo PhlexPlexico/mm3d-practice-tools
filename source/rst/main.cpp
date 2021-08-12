@@ -30,7 +30,7 @@ AdvanceState& advState = GetAdvState();
 namespace {
 
 void Init(Context& context) {
-  Watches_Init();
+  msys::Watches_Init();
   util::Print("Project Restoration initialised (" __DATE__ " " __TIME__ ")");
   game::sound::PlayEffect(game::sound::EffectId::NA_SE_SY_PREDEMO_OMEN);
   context.has_initialised = true;
@@ -136,7 +136,7 @@ static void frame_advance() {
   while (advState.advance_ctx_t.advance_state == advState.PAUSED ||
          advState.advance_ctx_t.advance_state == advState.LATCHED) {
     scan_shared_hid_inputs();
-    Command_UpdateCommands(inputs.cur.val);
+    msys::Command_UpdateCommands(inputs.cur.val);
     toggle_advance();
     if (advState.advance_ctx_t.advance_state == advState.LATCHED && !advState.frameAdvance) {
       //util::Print("%s: We are now paused! Our state? %d", __func__,
@@ -174,7 +174,7 @@ RST_HOOK void Calc(game::State* state) {
   // Rest of functionality is included in Commands, menu, watches, etc. 
   // In msys/
   scan_shared_hid_inputs();
-  Command_UpdateCommands(inputs.cur.val);
+  msys::Command_UpdateCommands(inputs.cur.val);
   frame_advance();
   //drawWatches();
   if(advState.useISG) {
@@ -207,7 +207,7 @@ RST_HOOK void DrawMenu() {
     Draw_FlushFramebufferTop();
   } else {
     // Not as spazzy on the main screen.
-    drawWatches();
+    msys::drawWatches();
   }
 }
 

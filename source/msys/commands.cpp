@@ -1,23 +1,24 @@
 extern "C" {
-  #include <3ds/services/fs.h>
+#include <3ds/services/fs.h>
 }
-#include "msys/include/menus/commands.h"
-#include "msys/include/entrances.h"
 #include "common/context.h"
 #include "common/hidstate.h"
 #include "common/utils.h"
 #include "game/common_data.h"
 #include "game/states/state.h"
+#include "game/static_context.h"
 #include "msys/include/MyThread.h"
 #include "msys/include/draw.h"
+#include "msys/include/entrances.h"
+#include "msys/include/file_functions.h"
 #include "msys/include/menu.h"
+#include "msys/include/menus/commands.h"
+#include "msys/include/menus/debug.h"
+#include "msys/include/menus/inventory.h"
 #include "msys/include/menus/warps.h"
 #include "msys/include/menus/watches.h"
-#include "msys/include/menus/inventory.h"
-#include "game/static_context.h"
-#include "msys/include/menus/debug.h"
-#include "msys/include/file_functions.h"
 
+namespace msys {
 rst::AdvanceState& advState = rst::GetAdvState();
 rst::Context context;
 void save_test();
@@ -43,11 +44,17 @@ static void Command_Levitate(void) {
   }
 }
 
-static void Command_Fall(void) {  // TODO: Doesn't work
+static void Command_Fall(void) {
   game::act::Player* link = GetPlayer();
   if (link) {
     link->pos.pos.y = -4096.f;
+    link->pos.pos.x = -4096.f;
     link->ztarget_pos.pos.y = -4096.f;
+    link->ztarget_pos.pos.x = -4096.f;
+    link->vel_y = 0.0f;
+    link->vel_xz = 0.0f;
+    link->vel.x = 0.0f;
+    link->vel.y = 0.0f;
   }
 }
 
@@ -60,7 +67,8 @@ static void Command_RunFast(void) {
 
 static void Command_Reset(void) {
   GetContext();
-  // Could be file select or title screen? File Select works for now since important flags seem to reset?
+  // Could be file select or title screen? File Select works for now since important flags seem to
+  // reset?
   context.gctx->ChangeState(game::StateType::FileSelect);
 }
 
@@ -68,19 +76,15 @@ static void Command_ReloadScene(void) {
   GetContext();
   if (!context.gctx || context.gctx->type != game::StateType::Play)
     return;
-  
-  game::CommonData& cdata = game::GetCommonData();
-  EntranceWarp(cdata.sub1.entrance);
 
+  game::CommonData& cdata = game::GetCommonData();
+  msys::EntranceWarp(cdata.sub1.entrance);
 }
 
 static void Command_VoidOut(void) {
   GetContext();
   context.gctx->VoidPlayer();
 }
-
-// static void Command_SaveState(void);
-// static void Command_LoadState(void);
 
 static game::act::PosRot storedPosRot;
 static u16 angle;
@@ -133,7 +137,6 @@ static void Commands_InsertCombos(u32 curCommand, nlohmann::basic_json<>* inputs
     i++;
   }
 }
-
 
 static void Commands_ListInitDefaults(void) {
   if (msys::File_CheckOrCreateProfileDirectory()) {
@@ -260,7 +263,7 @@ static void Commands_ListInitDefaults(void) {
       commandList[11].strict = 0;
     }
     rst::util::Print("%s: Reset combo coming up!", __func__);
-    commandList[12].comboLen = 5; // Reset inputs.
+    commandList[12].comboLen = 5;  // Reset inputs.
     commandList[12].inputs[0] = BUTTON_L1;
     commandList[12].inputs[1] = (BUTTON_L1 | BUTTON_R1);
     commandList[12].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X);
@@ -268,7 +271,6 @@ static void Commands_ListInitDefaults(void) {
     commandList[12].inputs[4] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B | BUTTON_LEFT);
     commandList[12].strict = 0;
   }
-  
 }
 
 Command commandList[] = {
@@ -486,7 +488,7 @@ void Commands_ShowCommands(void) {
     }
     Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Commands. Press START to restore defaults");
     for (s32 i = 0;
-         i < COMMAND_MENU_MAX_SHOW && page * COMMAND_MENU_MAX_SHOW + i < (COMMAND_NUM_COMMANDS-1);
+         i < COMMAND_MENU_MAX_SHOW && page * COMMAND_MENU_MAX_SHOW + i < (COMMAND_NUM_COMMANDS - 1);
          ++i) {
       char comboString[COMMAND_COMBO_MAX + 1];
       s32 j = page * COMMAND_MENU_MAX_SHOW + i;
@@ -537,3 +539,4 @@ void Commands_ShowCommands(void) {
     page = selected / COMMAND_MENU_MAX_SHOW;
   } while (true);
 }
+}  // namespace msys

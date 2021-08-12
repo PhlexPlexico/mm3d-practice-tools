@@ -1,11 +1,10 @@
 #include "include/menus/inventory.h"
-#include "game/common_data.h"
 #include "common/context.h"
+#include "game/common_data.h"
 #include "game/items.h"
 #include "msys/include/menu.h"
 
-
-
+namespace msys {
 static game::ItemId SelectedBottle;
 static u32 SelectedBottleItemIndex;
 static u32 BottleNumber;
@@ -20,11 +19,10 @@ void RemoveItemFromButtons(game::ItemId item_id) {
   }
 }
 
-
 static void DisableMenuToggles(ToggleMenu* menu) {
-    for (u32 i = 0; i < menu->nbItems - 1; ++i) {
-        menu->items[i].on = 0;
-    }
+  for (u32 i = 0; i < menu->nbItems - 1; ++i) {
+    menu->items[i].on = 0;
+  }
 }
 
 static void Inventory_ItemsMenuInit(void) {
@@ -61,7 +59,7 @@ static void Inventory_ItemsMenuInit(void) {
       game::HasItem(game::ItemId::GreatFairySword);
   // Loop through bottles and check which ones we have.
   for (u32 i = 15; i < 22; i++) {
-    InventoryItemsMenu.items[i].on = game::HasBottle(inventory.bottles[i-15]);
+    InventoryItemsMenu.items[i].on = game::HasBottle(inventory.bottles[i - 15]);
   }
 }
 
@@ -368,51 +366,52 @@ void Inventory_BottleSelect(s32 selected) {
 }
 
 void Inventory_SongsToggle(s32 selected) {
-  game::InventoryData::CollectRegister& song_list = game::GetCommonData().save.inventory.collect_register;
+  game::InventoryData::CollectRegister& song_list =
+      game::GetCommonData().save.inventory.collect_register;
   switch (selected) {
-    case (0):
-      song_list.sonata_of_awakening = !song_list.sonata_of_awakening;
-      break;
-    case (1):
-      song_list.goron_lullaby = !song_list.goron_lullaby;
-      break;
-    case (2):
-      song_list.new_wave_bossa_nova = !song_list.new_wave_bossa_nova;
-      break;
-    case (3):
-      song_list.elegy_of_emptiness = !song_list.elegy_of_emptiness;
-      break;
-    case (4):
-      song_list.oath_to_order = !song_list.oath_to_order;
-      break;
-    case (5):
-      song_list.sarias_song = !song_list.sarias_song;
-      break;
-    case (6):
-      song_list.song_of_time = !song_list.song_of_time;
-      break;
-    case (7):
-      song_list.song_of_healing = !song_list.song_of_healing;
-      break;
-    case (8):
-      song_list.eponas_song = !song_list.eponas_song;
-      break;
-    case (9):
-      song_list.song_of_soaring = !song_list.song_of_soaring;
-      break;
-    case (10):
-      song_list.song_of_storms = !song_list.song_of_storms;
-      break;
-    case (11):
-      song_list.suns_song = !song_list.suns_song;
-      break;
-    case (12):
-      song_list.lullaby_intro = !song_list.lullaby_intro;
-      if(song_list.lullaby_intro && song_list.goron_lullaby) {
-        song_list.goron_lullaby = 0;
-        InventorySongsMenu.items[1].on = 0;
-      }
-      break;    
+  case (0):
+    song_list.sonata_of_awakening = !song_list.sonata_of_awakening;
+    break;
+  case (1):
+    song_list.goron_lullaby = !song_list.goron_lullaby;
+    break;
+  case (2):
+    song_list.new_wave_bossa_nova = !song_list.new_wave_bossa_nova;
+    break;
+  case (3):
+    song_list.elegy_of_emptiness = !song_list.elegy_of_emptiness;
+    break;
+  case (4):
+    song_list.oath_to_order = !song_list.oath_to_order;
+    break;
+  case (5):
+    song_list.sarias_song = !song_list.sarias_song;
+    break;
+  case (6):
+    song_list.song_of_time = !song_list.song_of_time;
+    break;
+  case (7):
+    song_list.song_of_healing = !song_list.song_of_healing;
+    break;
+  case (8):
+    song_list.eponas_song = !song_list.eponas_song;
+    break;
+  case (9):
+    song_list.song_of_soaring = !song_list.song_of_soaring;
+    break;
+  case (10):
+    song_list.song_of_storms = !song_list.song_of_storms;
+    break;
+  case (11):
+    song_list.suns_song = !song_list.suns_song;
+    break;
+  case (12):
+    song_list.lullaby_intro = !song_list.lullaby_intro;
+    if (song_list.lullaby_intro && song_list.goron_lullaby) {
+      song_list.goron_lullaby = 0;
+      InventorySongsMenu.items[1].on = 0;
+    }
+    break;
   }
   InventorySongsMenu.items[selected].on = !InventorySongsMenu.items[selected].on;
 }
@@ -430,7 +429,8 @@ void Inventory_MasksToggle(s32 selected) {
 }
 
 void Inventory_RemainsMenuFunc() {
-  game::InventoryData::CollectRegister& remains = game::GetCommonData().save.inventory.collect_register;
+  game::InventoryData::CollectRegister& remains =
+      game::GetCommonData().save.inventory.collect_register;
   InventoryRemainsMenu.items[0].on = remains.odolwas_remains;
   InventoryRemainsMenu.items[1].on = remains.gohts_remains;
   InventoryRemainsMenu.items[2].on = remains.gyorgs_remains;
@@ -439,20 +439,21 @@ void Inventory_RemainsMenuFunc() {
 }
 
 void Inventory_RemainsToggle(s32 selected) {
-  game::InventoryData::CollectRegister& remains = game::GetCommonData().save.inventory.collect_register;
+  game::InventoryData::CollectRegister& remains =
+      game::GetCommonData().save.inventory.collect_register;
   switch (selected) {
-    case 0:
-      remains.odolwas_remains = !remains.odolwas_remains;
-      break;
-    case 1:
-      remains.gohts_remains = !remains.gohts_remains;
-      break;
-    case 2:
-      remains.gyorgs_remains = !remains.gyorgs_remains;
-      break;
-    case 3:
-      remains.twinmolds_remains = !remains.twinmolds_remains;
-      break;
+  case 0:
+    remains.odolwas_remains = !remains.odolwas_remains;
+    break;
+  case 1:
+    remains.gohts_remains = !remains.gohts_remains;
+    break;
+  case 2:
+    remains.gyorgs_remains = !remains.gyorgs_remains;
+    break;
+  case 3:
+    remains.twinmolds_remains = !remains.twinmolds_remains;
+    break;
   }
   InventoryRemainsMenu.items[selected].on = !InventoryRemainsMenu.items[selected].on;
 }
@@ -469,30 +470,33 @@ void Inventory_SwordMenuFunc() {
 void Inventory_SwordsToggle(s32 selected) {
   game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
   switch (selected) {
-    case 0:
-      swordShield.sword = game::SwordType::NoSword;
-      InventorySwordsMenu.items[1].on = 0;
-      InventorySwordsMenu.items[2].on = 0;
-      InventorySwordsMenu.items[3].on = 0;
-      break;
-    case 1:
-      swordShield.sword = game::SwordType::KokiriSword;
-      InventorySwordsMenu.items[0].on = 0;
-      InventorySwordsMenu.items[2].on = 0;
-      InventorySwordsMenu.items[3].on = 0;
-      break;
-    case 2:
-      swordShield.sword = game::SwordType::RazorSword;
-      InventorySwordsMenu.items[0].on = 0;
-      InventorySwordsMenu.items[1].on = 0;
-      InventorySwordsMenu.items[3].on = 0;
-      break;
-    case 3:
-      swordShield.sword = game::SwordType::GildedSword;
-      InventorySwordsMenu.items[0].on = 0;
-      InventorySwordsMenu.items[1].on = 0;
-      InventorySwordsMenu.items[2].on = 0;
-      break;
+  case 0:
+    swordShield.sword = game::SwordType::NoSword;
+    InventorySwordsMenu.items[1].on = 0;
+    InventorySwordsMenu.items[2].on = 0;
+    InventorySwordsMenu.items[3].on = 0;
+    break;
+  case 1:
+    swordShield.sword = game::SwordType::KokiriSword;
+    InventorySwordsMenu.items[0].on = 0;
+    InventorySwordsMenu.items[2].on = 0;
+    InventorySwordsMenu.items[3].on = 0;
+    game::GiveItem(game::ItemId::KokiriSword);
+    break;
+  case 2:
+    swordShield.sword = game::SwordType::RazorSword;
+    InventorySwordsMenu.items[0].on = 0;
+    InventorySwordsMenu.items[1].on = 0;
+    InventorySwordsMenu.items[3].on = 0;
+    game::GiveItem(game::ItemId::RazorSword);
+    break;
+  case 3:
+    swordShield.sword = game::SwordType::GildedSword;
+    InventorySwordsMenu.items[0].on = 0;
+    InventorySwordsMenu.items[1].on = 0;
+    InventorySwordsMenu.items[2].on = 0;
+    game::GiveItem(game::ItemId::GildedSword);
+    break;
   }
   InventorySwordsMenu.items[selected].on = !InventorySwordsMenu.items[selected].on;
 }
@@ -508,27 +512,27 @@ void Inventory_ShieldMenuFunc() {
 void Inventory_ShieldsToggle(s32 selected) {
   game::EquipmentData::SwordShield& swordShield = game::GetCommonData().save.equipment.sword_shield;
   // TODO: Get player actor change shield animation type.
-  //game::act::Player player = rst::GetContext().GetPlayerActor();//gctx->GetPlayerActor();
+  // game::act::Player player = rst::GetContext().GetPlayerActor();//gctx->GetPlayerActor();
   game::act::Player* player = rst::GetContext().gctx->GetPlayerActor();
   switch (selected) {
-    case 0:
-      swordShield.shield = game::ShieldType::NoShield;
-      player->visible_shield_type = 0;
-      InventoryShieldsMenu.items[1].on = 0;
-      InventoryShieldsMenu.items[2].on = 0;
-      break;
-    case 1:
-      swordShield.shield = game::ShieldType::HeroShield;
-      player->visible_shield_type = 1;
-      InventoryShieldsMenu.items[0].on = 0;
-      InventoryShieldsMenu.items[2].on = 0;
-      break;
-    case 2:
-      swordShield.shield = game::ShieldType::MirrorShield;
-      player->visible_shield_type = 2;
-      InventoryShieldsMenu.items[0].on = 0;
-      InventoryShieldsMenu.items[1].on = 0;
-      break;
+  case 0:
+    swordShield.shield = game::ShieldType::NoShield;
+    player->visible_shield_type = 0;
+    InventoryShieldsMenu.items[1].on = 0;
+    InventoryShieldsMenu.items[2].on = 0;
+    break;
+  case 1:
+    swordShield.shield = game::ShieldType::HeroShield;
+    player->visible_shield_type = 1;
+    InventoryShieldsMenu.items[0].on = 0;
+    InventoryShieldsMenu.items[2].on = 0;
+    break;
+  case 2:
+    swordShield.shield = game::ShieldType::MirrorShield;
+    player->visible_shield_type = 2;
+    InventoryShieldsMenu.items[0].on = 0;
+    InventoryShieldsMenu.items[1].on = 0;
+    break;
   }
   InventoryShieldsMenu.items[selected].on = !InventoryShieldsMenu.items[selected].on;
 }
@@ -544,148 +548,135 @@ Menu InventoryMenu = {
         {.title = "Remains", .action_type = METHOD, .method = Inventory_RemainsMenuFunc},
         {.title = "Ocarina Songs", .action_type = METHOD, .method = Inventory_SongsMenuFunc},
         //{.title = "Amounts", .action_type = METHOD, .method = Inventory_AmountsMenuFunc},
-    }
-};
+    }};
 
 ToggleMenu InventoryItemsMenu = {
-    .title="Items",
-    .nbItems=22,
-    .items= {
-        {.on=0, .title="Ocarina", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Hero's Bow", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Fire Arrows", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Ice Arrows", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Light Arrows", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Bombs", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Bombchus", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Deku Sticks", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Deku Nuts", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Magic Beans", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Powder Keg", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Pictograph Box", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Lens Of Truth", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Hookshot", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Great Fairy Sword", .method = Inventory_ItemsToggle},
-        {.on=0, .title="Bottle #1", .method = Inventory_BottlesMenuFunc},
-        {.on=0, .title="Bottle #2", .method = Inventory_BottlesMenuFunc},
-        {.on=0, .title="Bottle #3", .method = Inventory_BottlesMenuFunc},
-        {.on=0, .title="Bottle #4", .method = Inventory_BottlesMenuFunc},
-        {.on=0, .title="Bottle #5", .method = Inventory_BottlesMenuFunc},
-        {.on=0, .title="Bottle #6", .method = Inventory_BottlesMenuFunc},
-        {.on=0, .title="Bottle #7", .method = Inventory_BottlesMenuFunc},
-    }
-};
+    .title = "Items",
+    .nbItems = 22,
+    .items = {
+        {.on = 0, .title = "Ocarina", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Hero's Bow", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Fire Arrows", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Ice Arrows", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Light Arrows", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Bombs", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Bombchus", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Deku Sticks", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Deku Nuts", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Magic Beans", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Powder Keg", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Pictograph Box", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Lens Of Truth", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Hookshot", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Great Fairy Sword", .method = Inventory_ItemsToggle},
+        {.on = 0, .title = "Bottle #1", .method = Inventory_BottlesMenuFunc},
+        {.on = 0, .title = "Bottle #2", .method = Inventory_BottlesMenuFunc},
+        {.on = 0, .title = "Bottle #3", .method = Inventory_BottlesMenuFunc},
+        {.on = 0, .title = "Bottle #4", .method = Inventory_BottlesMenuFunc},
+        {.on = 0, .title = "Bottle #5", .method = Inventory_BottlesMenuFunc},
+        {.on = 0, .title = "Bottle #6", .method = Inventory_BottlesMenuFunc},
+        {.on = 0, .title = "Bottle #7", .method = Inventory_BottlesMenuFunc},
+    }};
 
 ToggleMenu InventoryMasksMenu = {
-    .title="Masks",
-    .nbItems=24,
-    .items= {
-        {.on=0, .title="Deku Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Goron Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Zora Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Fierce Deity Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Mask Of Truth", .method = Inventory_MasksToggle},
-        {.on=0, .title="Kafei Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="All Night Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Bunny Hood", .method = Inventory_MasksToggle},
-        {.on=0, .title="Keaton Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Garo Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Romani's Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Circus Leader Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Postman Hat", .method = Inventory_MasksToggle},
-        {.on=0, .title="Couple's Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Great Fairy Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Gibdo Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Don Gero Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Kamaro Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Captain Hat", .method = Inventory_MasksToggle},
-        {.on=0, .title="Stone Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Bremen Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Blast Mask", .method = Inventory_MasksToggle},
-        {.on=0, .title="Mask Of Scents", .method = Inventory_MasksToggle},
-        {.on=0, .title="Giant's Mask", .method = Inventory_MasksToggle},
-    }
-};
+    .title = "Masks",
+    .nbItems = 24,
+    .items = {
+        {.on = 0, .title = "Deku Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Goron Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Zora Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Fierce Deity Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Mask Of Truth", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Kafei Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "All Night Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Bunny Hood", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Keaton Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Garo Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Romani's Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Circus Leader Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Postman Hat", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Couple's Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Great Fairy Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Gibdo Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Don Gero Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Kamaro Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Captain Hat", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Stone Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Bremen Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Blast Mask", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Mask Of Scents", .method = Inventory_MasksToggle},
+        {.on = 0, .title = "Giant's Mask", .method = Inventory_MasksToggle},
+    }};
 
 ToggleMenu InventorySongsMenu = {
-    .title="Songs",
-    .nbItems=13,
-    .items= {
-        {.on=0, .title="Sonata Of Awakening", .method = Inventory_SongsToggle},
-        {.on=0, .title="Goron Lullaby", .method = Inventory_SongsToggle},
-        {.on=0, .title="New Wave Bossa Nova", .method = Inventory_SongsToggle},
-        {.on=0, .title="Elegy of Emptiness", .method = Inventory_SongsToggle},
-        {.on=0, .title="Oath To Order", .method = Inventory_SongsToggle},
-        {.on=0, .title="Sarias Song (does nothing)", .method = Inventory_SongsToggle},
-        {.on=0, .title="Song of Time", .method = Inventory_SongsToggle},
-        {.on=0, .title="Song of Healing", .method = Inventory_SongsToggle},
-        {.on=0, .title="Epona's Song", .method = Inventory_SongsToggle},
-        {.on=0, .title="Song of Soaring", .method = Inventory_SongsToggle},
-        {.on=0, .title="Song of Storms", .method = Inventory_SongsToggle},
-        {.on=0, .title="Suns Song (does nothing)", .method = Inventory_SongsToggle},
-        {.on=0, .title="Lullaby Intro", .method = Inventory_SongsToggle}
-    }
-};
+    .title = "Songs",
+    .nbItems = 13,
+    .items = {{.on = 0, .title = "Sonata Of Awakening", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Goron Lullaby", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "New Wave Bossa Nova", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Elegy of Emptiness", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Oath To Order", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Saria's Song (does nothing)", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Song of Time", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Song of Healing", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Epona's Song", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Song of Soaring", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Song of Storms", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Sun's Song (does nothing)", .method = Inventory_SongsToggle},
+              {.on = 0, .title = "Lullaby Intro", .method = Inventory_SongsToggle}}};
 
 ToggleMenu InventoryRemainsMenu = {
-    .title="Remains",
-    .nbItems=4,
-    .items= {
-        {.on=0, .title="Odolwa's Remains", .method = Inventory_RemainsToggle},
-        {.on=0, .title="Goht's Remains", .method = Inventory_RemainsToggle},
-        {.on=0, .title="Gyorg's Remains", .method = Inventory_RemainsToggle},
-        {.on=0, .title="Twinmold's Remains", .method = Inventory_RemainsToggle}
-    }
-};
+    .title = "Remains",
+    .nbItems = 4,
+    .items = {{.on = 0, .title = "Odolwa's Remains", .method = Inventory_RemainsToggle},
+              {.on = 0, .title = "Goht's Remains", .method = Inventory_RemainsToggle},
+              {.on = 0, .title = "Gyorg's Remains", .method = Inventory_RemainsToggle},
+              {.on = 0, .title = "Twinmold's Remains", .method = Inventory_RemainsToggle}}};
 
 ToggleMenu InventorySwordsMenu = {
-    .title="Swords",
-    .nbItems=4,
-    .items= {
-        {.on=0, .title="No Sword", .method = Inventory_SwordsToggle},
-        {.on=0, .title="Kokiri Sword", .method = Inventory_SwordsToggle},
-        {.on=0, .title="Razor Sword", .method = Inventory_SwordsToggle},
-        {.on=0, .title="Gilded Sword", .method = Inventory_SwordsToggle}
-    }
-};
+    .title = "Swords",
+    .nbItems = 4,
+    .items = {{.on = 0, .title = "No Sword", .method = Inventory_SwordsToggle},
+              {.on = 0, .title = "Kokiri Sword", .method = Inventory_SwordsToggle},
+              {.on = 0, .title = "Razor Sword", .method = Inventory_SwordsToggle},
+              {.on = 0, .title = "Gilded Sword", .method = Inventory_SwordsToggle}}};
 
 ToggleMenu InventoryShieldsMenu = {
-    .title="Swords",
-    .nbItems=3,
-    .items= {
-        {.on=0, .title="No Shield", .method = Inventory_ShieldsToggle},
-        {.on=0, .title="Hero's Shield", .method = Inventory_ShieldsToggle},
-        {.on=0, .title="Mirror Shield", .method = Inventory_ShieldsToggle},
-    }
-};
-
+    .title = "Swords",
+    .nbItems = 3,
+    .items = {
+        {.on = 0, .title = "No Shield", .method = Inventory_ShieldsToggle},
+        {.on = 0, .title = "Hero's Shield", .method = Inventory_ShieldsToggle},
+        {.on = 0, .title = "Mirror Shield", .method = Inventory_ShieldsToggle},
+    }};
 
 ToggleMenu InventoryBottlesMenu = {
-    .title="Choose Bottle Contents",
+    .title = "Choose Bottle Contents",
     .nbItems = 23,
-    .items={
-        {.on=0, .title="Empty Bottle", .method = Inventory_BottleSelect},
-        {.on=0, .title="Red Potion", .method = Inventory_BottleSelect},
-        {.on=0, .title="Green Potion", .method = Inventory_BottleSelect},
-        {.on=0, .title="Blue Potion", .method = Inventory_BottleSelect},
-        {.on=0, .title="Bottled Fairy", .method = Inventory_BottleSelect},
-        {.on=0, .title="Deku Princess", .method = Inventory_BottleSelect},
-        {.on=0, .title="Lon Lon Milk", .method = Inventory_BottleSelect},
-        {.on=0, .title="Lon Lon Milk (Half)", .method = Inventory_BottleSelect},
-        {.on=0, .title="Fish", .method = Inventory_BottleSelect},
-        {.on=0, .title="Bug", .method = Inventory_BottleSelect},
-        {.on=0, .title="Blue Fire", .method = Inventory_BottleSelect},
-        {.on=0, .title="Poe", .method = Inventory_BottleSelect},
-        {.on=0, .title="BigPoe", .method = Inventory_BottleSelect},
-        {.on=0, .title="Water", .method = Inventory_BottleSelect},
-        {.on=0, .title="Hot Spring Water", .method = Inventory_BottleSelect},
-        {.on=0, .title="Zora Egg", .method = Inventory_BottleSelect},
-        {.on=0, .title="Gold Dust", .method = Inventory_BottleSelect},
-        {.on=0, .title="Magical Mushroom", .method = Inventory_BottleSelect},
-        {.on=0, .title="Sea Horse", .method = Inventory_BottleSelect},
-        {.on=0, .title="Chateau Romani", .method = Inventory_BottleSelect},
-        {.on=0, .title="Mystery Milk", .method = Inventory_BottleSelect},
-        {.on=0, .title="Mystery Milk Spoiled", .method = Inventory_BottleSelect},
-        {.on=0, .title="None", .method = Inventory_BottleSelect},
-    }
-};
+    .items = {
+        {.on = 0, .title = "Empty Bottle", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Red Potion", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Green Potion", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Blue Potion", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Bottled Fairy", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Deku Princess", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Lon Lon Milk", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Lon Lon Milk (Half)", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Fish", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Bug", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Blue Fire", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Poe", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "BigPoe", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Water", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Hot Spring Water", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Zora Egg", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Gold Dust", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Magical Mushroom", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Sea Horse", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Chateau Romani", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Mystery Milk", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "Mystery Milk Spoiled", .method = Inventory_BottleSelect},
+        {.on = 0, .title = "None", .method = Inventory_BottleSelect},
+    }};
+
+}  // namespace msys

@@ -7,15 +7,13 @@
 #include "msys/include/draw.h"
 #include "msys/include/menu.h"
 
-
 #define ACTOR_LIST_MAX_SHOW 15
-
+namespace msys {
 typedef struct {
   game::act::Actor* instance;
   game::act::Id id;
   s16 params;
 } ShowActor_Info;
-
 
 static const char* const ActorTypeNames[] = {
     "SWITCH",  // 0x0
@@ -139,12 +137,9 @@ static void DebugActors_ShowActors(void) {
       Draw_ClearFramebuffer();
       Draw_FlushFramebuffer();
       Draw_Unlock();
-    }
-    else if(pressed & BUTTON_X)
-    {
-        actorList[selected].instance->Free();
-    }
-    else if (pressed & BUTTON_DOWN) {
+    } else if (pressed & BUTTON_X) {
+      actorList[selected].instance->Free();
+    } else if (pressed & BUTTON_DOWN) {
       selected++;
     } else if (pressed & BUTTON_UP) {
       selected--;
@@ -192,10 +187,10 @@ static void DebugActors_ShowActors(void) {
   } while (true);
 }
 
-Menu DebugMenu = {
-  .title="Debug",
-  .nbItems = 1,
-  .items = {
-    {.title = "Actors", .action_type = METHOD, .method = DebugActors_ShowActors},
-  }
-};
+Menu DebugMenu = {.title = "Debug",
+                  .nbItems = 1,
+                  .items = {
+                      {.title = "Actors", .action_type = METHOD, .method = DebugActors_ShowActors},
+                  }};
+
+}  // namespace msys

@@ -1,22 +1,22 @@
-#include "msys/include/menu.h"
 #include "msys/include/menus/warps.h"
+#include <stdio.h>
 #include "msys/include/draw.h"
 #include "msys/include/entrances.h"
-#include <stdio.h>
+#include "msys/include/menu.h"
 
+namespace msys {
 Menu WarpsMenu = {
-    .title="Warps",
+    .title = "Warps",
     .nbItems = 2,
-    .items={
-        {.title = "Places", .action_type = METHOD, .method = WarpsPlacesMenuShow},
-        {.title = "Manually Enter Entrance Index", .action_type = METHOD, .method = ManuallyEnterEntranceIndex}
-    }
-};
+    .items = {{.title = "Places", .action_type = METHOD, .method = WarpsPlacesMenuShow},
+              {.title = "Manually Enter Entrance Index",
+               .action_type = METHOD,
+               .method = ManuallyEnterEntranceIndex}}};
 
 WarpsSceneMenu WarpsPlacesOverworldSwampMenu = {
-    .title="Swamp Overworld",
+    .title = "Swamp Overworld",
     .nbItems = 12,
-    .scenes={
+    .scenes = {
         {"0C: Southern Swamp Clear", &Entrances_Southern_Swamp_Clear},
         {"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
         {"3E: Milk Road", &Entrances_Milk_Road},
@@ -29,13 +29,12 @@ WarpsSceneMenu WarpsPlacesOverworldSwampMenu = {
         {"C2: Woods Of Mystery", &Entrances_Woods_Of_Mystery},
         {"A8: Tourist Information", &Entrances_Tourist_Information},
         {"9E: Deku Shrine", &Entrances_Deku_Shrine},
-    }
-};
+    }};
 
 WarpsSceneMenu WarpsPlacesOverworldSnowHeadMenu = {
-    .title="Snowhead Overworld",
+    .title = "Snowhead Overworld",
     .nbItems = 14,
-    .scenes={
+    .scenes = {
         {"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
         {"32: Path To Mountain Village", &Entrances_Path_To_Mountain_Village},
         {"46: Fairy's Fountains", &Entrances_Fairys_Fountain},
@@ -50,33 +49,29 @@ WarpsSceneMenu WarpsPlacesOverworldSnowHeadMenu = {
         {"B4: Path To Goron Village (Winter)", &Entrances_Path_To_Goron_Village_Winter},
         {"B6: Path To Goron Village (Spring)", &Entrances_Path_To_Goron_Village_Spring},
         {"D0: Goron Racetrack", &Entrances_Goron_Racetrack},
-    }
-};
+    }};
 
 WarpsSceneMenu WarpsPlacesOverworldGreatBayMenu = {
-    .title="Great Bay Overworld",
+    .title = "Great Bay Overworld",
     .nbItems = 13,
-    .scenes={
-        {"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
-        {"22: Pirates' Fortress Tower", &Entrances_Pirates_Fortress_Tower},
-        {"40: Pirates' Fortress Sewers", &Entrances_Pirates_Fortress_Sewers},
-        {"44: Pinnacle Rock", &Entrances_Pinnacle_Rock},
-        {"46: Fairy's Fountains", &Entrances_Fairys_Fountain},
-        {"58: Marine Research Lab", &Entrances_Marine_Research_Lab},
-        {"60: Zora Hall Atrium", &Entrances_Zora_Hall_Atrium},
-        {"68: Great Bay Coast", &Entrances_Great_Bay_Coast},
-        {"6A: Zora Cape", &Entrances_Zora_Cape},
-        {"70: Pirates' Fortress Moat", &Entrances_Pirates_Fortress_Moat},
-        {"72: Fisherman's Hut", &Entrances_Fishermans_Hut},
-        {"8E: Waterfall Rapids", &Entrances_Waterfall_Rapids},
-        {"92: Zora Hall Rooms", &Entrances_Zora_Hall_Rooms}
-    }
-};
+    .scenes = {{"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
+               {"22: Pirates' Fortress Tower", &Entrances_Pirates_Fortress_Tower},
+               {"40: Pirates' Fortress Sewers", &Entrances_Pirates_Fortress_Sewers},
+               {"44: Pinnacle Rock", &Entrances_Pinnacle_Rock},
+               {"46: Fairy's Fountains", &Entrances_Fairys_Fountain},
+               {"58: Marine Research Lab", &Entrances_Marine_Research_Lab},
+               {"60: Zora Hall Atrium", &Entrances_Zora_Hall_Atrium},
+               {"68: Great Bay Coast", &Entrances_Great_Bay_Coast},
+               {"6A: Zora Cape", &Entrances_Zora_Cape},
+               {"70: Pirates' Fortress Moat", &Entrances_Pirates_Fortress_Moat},
+               {"72: Fisherman's Hut", &Entrances_Fishermans_Hut},
+               {"8E: Waterfall Rapids", &Entrances_Waterfall_Rapids},
+               {"92: Zora Hall Rooms", &Entrances_Zora_Hall_Rooms}}};
 
 WarpsSceneMenu WarpsPlacesOverworldIkanaMenu = {
-    .title="Ikana Canyon Overworld",
+    .title = "Ikana Canyon Overworld",
     .nbItems = 15,
-    .scenes={
+    .scenes = {
         {"0A: Beneath The Graveyard Iron Knuckles", &Entrances_Beneath_The_Graveyard_Iron_Knuckles},
         {"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
         {"20: Ikana Canyon", &Entrances_Ikana_Canyon},
@@ -91,28 +86,23 @@ WarpsSceneMenu WarpsPlacesOverworldIkanaMenu = {
         {"A4: Music Box House", &Entrances_Music_Box_House},
         {"AA: Stone Tower Upright", &Entrances_Stone_Tower_Upright},
         {"AC: Stone Tower Inverted", &Entrances_Stone_Tower_Inverted},
-        {"BA: Secret Shrine", &Entrances_Secret_Shrine}
-    }
-};
+        {"BA: Secret Shrine", &Entrances_Secret_Shrine}}};
 
 WarpsSceneMenu WarpsPlacesOverworldTerminaMenu = {
-    .title="Termina Overworld",
+    .title = "Termina Overworld",
     .nbItems = 7,
-    .scenes={
-        {"06: Romani Ranch Buildings", &Entrances_Ranch},
-        {"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
-        {"3E: Milk Road", &Entrances_Milk_Road},
-        {"4C: Observatory", &Entrances_Astral_Observatory},
-        {"54: Termina", &Entrances_Termina_Field},
-        {"64: Romani Ranch", &Entrances_Romani_Ranch},
-        {"CE: Gorman Track", &Entrances_Gorman_Track}
-    }
-};
+    .scenes = {{"06: Romani Ranch Buildings", &Entrances_Ranch},
+               {"14: Grottos", &Entrances_Lone_Peak_Shrine_And_Grottos},
+               {"3E: Milk Road", &Entrances_Milk_Road},
+               {"4C: Observatory", &Entrances_Astral_Observatory},
+               {"54: Termina", &Entrances_Termina_Field},
+               {"64: Romani Ranch", &Entrances_Romani_Ranch},
+               {"CE: Gorman Track", &Entrances_Gorman_Track}}};
 
 WarpsSceneMenu WarpsPlacesTownsMenu = {
-    .title="Clock Town Entrances",
+    .title = "Clock Town Entrances",
     .nbItems = 19,
-    .scenes={
+    .scenes = {
         {"00: Mayor's Residence", &Entrances_Mayors_Residence},
         {"08: Honey and Darling's", &Entrances_Honey_And_Darlings_Shop},
         {"0E: Curiousity Shop", &Entrances_Curiosity_Shop},
@@ -134,38 +124,35 @@ WarpsSceneMenu WarpsPlacesTownsMenu = {
         {"D8: South Clock Town", &Entrances_South_Clock_Town},
         {"DA: Laundry Pool", &Entrances_Laundry_Pool},
         {"C0: Clock Tower Inside", &Entrances_Clock_Tower_Inside},
-    }
-};
+    }};
 
 WarpsSceneMenu WarpsPlacesDungeonsMenu = {
-    .title="Dungeons",
+    .title = "Dungeons",
     .nbItems = 5,
-    .scenes={
+    .scenes = {
         {"26: Stone Tower Temple Upright", &Entrances_Stone_Tower_Temple_Upright},
         {"2A: Stone Tower Temple Inverted", &Entrances_Stone_Tower_Temple_Inverted},
         {"30: Woodfall Temple", &Entrances_Woodfall_Temple},
         {"3C: Snowhead Temple", &Entrances_Snowhead_Temple},
-        {"8C: Great Bay Temple", &Entrances_Great_Bay_Temple},   
-    }
-};
+        {"8C: Great Bay Temple", &Entrances_Great_Bay_Temple},
+    }};
 
 WarpsSceneMenu WarpsPlacesBossesMenu = {
-    .title="Boss Rooms",
+    .title = "Boss Rooms",
     .nbItems = 6,
-    .scenes={
-         {"01: Majora's Lair", &Entrances_Majoras_Lair},
-         {"38: Odolwa's Lair", &Entrances_Odolwas_Lair},
-         {"66: Twinmold's Lair", &Entrances_Twinmolds_Lair},
-         {"82: Goht's Lair", &Entrances_Gohts_Lair},
-         {"A6: Igos Du Ikana's Lair", &Entrances_Igos_Du_Ikanas_Lair},
-         {"B8: Gyorg's Lair", &Entrances_Gyorgs_Lair},
-    }
-};
+    .scenes = {
+        {"01: Majora's Lair", &Entrances_Majoras_Lair},
+        {"38: Odolwa's Lair", &Entrances_Odolwas_Lair},
+        {"66: Twinmold's Lair", &Entrances_Twinmolds_Lair},
+        {"82: Goht's Lair", &Entrances_Gohts_Lair},
+        {"A6: Igos Du Ikana's Lair", &Entrances_Igos_Du_Ikanas_Lair},
+        {"B8: Gyorg's Lair", &Entrances_Gyorgs_Lair},
+    }};
 
 WarpsSceneMenu WarpsPlacesShopsMenu = {
-    .title="Shops",
+    .title = "Shops",
     .nbItems = 9,
-    .scenes={
+    .scenes = {
         {"02: Hag's Potion Shop", &Entrances_Hags_Potion_Shop},
         {"04: Honey & Darling's Shop", &Entrances_Honey_And_Darlings_Shop},
         {"0E: Curiosity Shop", &Entrances_Curiosity_Shop},
@@ -175,56 +162,49 @@ WarpsSceneMenu WarpsPlacesShopsMenu = {
         {"6C: Lottery Shop", &Entrances_Lottery_Shop},
         {"74: Goron Shop", &Entrances_Goron_Shop},
         {"CA: Bomb Shop", &Entrances_Bomb_Shop},
-    }
-};
+    }};
 
-WarpsSceneMenu WarpsPlacesHousesMenu = {
-    .title="Houses",
-    .nbItems = 6,
-    .scenes={
-        {"00: Mayor's House", &Entrances_Mayors_Residence},
-        {"03: Mama's House & Barn", &Entrances_Ranch},
-        {"72: Fisherman's Hut", &Entrances_Fishermans_Hut},
-        {"7C: Doggy Racetrack", &Entrances_Doggy_Racetrack},
-        {"7E: Cucco Shack", &Entrances_Cucco_Shack},
-        {"A4: Music Box House", &Entrances_Music_Box_House},
-    }
-};
+WarpsSceneMenu WarpsPlacesHousesMenu = {.title = "Houses",
+                                        .nbItems = 6,
+                                        .scenes = {
+                                            {"00: Mayor's House", &Entrances_Mayors_Residence},
+                                            {"03: Mama's House & Barn", &Entrances_Ranch},
+                                            {"72: Fisherman's Hut", &Entrances_Fishermans_Hut},
+                                            {"7C: Doggy Racetrack", &Entrances_Doggy_Racetrack},
+                                            {"7E: Cucco Shack", &Entrances_Cucco_Shack},
+                                            {"A4: Music Box House", &Entrances_Music_Box_House},
+                                        }};
 
 WarpsSceneMenu WarpsPlacesMiscMenu = {
-    .title="Misc Places/Cutscenes",
+    .title = "Misc Places/Cutscenes",
     .nbItems = 6,
-    .scenes={
-       {"10: Test Scenes", &Entrances_Test_Scene},
-       {"1C: Cutscenes", &Entrances_Cutscene_Scene},
-       {"2E: Deku Intro Scene", &Entrances_Deku_Intro_Scene},
-       {"BE: Pirates Cutscene Scene", &Entrances_Pirates_Cutscene_Scene},
-       {"C4: Lost Woods", &Entrances_Lost_Woods},
-       {"CC: Giants' Chamber", &Entrances_Giants_Chamber},
-    }
-};
+    .scenes = {
+        {"10: Test Scenes", &Entrances_Test_Scene},
+        {"1C: Cutscenes", &Entrances_Cutscene_Scene},
+        {"2E: Deku Intro Scene", &Entrances_Deku_Intro_Scene},
+        {"BE: Pirates Cutscene Scene", &Entrances_Pirates_Cutscene_Scene},
+        {"C4: Lost Woods", &Entrances_Lost_Woods},
+        {"CC: Giants' Chamber", &Entrances_Giants_Chamber},
+    }};
 
 WarpsSceneMenu WarpsSpiderHouses = {
-    .title="Spider Houses",
+    .title = "Spider Houses",
     .nbItems = 2,
-    .scenes={
-       {"48: Swamp Spider House", &Entrances_Swamp_Spider_House},
-       {"4A: Oceanside Spider House", &Entrances_Oceanside_Spider_House},
-    }
-};
+    .scenes = {
+        {"48: Swamp Spider House", &Entrances_Swamp_Spider_House},
+        {"4A: Oceanside Spider House", &Entrances_Oceanside_Spider_House},
+    }};
 
-WarpsSceneMenu WarpsMoon = {
-    .title="Moon Trials",
-    .nbItems = 6,
-    .scenes={
-       {"01: Majora's Lair", &Entrances_Majoras_Lair},
-       {"4E: Deku Trial", &Entrances_Deku_Trial},
-       {"78: Goron Trial", &Entrances_Goron_Trial},
-       {"88: Zora Trial", &Entrances_Zora_Trial},
-       {"C6: Link Trial", &Entrances_Link_Trial},
-       {"C8: The Moon", &Entrances_The_Moon},
-    }
-};
+WarpsSceneMenu WarpsMoon = {.title = "Moon Trials",
+                            .nbItems = 6,
+                            .scenes = {
+                                {"01: Majora's Lair", &Entrances_Majoras_Lair},
+                                {"4E: Deku Trial", &Entrances_Deku_Trial},
+                                {"78: Goron Trial", &Entrances_Goron_Trial},
+                                {"88: Zora Trial", &Entrances_Zora_Trial},
+                                {"C6: Link Trial", &Entrances_Link_Trial},
+                                {"C8: The Moon", &Entrances_The_Moon},
+                            }};
 
 const WarpsPlacesMenuEntry placesMenuEntries[] = {
     {"Dungeons", &WarpsPlacesDungeonsMenu},
@@ -244,139 +224,121 @@ const WarpsPlacesMenuEntry placesMenuEntries[] = {
 
 const s32 WarpsPlacesMenuSize = 13;
 
-void WarpsPlacesMenuShow(void){
-    s32 selected = 0;
+void WarpsPlacesMenuShow(void) {
+  s32 selected = 0;
 
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
+
+  do {
     Draw_Lock();
-    Draw_ClearFramebuffer();
+    Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Places");
+
+    for (s32 i = 0; i < WarpsPlacesMenuSize; ++i) {
+      Draw_DrawString(30, 30 + i * SPACING_Y, COLOR_WHITE, placesMenuEntries[i].title);
+      Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_TITLE, i == selected ? '>' : ' ');
+    }
+
     Draw_FlushFramebuffer();
     Draw_Unlock();
 
-    do
-    {
-        Draw_Lock();
-        Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Places");
+    u32 pressed = waitInputWithTimeout(1000);
+    if (pressed & BUTTON_B)
+      break;
+    if (pressed & BUTTON_A) {
+      Draw_Lock();
+      Draw_ClearFramebuffer();
+      Draw_FlushFramebuffer();
+      Draw_Unlock();
 
-        for (s32 i = 0; i < WarpsPlacesMenuSize; ++i)
-        {
+      WarpsSceneMenuShow(placesMenuEntries[selected].menu);
 
-            Draw_DrawString(30, 30 + i * SPACING_Y, COLOR_WHITE, placesMenuEntries[i].title);
-            Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_TITLE, i == selected ? '>' : ' ');
-        }
+      Draw_Lock();
+      Draw_ClearFramebuffer();
+      Draw_FlushFramebuffer();
+      Draw_Unlock();
+    } else if (pressed & BUTTON_DOWN) {
+      selected++;
+    } else if (pressed & BUTTON_UP) {
+      selected--;
+    }
 
-        Draw_FlushFramebuffer();
-        Draw_Unlock();
+    if (selected < 0)
+      selected = WarpsPlacesMenuSize - 1;
+    else if (selected >= WarpsPlacesMenuSize)
+      selected = 0;
 
-        u32 pressed = waitInputWithTimeout(1000);
-        if(pressed & BUTTON_B)
-            break;
-        if(pressed & BUTTON_A)
-        {
-            Draw_Lock();
-            Draw_ClearFramebuffer();
-            Draw_FlushFramebuffer();
-            Draw_Unlock();
-
-            WarpsSceneMenuShow(placesMenuEntries[selected].menu);
-
-            Draw_Lock();
-            Draw_ClearFramebuffer();
-            Draw_FlushFramebuffer();
-            Draw_Unlock();
-        }
-        else if(pressed & BUTTON_DOWN)
-        {
-            selected++;
-        }
-        else if(pressed & BUTTON_UP)
-        {
-            selected--;
-        }
-
-        if(selected < 0)
-            selected = WarpsPlacesMenuSize - 1;
-        else if(selected >= WarpsPlacesMenuSize) selected = 0;
-
-    } while(true);
+  } while (true);
 }
 
+void ManuallyEnterEntranceIndex(void) {
+  s32 selected = 0;
+  u16 chosenIndex = 0x0000;
+  u32 chosen = 0;
 
-void ManuallyEnterEntranceIndex(void){
-    s32 selected = 0;
-    u16 chosenIndex = 0x0000;
-    u32 chosen = 0;
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
 
+  do {
     Draw_Lock();
-    Draw_ClearFramebuffer();
+    Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Manually Enter Entrance Index");
+
+    // Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_CsIdx, COLOR_TITLE, selected ==
+    // Manual_Entrance_Menu_CsIdx ? '>' : ' ');
+
+    Draw_DrawFormattedString(30, 30 + SPACING_Y * Manual_Entrance_Menu_EtcIdx, COLOR_WHITE,
+                             "Entrance Index: 0x%04X", chosenIndex);
+    Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_EtcIdx, COLOR_TITLE,
+                       selected == Manual_Entrance_Menu_EtcIdx ? '>' : ' ');
+
+    Draw_DrawString(30, 30 + SPACING_Y * Manual_Entrance_Menu_Go, COLOR_WHITE, "Go");
+    Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_Go, COLOR_TITLE,
+                       selected == Manual_Entrance_Menu_Go ? '>' : ' ');
+
     Draw_FlushFramebuffer();
     Draw_Unlock();
 
-    do
-    {
-        Draw_Lock();
-        Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Manually Enter Entrance Index");
+    u32 pressed = waitInputWithTimeout(1000);
+    if (pressed & BUTTON_B && !chosen)
+      break;
+    else if (pressed & BUTTON_B && chosen) {
+      chosen = 0;
+    } else if (pressed & BUTTON_A && !chosen) {
+      if (selected == Manual_Entrance_Menu_EtcIdx) {
+        chosen = 1;
+      } else if (selected == Manual_Entrance_Menu_Go) {
+        EntranceWarp(chosenIndex);
+        svcExitThread();
+        break;
+      }
+    } else if (pressed & BUTTON_A && chosen) {
+      chosen = 0;
+    } else if (pressed & BUTTON_DOWN && !chosen) {
+      selected++;
+    } else if (pressed & BUTTON_DOWN && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
+      chosenIndex--;
+    } else if (pressed & BUTTON_UP && !chosen) {
+      selected--;
+    } else if (pressed & BUTTON_UP && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
+      chosenIndex++;
+    } else if (pressed & BUTTON_LEFT && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
+      chosenIndex -= 16;
+    } else if (pressed & BUTTON_RIGHT && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
+      chosenIndex += 16;
+    }
+    if (selected < 0)
+      selected = Manual_Entrance_Menu_Go;
 
-        //Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_CsIdx, COLOR_TITLE, selected == Manual_Entrance_Menu_CsIdx ? '>' : ' ');
-
-        Draw_DrawFormattedString(30, 30 + SPACING_Y * Manual_Entrance_Menu_EtcIdx, COLOR_WHITE,
-            "Entrance Index: 0x%04X", chosenIndex);
-        Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_EtcIdx, COLOR_TITLE, selected == Manual_Entrance_Menu_EtcIdx ? '>' : ' ');
-
-        Draw_DrawString(30, 30 + SPACING_Y * Manual_Entrance_Menu_Go, COLOR_WHITE, "Go");
-        Draw_DrawCharacter(10, 30 + SPACING_Y * Manual_Entrance_Menu_Go, COLOR_TITLE, selected == Manual_Entrance_Menu_Go ? '>' : ' ');
-
-        Draw_FlushFramebuffer();
-        Draw_Unlock();
-
-        u32 pressed = waitInputWithTimeout(1000);
-        if(pressed & BUTTON_B && !chosen)
-            break;
-        else if(pressed & BUTTON_B && chosen)
-        {
-            chosen = 0;
-        }
-        else if(pressed & BUTTON_A && !chosen)
-        {
-            if(selected == Manual_Entrance_Menu_EtcIdx){
-                chosen = 1;
-            }
-            else if(selected == Manual_Entrance_Menu_Go){
-                EntranceWarp(chosenIndex);
-                svcExitThread();
-                break;
-            }
-        }
-        else if(pressed & BUTTON_A && chosen)
-        {
-            chosen = 0;
-        }
-        else if(pressed & BUTTON_DOWN && !chosen)
-        {
-            selected++;
-        }
-        else if(pressed & BUTTON_DOWN && chosen && selected == Manual_Entrance_Menu_EtcIdx){
-            chosenIndex--;
-        }
-        else if(pressed & BUTTON_UP && !chosen)
-        {
-            selected--;
-        }
-        else if(pressed & BUTTON_UP && chosen && selected == Manual_Entrance_Menu_EtcIdx){
-            chosenIndex++;
-        }
-        else if(pressed & BUTTON_LEFT && chosen && selected == Manual_Entrance_Menu_EtcIdx){
-            chosenIndex -= 16;
-        }
-        else if(pressed & BUTTON_RIGHT && chosen && selected == Manual_Entrance_Menu_EtcIdx){
-            chosenIndex += 16;
-        }
-        if(selected < 0)
-            selected = Manual_Entrance_Menu_Go;
-
-    } while(true);
+  } while (true);
 }
 
 // void ClearCutscenePointer(void){
 //     static u32 nullCS[] = { 0, 0 };
 //     gGlobalContext->csCtx.segment = &nullCS;
 // }
+
+}  // namespace msys

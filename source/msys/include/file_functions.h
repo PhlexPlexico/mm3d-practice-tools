@@ -22,4 +22,5 @@ namespace msys {
   json File_WriteWatchesToJson(Watch*);
   Result File_WriteStringFileToSd(const char*, char[]);
   Result File_ReadFromJsonFile(json*, char[]);
+  Result File_DeleteFileFromSd(char[]);
 }

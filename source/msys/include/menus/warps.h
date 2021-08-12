@@ -1,8 +1,9 @@
 #pragma once
 
-#include "msys/include/menu.h"
 #include "msys/include/entrances.h"
+#include "msys/include/menu.h"
 
+namespace msys {
 extern Menu WarpsMenu;
 extern Menu WarpsPlacesMenu;
 extern WarpsSceneMenu WarpsPlacesDungeonsMenu;
@@ -22,7 +23,8 @@ extern WarpsSceneMenu WarpsMoon;
 void WarpsPlacesMenuShow(void);
 
 enum {
-    //Manual_Entrance_Menu_CsIdx,
-    Manual_Entrance_Menu_EtcIdx,
-    Manual_Entrance_Menu_Go,
+  // Manual_Entrance_Menu_CsIdx,
+  Manual_Entrance_Menu_EtcIdx,
+  Manual_Entrance_Menu_Go,
 };
+}  // namespace msys

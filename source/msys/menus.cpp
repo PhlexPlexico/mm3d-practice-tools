@@ -27,36 +27,32 @@
  */
 
 extern "C" {
-    #include <3ds/os.h>
+#include <3ds/os.h>
 }
-#include "msys/include/menus.h"
-#include "msys/include/menu.h"
 #include "msys/include/draw.h"
+#include "msys/include/menu.h"
+#include "msys/include/menus.h"
 
-#include "msys/include/menus/warps.h"
-#include "msys/include/menus/scene.h"
-#include "msys/include/menus/save.h"
-#include "msys/include/menus/cheats.h"
-#include "msys/include/menus/inventory.h"
-#include "msys/include/menus/equips.h"
-#include "msys/include/menus/file.h"
-#include "msys/include/menus/watches.h"
-#include "msys/include/menus/debug.h"
-#include "msys/include/menus/commands.h"
 #include "../game/common_data.h"
+#include "msys/include/menus/cheats.h"
+#include "msys/include/menus/commands.h"
+#include "msys/include/menus/debug.h"
+#include "msys/include/menus/equips.h"
+#include "msys/include/menus/inventory.h"
+#include "msys/include/menus/save.h"
+#include "msys/include/menus/scene.h"
+#include "msys/include/menus/warps.h"
+#include "msys/include/menus/watches.h"
 
-Menu pz3DMenu{
-    .title="MM3D Practice Menu",
-    .nbItems=8,
-    .items{
-        { .title="Warps", .action_type=MENU, .menu=&WarpsMenu },
-        { .title="Cheats", .action_type=MENU, .menu=&CheatsMenu },
-        { .title="Inventory", .action_type=MENU, .menu=&InventoryMenu },
-        { .title="Equips", .action_type=MENU, .menu=&EquipsMenu },
-        { .title="Watches", .action_type=METHOD, .method=&WatchesMenuFunc },
-        { .title="Debug", .action_type=MENU, .menu=&DebugMenu },
-        { .title="Commands", .action_type=METHOD, .method=Commands_ShowCommands },
-        { .title="Save...", .action_type=MENU, .menu=&SaveMenu }
-    }
-};
-
+namespace msys {
+Menu pz3DMenu{.title = "MM3D Practice Menu",
+              .nbItems = 8,
+              .items{{.title = "Warps", .action_type = MENU, .menu = &WarpsMenu},
+                     {.title = "Cheats", .action_type = MENU, .menu = &CheatsMenu},
+                     {.title = "Inventory", .action_type = MENU, .menu = &InventoryMenu},
+                     {.title = "Equips", .action_type = MENU, .menu = &EquipsMenu},
+                     {.title = "Watches", .action_type = METHOD, .method = &WatchesMenuFunc},
+                     {.title = "Debug", .action_type = MENU, .menu = &DebugMenu},
+                     {.title = "Commands", .action_type = METHOD, .method = Commands_ShowCommands},
+                     {.title = "Save...", .action_type = MENU, .menu = &SaveMenu}}};
+}

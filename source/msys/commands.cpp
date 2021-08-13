@@ -142,8 +142,7 @@ static void Commands_ListInitDefaults(void) {
   if (msys::File_CheckOrCreateProfileDirectory()) {
     nlohmann::json tmpJson;
     char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
-    msys::File_ReadFromJsonFile(&tmpJson, path);
-    if (!tmpJson.empty()) {
+    if (R_SUCCEEDED(msys::File_ReadFromJsonFile(&tmpJson, path))) {
       commandList[0].comboLen = (u32)tmpJson["Open Menu"]["comboLength"];
       Commands_InsertCombos(0, &tmpJson["Open Menu"]["inputs"]);
       commandList[0].strict = (u32)tmpJson["Open Menu"]["strict"];

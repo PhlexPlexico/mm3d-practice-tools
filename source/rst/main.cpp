@@ -176,7 +176,6 @@ RST_HOOK void Calc(game::State* state) {
   scan_shared_hid_inputs();
   msys::Command_UpdateCommands(inputs.cur.val);
   frame_advance();
-  //drawWatches();
   if(advState.useISG) {
     game::act::Player* player = context.gctx->GetPlayerActor();
     if (player) {
@@ -186,8 +185,11 @@ RST_HOOK void Calc(game::State* state) {
   }
   // End routines.
   if (false) {
-    game::CommonData& cdata = game::GetCommonData();
-    rst::util::Print("Common data picto ptr is %p", &(cdata.pictograph_data));
+    game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
+    if (link) {
+      rst::util::Print("Common data picto ptr is %p", &(link->sword_active_timer));
+    }
+    
 
     // PrintDebug(context.gctx);
     // if (state->pad_state.input.new_buttons.IsSet(game::pad::Button::ZR)) {

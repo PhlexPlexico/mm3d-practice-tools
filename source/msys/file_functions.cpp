@@ -20,7 +20,7 @@ namespace msys {
     json jsonToSave = File_WriteCommandListToJson(commandList);
     const char* jsonInChar = jsonToSave.dump(2).c_str();
     char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
-    File_WriteStringFileToSd(jsonInChar, path);
+    if(!R_SUCCEEDED(File_WriteStringFileToSd(jsonInChar, path))) return -1;
     return 1;
   }
 
@@ -28,9 +28,9 @@ namespace msys {
     json jsonToSave = File_WriteWatchesToJson(watches);
     if (!jsonToSave.empty()) {
       const char* jsonInChar = jsonToSave.dump(2).c_str();
-      rst::util::Print("%s", jsonInChar);
+      //rst::util::Print("%s", jsonInChar);
       char path[] = "/3ds/mm3d/mm3d-practice-patch/watches.json";
-      File_WriteStringFileToSd(jsonInChar, path);
+      if(!R_SUCCEEDED(File_WriteStringFileToSd(jsonInChar, path))) return -1;
       return 1;
     } else {
       return -1;

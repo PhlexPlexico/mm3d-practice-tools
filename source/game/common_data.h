@@ -704,6 +704,19 @@ struct CommonData {
 };
 static_assert(sizeof(CommonData) == 0x140F8);
 
+struct DayTimer {
+  game::act::Actor common_actor;
+  u8 evening;
+  u8 field_1F9;
+  u16 time;
+  u8 gap_1FC[2];
+  u16 field_1FE;
+  u8 gap_200[4];
+  u32 daytimer_calc;
+  u32 field_208;
+
+};
+static_assert(sizeof(DayTimer) == 0x20C);
 CommonData& GetCommonData();
 
 }  // namespace game

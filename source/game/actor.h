@@ -21,6 +21,8 @@ enum class Id : u16 {
   Player = 0,
   // Arrow
   Arrow = 0xf,
+  // DayTimer
+  DayTimer = 0xf5,
   // Elegy of Emptiness statue
   ObjElegyStatue = 0x1F,
   // Clear Tag (?)

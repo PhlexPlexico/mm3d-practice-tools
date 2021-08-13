@@ -6,8 +6,11 @@ extern "C" {
 #include <stdio.h>
 #include "common/utils.h"
 #include "common/debug.h"
+#include "game/common_data.h"
+#include "game/actor.h"
 #include "menus/commands.h"
 #include "menus/watches.h"
+
 namespace msys {
   using json = nlohmann::json;
 
@@ -18,6 +21,7 @@ namespace msys {
   void File_CloseHandle();
   Result File_SaveProfile(Command*);
   Result File_SaveWatches(Watch*);
+  Result File_SaveMemfile(game::SaveData*, game::act::Actor*);
   json File_WriteCommandListToJson(Command*);
   json File_WriteWatchesToJson(Watch*);
   Result File_WriteStringFileToSd(const char*, char[]);

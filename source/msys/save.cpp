@@ -4,11 +4,11 @@ extern "C" {
 #include "msys/include/menus/save.h"
 #include "msys/include/file_functions.h"
 #include "msys/include/menus/commands.h"
+#include "game/actor.h"
 
-// XXX: Move Drawing to individual function instead of copy/paste.
 namespace msys {
 
-static void Save_DrawInformation(char* topMsg, char* btmMsg, char* successMsg, char* delMsg, char* failMsg, Result* saved, char filePath[]) {
+static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMsg, char* delMsg, char* failMsg, Result* saved, char filePath[]) {
   Draw_Lock();
   Draw_ClearFramebuffer();
   Draw_FlushFramebuffer();
@@ -66,7 +66,7 @@ static void Save_ProfileToJson(void) {
   char delMsg[] = "Delete Complete! Press B to go back.";
   char failMsg[] = "Save not completed. Error writing to SD.\nPlease restart your game and try again.";
 
-  Save_DrawInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path);
+  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path);
 }
 
 static void Save_WatchesToJson(void) {
@@ -78,15 +78,57 @@ static void Save_WatchesToJson(void) {
   char delMsg[] = "Delete Complete! Press B to go back.";
   char failMsg[] = "Save not completed. Please ensure you have watches\nTO save!\nPlease restart your game and try again.";
 
-  Save_DrawInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path);
-
+  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path);
 }
 
-Menu SaveMenu = {.title = "Save",
-                 .nbItems = 2,
+static void Save_WriteToBin(s32 selected) {
+  //XXX: Get sava data context, and the actor for DayTimer to pass into File_SaveMemFile.
+  rst::util::Print("%s: Not implemented. But selected is %li", __func__, selected);
+}
+
+static void Save_MemfileToBin(void) {
+  s32 selected = 0;
+
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
+
+  do {
+    Draw_Lock();
+    Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Memfiles");
+    for (s32 i = 0; i < MAX_SAVED_PROFILES; ++i) {
+      Draw_DrawFormattedString(30, 30 + i * SPACING_Y, COLOR_WHITE, "Memfile #%i", i);
+      Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_GREEN, i == selected ? '>' : ' ');
+    }
+
+    Draw_FlushFramebuffer();
+    Draw_Unlock();
+
+    u32 pressed = waitInputWithTimeout(1000);
+    if (pressed & BUTTON_B)
+      break;
+    if (pressed & BUTTON_A) {
+      Save_WriteToBin(selected);
+    } else if (pressed & BUTTON_DOWN) {
+      selected++;
+    } else if (pressed & BUTTON_UP) {
+      selected--;
+    }
+
+    if (selected < 0)
+      selected = MAX_SAVED_PROFILES - 1;
+    else if (selected >= MAX_SAVED_PROFILES)
+      selected = 0;
+  } while (true);
+}
+
+Menu SaveMenu = {.title = "SD Card",
+                 .nbItems = 5,
                  .items = {
-                     {.title = "Save Profile", .action_type = METHOD, .method = Save_ProfileToJson},
-                     {.title = "Save Watches", .action_type = METHOD, .method = Save_WatchesToJson},
+                     {.title = "Profile", .action_type = METHOD, .method = Save_ProfileToJson},
+                     {.title = "Watches", .action_type = METHOD, .method = Save_WatchesToJson},
+                     {.title = "Memfiles", .action_type = METHOD, .method = Save_MemfileToBin}
                  }};
 
 }  // namespace msys

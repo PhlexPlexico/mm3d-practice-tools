@@ -54,5 +54,5 @@ Menu pz3DMenu{.title = "MM3D Practice Menu",
                      {.title = "Watches", .action_type = METHOD, .method = &WatchesMenuFunc},
                      {.title = "Debug", .action_type = MENU, .menu = &DebugMenu},
                      {.title = "Commands", .action_type = METHOD, .method = Commands_ShowCommands},
-                     {.title = "Save...", .action_type = MENU, .menu = &SaveMenu}}};
+                     {.title = "SD Card Functions", .action_type = MENU, .menu = &SaveMenu}}};
 }

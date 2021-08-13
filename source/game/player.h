@@ -352,6 +352,8 @@ struct Player : public Actor {
   u8 field_11E3F;
   char field_11E40;
   char field_11E41;
+  // gap_11E42[0] does 2 when L targeting
+  // char field_11E46 - 16 when tatl out, 0 when away.
   u8 gap_11E42[10];
   char field_11E4C;
   char field_11E4D;

@@ -329,6 +329,10 @@ void ManuallyEnterEntranceIndex(void) {
       chosenIndex -= 16;
     } else if (pressed & BUTTON_RIGHT && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
       chosenIndex += 16;
+    } else if (pressed & BUTTON_R1 && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
+      chosenIndex += 256;
+    } else if (pressed & BUTTON_L1 && chosen && selected == Manual_Entrance_Menu_EtcIdx) {
+      chosenIndex -= 256;
     }
     if (selected < 0)
       selected = Manual_Entrance_Menu_Go;

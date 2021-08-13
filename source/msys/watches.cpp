@@ -314,8 +314,7 @@ void Watches_Init() {
   if (msys::File_CheckOrCreateProfileDirectory()) {
     nlohmann::json tmpJson;
     char path[] = "/3ds/mm3d/mm3d-practice-patch/watches.json";
-    msys::File_ReadFromJsonFile(&tmpJson, path);
-    if (!tmpJson.empty()) {
+    if (R_SUCCEEDED(msys::File_ReadFromJsonFile(&tmpJson, path))) {
       u32 i = 0;
       for (auto& [key, value] : tmpJson.items()) {
         strncpy(watches[i].name, key.c_str(), WATCHES_MAXNAME + 1);

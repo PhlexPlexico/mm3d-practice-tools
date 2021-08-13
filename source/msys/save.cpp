@@ -17,7 +17,7 @@ static void Save_ProfileToJson(void) {
       Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Save Current Shortcut Keys? ");
 
       Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,
-                      "Press A to save, B to go back, and Y to delete your watches.");
+                      "Press A to save, B to go back, and Y to delete your profile.");
 
       Draw_FlushFramebuffer();
       Draw_Unlock();
@@ -38,8 +38,9 @@ static void Save_ProfileToJson(void) {
       Draw_FlushFramebuffer();
       Draw_Unlock();
     } else if (pressed & BUTTON_Y) {
+      char path[43] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
       saved =
-          (bool)File_DeleteFileFromSd("/3ds/mm3d/mm3d-practice-patch/profile.json");
+          (bool)File_DeleteFileFromSd(path);
       Draw_Lock();
       Draw_ClearFramebuffer();
       Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,
@@ -64,7 +65,7 @@ static void Save_WatchesToJson(void) {
       Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Save Current Watches?");
 
       Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,
-                      "Press A to save, B to go back, and Y to delete your profile.");
+                      "Press A to save, B to go back, and Y to delete your watches.");
 
       Draw_FlushFramebuffer();
       Draw_Unlock();
@@ -90,8 +91,9 @@ static void Save_WatchesToJson(void) {
       Draw_FlushFramebuffer();
       Draw_Unlock();
     } else if (pressed & BUTTON_Y) {
+      char path[43] = "/3ds/mm3d/mm3d-practice-patch/watches.json";
       saved =
-          (bool)File_DeleteFileFromSd("/3ds/mm3d/mm3d-practice-patch/watches.json");
+          (bool)File_DeleteFileFromSd(path);
       Draw_Lock();
       Draw_ClearFramebuffer();
       Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,

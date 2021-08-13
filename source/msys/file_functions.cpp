@@ -91,7 +91,7 @@ namespace msys {
     File_CloseHandle();
     // Parse the JSON.
     *jsonFromFile = json::parse(readJson, NULL, false);
-    if (*jsonFromFile == json::value_t::discarded) {
+    if (jsonFromFile->is_discarded()) {
       rst::util::Print("%s: Could not parse JSON. Please check file or create a new one.", __func__);
       return -3;
     }

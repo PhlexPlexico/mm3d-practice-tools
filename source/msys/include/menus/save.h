@@ -7,6 +7,7 @@ extern "C" {
 #include "game/common_data.h"
 #include "msys/include/file_functions.h"
 #include "msys/include/menus/commands.h"
+#include "msys/include/entrances.h"
 #include "game/actor.h"
 #include "common/context.h"
 

@@ -19,6 +19,22 @@ namespace msys {
 
   typedef struct {
     game::CommonData file;
+    game::SaveData save;
+    game::PlayerData playerdata;
+    game::EquipmentData equipdata;
+    game::InventoryData inventory;
+    game::CommonDataSub1 csub1;
+    game::CommonDataSub3 csub3;
+    game::CommonDataSub4 csub4;
+    game::CommonDataSub5 csub5;
+    game::CommonDataSub6 csub6;
+    game::CommonDataSub7 csub7;
+    game::CommonDataSub8 csub8;
+    game::CommonDataSub9 csub9;
+    game::CommonDataSub10 csub10;
+    game::CommonDataSub11 csub11;
+    game::CommonDataSub12 csub12;
+    game::RespawnData respawn;
     //game::act::DayTimerActor daytime;
     u8 evening;
     u8 unk_1F9;

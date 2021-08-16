@@ -37,12 +37,12 @@ namespace msys {
   }
 
   Result File_SaveContextToSD(game::CommonData* cdata, game::act::DayTimerActor* dtBoundaries, s32 idx) {
-    MemFileT *newmemfile;
+    MemFileT *newmemfile = new MemFileT();
     std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
     savePath.replace(38,1,std::to_string(idx));
-    newmemfile = (MemFileT*)malloc(sizeof(*newmemfile));
+    //newmemfile = (MemFileT*)malloc(sizeof(*newmemfile));
     // Copy the common data struct.
-    memcpy(&newmemfile->file, &cdata, sizeof(newmemfile->file));
+    memcpy(&newmemfile->file, &cdata, sizeof(game::CommonData));
     // We don't need the actual actor, just some of the flags stored.
     newmemfile->evening = dtBoundaries->evening;
     newmemfile->unk_1F9 = dtBoundaries->field_1F9;
@@ -52,6 +52,7 @@ namespace msys {
     newmemfile->unk_208 = dtBoundaries->field_208;
 
     File_WriteMemFileToSd(newmemfile, savePath.c_str());
+    delete newmemfile;
     return 1;
   }
 
@@ -185,8 +186,8 @@ namespace msys {
     rst::util::Print("%s: Made it past read file.", __func__);
     FSFILE_Close(fsHandle);
     File_CloseHandle();
-    memcpy(data, &buffer, sizeof(buffer));
-    rst::util::Print("%s:\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu",
+    memcpy(data, &buffer, sizeof(MemFileT));
+    rst::util::Print("%s:\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu\n",
                      __func__, data->time, data->evening, data->daytimer_calc);
     return 1;
   }

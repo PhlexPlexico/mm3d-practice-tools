@@ -119,8 +119,8 @@ static void Save_ReadFromBin(s32 selected) {
       }
     }
   }
-  MemFileT* newmemfile;
-  newmemfile = (MemFileT*)malloc(sizeof(*newmemfile));
+  MemFileT* newmemfile = new MemFileT();
+  //newmemfile = (MemFileT*)malloc(sizeof(*newmemfile));
   std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
   savePath.replace(38,1,std::to_string(selected));
   Draw_Lock();
@@ -143,6 +143,7 @@ static void Save_ReadFromBin(s32 selected) {
     Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
                       "Loaded!");
   }
+  delete newmemfile;
   Draw_FlushFramebuffer();
   Draw_Unlock();
 }

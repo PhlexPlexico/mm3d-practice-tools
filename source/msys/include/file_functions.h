@@ -18,30 +18,11 @@ namespace msys {
   #define PZ3D_MEMFILE_MAX 3
 
   typedef struct {
-    game::CommonData file;
     game::SaveData save;
-    game::PlayerData playerdata;
-    game::EquipmentData equipdata;
-    game::InventoryData inventory;
     game::CommonDataSub1 csub1;
-    game::CommonDataSub3 csub3;
-    game::CommonDataSub4 csub4;
-    game::CommonDataSub5 csub5;
-    game::CommonDataSub6 csub6;
-    game::CommonDataSub7 csub7;
-    game::CommonDataSub8 csub8;
-    game::CommonDataSub9 csub9;
-    game::CommonDataSub10 csub10;
-    game::CommonDataSub11 csub11;
-    game::CommonDataSub12 csub12;
     game::RespawnData respawn;
-    //game::act::DayTimerActor daytime;
-    u8 evening;
-    u8 unk_1F9;
-    u16 time;
-    u16 unk_1FE;
-    u32 daytimer_calc;
-    u32 unk_208;
+    //XXX: Store players position.
+    
   } MemFileT;
 
   bool File_CheckOrCreateProfileDirectory();
@@ -49,7 +30,7 @@ namespace msys {
   void File_CloseHandle();
   Result File_SaveProfile(Command*);
   Result File_SaveWatches(Watch*);
-  Result File_SaveContextToSD(game::CommonData*, game::act::DayTimerActor*, s32);
+  Result File_SaveContextToSD(game::CommonData*, /*game::act::DayTimerActor*,*/ s32);
   json File_WriteCommandListToJson(Command*);
   json File_WriteWatchesToJson(Watch*);
   Result File_WriteStringFileToSd(const char*, char[]);

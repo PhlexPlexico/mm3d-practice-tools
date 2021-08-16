@@ -36,34 +36,14 @@ namespace msys {
     }
   }
 
-  Result File_SaveContextToSD(game::CommonData* cdata, game::act::DayTimerActor* dtBoundaries, s32 idx) {
+  Result File_SaveContextToSD(game::CommonData* cdata, /*game::act::DayTimerActor* dtBoundaries,*/ s32 idx) {
     MemFileT *newmemfile = new MemFileT();
     std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
     savePath.replace(38,1,std::to_string(idx));
-    //newmemfile = (MemFileT*)malloc(sizeof(*newmemfile));
     // Copy the common data struct.
-    memcpy(&newmemfile->file, &cdata, sizeof(game::CommonData));
     memcpy(&newmemfile->save, &cdata->save, sizeof(game::SaveData));
     memcpy(&newmemfile->csub1, &cdata->sub1, sizeof(game::CommonDataSub1));
-    memcpy(&newmemfile->csub3, &cdata->sub3, sizeof(game::CommonDataSub3));
-    memcpy(&newmemfile->csub4, &cdata->sub4, sizeof(game::CommonDataSub4));
-    memcpy(&newmemfile->csub5, &cdata->sub5, sizeof(game::CommonDataSub5));
-    memcpy(&newmemfile->csub6, &cdata->sub6, sizeof(game::CommonDataSub6));
-    memcpy(&newmemfile->csub7, &cdata->sub7, sizeof(game::CommonDataSub7));
-    memcpy(&newmemfile->csub8, &cdata->sub8, sizeof(game::CommonDataSub8));
-    memcpy(&newmemfile->csub9, &cdata->sub9, sizeof(game::CommonDataSub9));
-    memcpy(&newmemfile->csub10, &cdata->sub10, sizeof(game::CommonDataSub10));
-    memcpy(&newmemfile->csub11, &cdata->sub11, sizeof(game::CommonDataSub11));
-    memcpy(&newmemfile->csub12, &cdata->sub12, sizeof(game::CommonDataSub12));
     memcpy(&newmemfile->respawn, &cdata->sub13s, sizeof(game::RespawnData));
-    // memcpy(&newmemfile->sub1, &cdata->sub1, sizeof(game::CommonDataSub1));
-    // We don't need the actual actor, just some of the flags stored.
-    newmemfile->evening = dtBoundaries->evening;
-    newmemfile->unk_1F9 = dtBoundaries->field_1F9;
-    newmemfile->time = dtBoundaries->time;
-    newmemfile->unk_1FE = dtBoundaries->field_1FE;
-    newmemfile->daytimer_calc = dtBoundaries->daytimer_calc;
-    newmemfile->unk_208 = dtBoundaries->field_208;
 
     File_WriteMemFileToSd(newmemfile, savePath.c_str());
     delete newmemfile;
@@ -200,11 +180,7 @@ namespace msys {
     rst::util::Print("%s: Made it past read file.", __func__);
     FSFILE_Close(fsHandle);
     File_CloseHandle();
-    memcpy(data, buffer, sizeof(MemFileT));
-    rst::util::Print("%s:\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu\n",
-                     __func__, data->time, data->evening, data->daytimer_calc);
-    rst::util::Print("%s: Save data what is day? %i What's our rupee count? %u",
-                     __func__, data->file.save.day, data->file.save.player.rupee_count);                 
+    memcpy(data, buffer, sizeof(MemFileT));          
     return 1;
   }
 

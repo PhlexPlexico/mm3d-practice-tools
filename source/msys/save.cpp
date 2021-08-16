@@ -82,22 +82,12 @@ static void Save_WatchesToJson(void) {
 
 static void Save_WriteToBin(s32 selected) {
   game::CommonData& cdata = game::GetCommonData();
-  game::GlobalContext* gctx = rst::GetContext().gctx;
-  game::act::DayTimerActor* boundaryWrites;
-  for (size_t actSize = 0; actSize < gctx->actors.lists.size(); ++actSize) {
-    game::ActorList& actorList = gctx->actors.lists[actSize];
-    for (game::act::Actor* actor = actorList.first; actor; actor = actor->next) {
-      if (actor->id == game::act::Id::DayTimer) {
-        boundaryWrites = (game::act::DayTimerActor*)actor;
-        break;
-      }
-    }
-  }
+
   Draw_Lock();
   Draw_ClearFramebuffer();
   Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
                       "Saving...");
-  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, boundaryWrites, selected))) {
+  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, selected))) {
     Draw_ClearFramebuffer();
     Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
                       "Saved!");
@@ -108,17 +98,7 @@ static void Save_WriteToBin(s32 selected) {
 
 static void Save_ReadFromBin(s32 selected) {
   game::CommonData& cdata = game::GetCommonData();
-  game::GlobalContext* gctx = rst::GetContext().gctx;
-  game::act::DayTimerActor* boundaryWrites = NULL;
-  for (size_t actSize = 0; actSize < gctx->actors.lists.size(); ++actSize) {
-    game::ActorList& actorList = gctx->actors.lists[actSize];
-    for (game::act::Actor* actor = actorList.first; actor; actor = actor->next) {
-      if (actor->id == game::act::Id::DayTimer) {
-        boundaryWrites = (game::act::DayTimerActor*)actor;
-        break;
-      }
-    }
-  }
+
   MemFileT* newmemfile = new MemFileT();
   std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
   savePath.replace(38,1,std::to_string(selected));
@@ -126,38 +106,17 @@ static void Save_ReadFromBin(s32 selected) {
   Draw_ClearFramebuffer();
   Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
                       "Loading...");
-  rst::util::Print("%s:PRELOAD\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu", 
-                     __func__, newmemfile->evening, newmemfile->time, newmemfile->daytimer_calc);
+
   if(R_SUCCEEDED(File_ReadMemFileFromSd(newmemfile, savePath.c_str()))) {
-    rst::util::Print("%s: \nEvening stored? %u\nTime? %i\nDaytimer calc? %lu\n\n\nSave data time: %lu", 
-                     __func__, newmemfile->evening, newmemfile->time, newmemfile->daytimer_calc, cdata.save.time);
-    // memcpy(&cdata, &newmemfile->file, sizeof(game::CommonData));
-    
-    // memcpy(&cdata.sub1, &newmemfile->sub1, sizeof(game::CommonDataSub1));
-    memcpy(&cdata, &newmemfile->file, sizeof(game::CommonData));
+
     memcpy(&cdata.save, &newmemfile->save, sizeof(game::SaveData));
     memcpy(&cdata.save_backup, &newmemfile->save, sizeof(game::SaveData));
     memcpy(&cdata.sub1, &newmemfile->csub1, sizeof(game::CommonDataSub1));
-    memcpy(&cdata.sub3, &newmemfile->csub3, sizeof(game::CommonDataSub3));
-    memcpy(&cdata.sub4, &newmemfile->csub4, sizeof(game::CommonDataSub4));
-    memcpy(&cdata.sub5, &newmemfile->csub5, sizeof(game::CommonDataSub5));
-    memcpy(&cdata.sub6, &newmemfile->csub6, sizeof(game::CommonDataSub6));
-    memcpy(&cdata.sub7, &newmemfile->csub7, sizeof(game::CommonDataSub7));
-    memcpy(&cdata.sub8, &newmemfile->csub8, sizeof(game::CommonDataSub8));
-    memcpy(&cdata.sub9, &newmemfile->csub9, sizeof(game::CommonDataSub9));
-    memcpy(&cdata.sub10, &newmemfile->csub10, sizeof(game::CommonDataSub10));
-    memcpy(&cdata.sub11, &newmemfile->csub11, sizeof(game::CommonDataSub11));
-    memcpy(&cdata.sub12, &newmemfile->csub12, sizeof(game::CommonDataSub12));
     memcpy(&cdata.sub13s, &newmemfile->respawn, sizeof(game::RespawnData));
-    boundaryWrites->evening = newmemfile->evening;
-    boundaryWrites->field_1F9 = newmemfile->unk_1F9;
-    boundaryWrites->time = newmemfile->save.time;
-    boundaryWrites->field_1FE = newmemfile->unk_1FE;
-    boundaryWrites->daytimer_calc = newmemfile->daytimer_calc;
-    boundaryWrites->field_208 = newmemfile->unk_208;
-    cdata.save.time = newmemfile->save.time;
-    rst::util::Print("%s: Time is now %lu", cdata.save.time);
+
+    cdata.time_copy = newmemfile->save.time;
     EntranceWarp(cdata.sub1.entrance);
+    // XXX: Set the players position as well.
     Draw_ClearFramebuffer();
     Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
                       "Loaded!");

@@ -1,10 +1,5 @@
-extern "C" {
-  #include <3ds/types.h>
-}
+
 #include "msys/include/menus/save.h"
-#include "msys/include/file_functions.h"
-#include "msys/include/menus/commands.h"
-#include "game/actor.h"
 
 namespace msys {
 
@@ -32,14 +27,18 @@ static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMs
     }
 
     if (pressed & BUTTON_A) {
-      *saved = File_SaveProfile(commandList);
       Draw_Lock();
       Draw_ClearFramebuffer();
+      *saved = File_SaveProfile(commandList);
+      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 30, COLOR_TITLE,
+                        "Saving...");
       if (R_FAILED(*saved)) {
+        Draw_ClearFramebuffer();
         Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_RED,
                         failMsg);
       } else {
-        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 30, COLOR_TITLE,
+        Draw_ClearFramebuffer();
+        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 30, COLOR_GREEN,
                         successMsg);
       }
       Draw_FlushFramebuffer();
@@ -82,7 +81,29 @@ static void Save_WatchesToJson(void) {
 }
 
 static void Save_WriteToBin(s32 selected) {
-  //XXX: Get sava data context, and the actor for DayTimer to pass into File_SaveMemFile.
+  game::CommonData& cdata = game::GetCommonData();
+  game::GlobalContext* gctx = rst::GetContext().gctx;
+  game::act::DayTimerActor* boundaryWrites;
+  for (size_t actSize = 0; actSize < gctx->actors.lists.size(); ++actSize) {
+    game::ActorList& actorList = gctx->actors.lists[actSize];
+    for (game::act::Actor* actor = actorList.first; actor; actor = actor->next) {
+      if (actor->id == game::act::Id::DayTimer) {
+        boundaryWrites = (game::act::DayTimerActor*)actor;
+        break;
+      }
+    }
+  }
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
+                      "Saving...");
+  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, boundaryWrites, selected))) {
+    Draw_ClearFramebuffer();
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
+                      "Saved!");
+  }
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
   rst::util::Print("%s: Not implemented. But selected is %li", __func__, selected);
 }
 
@@ -109,7 +130,13 @@ static void Save_MemfileToBin(void) {
     if (pressed & BUTTON_B)
       break;
     if (pressed & BUTTON_A) {
+      Draw_Lock();
+      Draw_ClearFramebuffer();
+      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
+                        "Saving...");
       Save_WriteToBin(selected);
+      Draw_FlushFramebuffer();
+      Draw_Unlock();
     } else if (pressed & BUTTON_DOWN) {
       selected++;
     } else if (pressed & BUTTON_UP) {
@@ -124,7 +151,7 @@ static void Save_MemfileToBin(void) {
 }
 
 Menu SaveMenu = {.title = "SD Card",
-                 .nbItems = 5,
+                 .nbItems = 3,
                  .items = {
                      {.title = "Profile", .action_type = METHOD, .method = Save_ProfileToJson},
                      {.title = "Watches", .action_type = METHOD, .method = Save_WatchesToJson},

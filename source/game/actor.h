@@ -261,4 +261,18 @@ struct DynaPolyActor : Actor {
 };
 static_assert(sizeof(DynaPolyActor) == 0x20C);
 
+struct DayTimerActor {
+  Actor common_actor;
+  u8 evening;
+  u8 field_1F9;
+  u16 time;
+  u8 gap_1FC[2];
+  u16 field_1FE;
+  u8 gap_200[4];
+  u32 daytimer_calc;
+  u32 field_208;
+
+};
+static_assert(sizeof(DayTimerActor) == 0x20C);
+
 }  // namespace game::act

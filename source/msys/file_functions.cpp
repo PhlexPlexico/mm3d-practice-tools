@@ -164,7 +164,6 @@ namespace msys {
   Result File_ReadMemFileFromSd(MemFileT* data, const char* path) {
     Handle fsHandle = File_GetHandle();
     u64 fileSize = 0;
-    char* buffer;
 
     if(!R_SUCCEEDED(FSUSER_OpenFileDirectly(&fsHandle, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""), fsMakePath(PATH_ASCII, path), FS_OPEN_READ, 0))) {
       FSFILE_Close(fsHandle);
@@ -174,7 +173,7 @@ namespace msys {
     rst::util::Print("%s: Made it past open file directly.", __func__);
     // Get the proper size and alloc as necessary.
     FSFILE_GetSize(fsHandle, &fileSize);
-    buffer = (char*)malloc(fileSize+1);
+    char* buffer = (char*)malloc(fileSize+1);
     memset(buffer, 0, fileSize);
     rst::util::Print("%s: Malloc'd.", __func__);
     // Read the file into the buffer.
@@ -186,7 +185,7 @@ namespace msys {
     rst::util::Print("%s: Made it past read file.", __func__);
     FSFILE_Close(fsHandle);
     File_CloseHandle();
-    memcpy(&data, &buffer, sizeof(data));
+    memcpy(data, &buffer, sizeof(buffer));
     rst::util::Print("%s:\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu",
                      __func__, data->time, data->evening, data->daytimer_calc);
     return 1;

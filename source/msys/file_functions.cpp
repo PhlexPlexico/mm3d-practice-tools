@@ -158,7 +158,6 @@ namespace msys {
     FSFILE_Close(fsHandle);
     FSUSER_CloseArchive(sdmcArchive);
     File_CloseHandle();
-    File_ReadMemFileFromSd(data, path);
     return 1;
   }
 
@@ -187,8 +186,9 @@ namespace msys {
     rst::util::Print("%s: Made it past read file.", __func__);
     FSFILE_Close(fsHandle);
     File_CloseHandle();
-    memcpy(&data, &buffer, sizeof(MemFileT));
-    //rst::util::Print("%s: Data->evening is %u.", __func__, data->evening);
+    memcpy(&data, &buffer, sizeof(data));
+    rst::util::Print("%s:\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu",
+                     __func__, data->time, data->evening, data->daytimer_calc);
     return 1;
   }
 

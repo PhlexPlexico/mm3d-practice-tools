@@ -104,7 +104,47 @@ static void Save_WriteToBin(s32 selected) {
   }
   Draw_FlushFramebuffer();
   Draw_Unlock();
-  rst::util::Print("%s: Not implemented. But selected is %li", __func__, selected);
+}
+
+static void Save_ReadFromBin(s32 selected) {
+  game::CommonData& cdata = game::GetCommonData();
+  game::GlobalContext* gctx = rst::GetContext().gctx;
+  game::act::DayTimerActor* boundaryWrites;
+  for (size_t actSize = 0; actSize < gctx->actors.lists.size(); ++actSize) {
+    game::ActorList& actorList = gctx->actors.lists[actSize];
+    for (game::act::Actor* actor = actorList.first; actor; actor = actor->next) {
+      if (actor->id == game::act::Id::DayTimer) {
+        boundaryWrites = (game::act::DayTimerActor*)actor;
+        break;
+      }
+    }
+  }
+  MemFileT* newmemfile;
+  newmemfile = (MemFileT*)malloc(sizeof(*newmemfile));
+  std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
+  savePath.replace(38,1,std::to_string(selected));
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
+                      "Loading...");
+  rst::util::Print("%s:PRELOAD\nEvening stored? %u\nTime? %i\nDaytimer calc? %lu", 
+                     __func__, newmemfile->evening, newmemfile->time, newmemfile->daytimer_calc);
+  if(R_SUCCEEDED(File_ReadMemFileFromSd(newmemfile, savePath.c_str()))) {
+    rst::util::Print("%s: \nEvening stored? %u\nTime? %i\nDaytimer calc? %lu", 
+                     __func__, newmemfile->evening, newmemfile->time, newmemfile->daytimer_calc);
+    // memcpy(&cdata, &newmemfile.file, sizeof(cdata));
+    // boundaryWrites->evening = newmemfile.evening;
+    // boundaryWrites->field_1F9 = newmemfile.unk_1F9;
+    // boundaryWrites->time = newmemfile.time;
+    // boundaryWrites->field_1FE = newmemfile.unk_1FE;
+    // boundaryWrites->daytimer_calc = newmemfile.daytimer_calc;
+    // boundaryWrites->field_208 = newmemfile.unk_208;
+    Draw_ClearFramebuffer();
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
+                      "Loaded!");
+  }
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
 }
 
 static void Save_MemfileToBin(void) {
@@ -122,7 +162,7 @@ static void Save_MemfileToBin(void) {
       Draw_DrawFormattedString(30, 30 + i * SPACING_Y, COLOR_WHITE, "Memfile #%i", i);
       Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_GREEN, i == selected ? '>' : ' ');
     }
-
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, "A to save, Y to load, X to delete");
     Draw_FlushFramebuffer();
     Draw_Unlock();
 
@@ -130,14 +170,12 @@ static void Save_MemfileToBin(void) {
     if (pressed & BUTTON_B)
       break;
     if (pressed & BUTTON_A) {
-      Draw_Lock();
-      Draw_ClearFramebuffer();
-      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
-                        "Saving...");
       Save_WriteToBin(selected);
-      Draw_FlushFramebuffer();
-      Draw_Unlock();
-    } else if (pressed & BUTTON_DOWN) {
+    } else if (pressed & BUTTON_Y) {
+      Save_ReadFromBin(selected);
+    } else if (pressed & BUTTON_X) {
+      rst::util::Print("%s: Not yet implemented...", __func__);
+    }else if (pressed & BUTTON_DOWN) {
       selected++;
     } else if (pressed & BUTTON_UP) {
       selected--;

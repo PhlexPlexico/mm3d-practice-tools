@@ -185,11 +185,12 @@ RST_HOOK void Calc(game::State* state) {
   }
   // End routines.
   if (false) {
-    game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
-    if (link) {
-      rst::util::Print("Common data picto ptr is %p", &(link->sword_active_timer));
-    }
-    
+    // game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
+    // game::Action tmp = game::GetActionForItem(game::ItemId::BlastMask);
+    // if (link) {
+    //   rst::util::Print("Common data picto ptr is %p, action for blast mask is %u", &(link->active_mask_id), (u8)tmp);
+    // }
+    PrintDebug(context.gctx);
 
     // PrintDebug(context.gctx);
     // if (state->pad_state.input.new_buttons.IsSet(game::pad::Button::ZR)) {

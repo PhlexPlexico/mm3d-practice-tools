@@ -19,7 +19,7 @@ void EntranceWarp(u16 EntranceIndex) {
   GetContext();
   game::CommonData& cdata = game::GetCommonData();
   warpCtx.gctx->next_entrance = EntranceIndex;
-  cdata.sub13s[8].entrance_index = EntranceIndex;
+  cdata.sub13s[0].entrance_index = EntranceIndex;
   warpCtx.gctx->field_C529_one_to_clear_input = 0x14;
 }
 

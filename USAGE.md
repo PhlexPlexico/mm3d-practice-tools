@@ -21,7 +21,8 @@
     * [2.8 Debug](#28-debug)
         * [2.8.1 Actors](#281-actors)
 * [3 Commands](#3-commands)
-* [4 Save](#3-save)
+* [4 Save](#4-save)
+    * [4.1 Memfiles](#41-memfiles)
 
 ## 1 Introduction
 The main interface for the practice menu, is used by bringing up the menu which by default is done by pressing the `L + R + Select` Buttons.  
@@ -130,7 +131,12 @@ The practice patch implements the following commands
 * toggle watches - displays active watches on the bottom screen.
 * reset inputs - Reset inputs to a default state, either by your profile if it exists, or the above defaults. `L+R+X+B+LEFT`
 
-## Save
+## 4 Save
 The saving menu currently has the functionality to store your button combinations for commands to the SD card (known as your "profile"). This way, it becomes a portable JSON file that you can share with your friends, or move to another system if yours breaks.  
 Included with this is the saving of watches as well. Instead of having to re-write the address on game load every time, you can save the watches to a file and have them load on game load.  
 Within both of these menus, you can also press Y to delete the file from your SD card, in case you wish to start over.
+
+### 4.1 Memfiles
+Memfiles are a sort of psuedo-savestate. They are much simpler than true save states, but still allow for powerful practice.  
+A memfile saves the entirety of the save context, as well as a few of Link's modifiers such as his location on the map, and his velocity.
+When a memfile is loaded from the menu, it will reload the area and place Link where he was when the save was initiated.

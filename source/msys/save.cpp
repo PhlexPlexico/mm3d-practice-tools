@@ -34,7 +34,7 @@ static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMs
                         "Saving...");
       if (R_FAILED(*saved)) {
         Draw_ClearFramebuffer();
-        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_RED,
+        Draw_DrawString(10, SCREEN_BOT_HEIGHT - 30, COLOR_RED,
                         failMsg);
       } else {
         Draw_ClearFramebuffer();
@@ -48,7 +48,7 @@ static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMs
           File_DeleteFileFromSd(filePath);
       Draw_Lock();
       Draw_ClearFramebuffer();
-      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE,
+      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_TITLE,
                       delMsg);
       Draw_FlushFramebuffer();
       Draw_Unlock();
@@ -83,14 +83,40 @@ static void Save_WatchesToJson(void) {
 static void Save_WriteToBin(s32 selected) {
   game::CommonData& cdata = game::GetCommonData();
   game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
+  std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
+  savePath.replace(38,1,std::to_string(selected));
   Draw_Lock();
   Draw_ClearFramebuffer();
-  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
+  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_TITLE,
                       "Saving...");
-  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, link, selected))) {
+  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, link, savePath.c_str()))) {
     Draw_ClearFramebuffer();
-    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_GREEN,
                       "Saved!");
+  } else {
+    Draw_ClearFramebuffer();
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_RED,
+                      "Error saving! Please check SD card access/space.");
+  }
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
+}
+
+static void Save_DeleteMemFile(s32 selected) {
+  std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
+  savePath.replace(38,1,std::to_string(selected));
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_TITLE,
+                      "Deleting File...");
+  if(R_SUCCEEDED(File_DeleteFileFromSd((char*)savePath.c_str()))) {
+    Draw_ClearFramebuffer();
+    Draw_DrawFormattedString(10, SCREEN_BOT_HEIGHT - 40, COLOR_GREEN,
+                      "Memfile %i successfully deleted!", selected);
+  } else {
+    Draw_ClearFramebuffer();
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_RED,
+                      "Error deleting! Please ensure this file exists.");
   }
   Draw_FlushFramebuffer();
   Draw_Unlock();
@@ -103,7 +129,7 @@ static void Save_ReadFromBin(s32 selected) {
   savePath.replace(38,1,std::to_string(selected));
   Draw_Lock();
   Draw_ClearFramebuffer();
-  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
+  Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_TITLE,
                       "Loading...");
 
   if(R_SUCCEEDED(File_ReadMemFileFromSd(newmemfile, savePath.c_str()))) {
@@ -115,25 +141,29 @@ static void Save_ReadFromBin(s32 selected) {
     cdata.time_copy = newmemfile->save.time;
     game::GlobalContext* gctx = rst::GetContext().gctx;
     gctx->next_entrance = cdata.sub1.entrance;
-    gctx->gap_C533[1] = 0;
+    //gctx->gap_C533[1] = 0;
+    // Setting this field is almost like a void flag. 0xFFFFFFFB is a void that does no damage.
+    // Also has a different camera effect. 1 is typical water void with damage, 2 causes some 
+    // camera zoom and soft locks. Could be a flag field
     cdata.field_13624 = 0xFFFFFFFB;
-    //EntranceWarp(cdata.sub1.entrance);
-    
-    //EntranceWarp(newmemfile->linkcoords.rot.z);
+
     cdata.sub13s[0].pos = newmemfile->linkcoords.pos;
-    
+    gctx->field_C529_one_to_clear_input = 0x14;
     game::act::Player* link = gctx->GetPlayerActor();
-    
     link->pos = newmemfile->linkcoords;
     link->initial_pos = newmemfile->linkcoords;
     link->ztarget_pos = newmemfile->linkcoords;
     link->angle = newmemfile->angle;
-    gctx->field_C529_one_to_clear_input = 0x14;
+    link->lin_vel = newmemfile->velocity;
+    link->flags1 = newmemfile->flags1;
+    link->flags2 = newmemfile->flags2;
+    link->flags3 = newmemfile->flags3;
+    
     Draw_ClearFramebuffer();
-    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_GREEN,
                       "Loaded!");
   } else {
-    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_RED,
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 40, COLOR_RED,
                       "Version not supported!");
   }
   delete newmemfile;
@@ -156,7 +186,7 @@ static void Save_MemfileToBin(void) {
       Draw_DrawFormattedString(30, 30 + i * SPACING_Y, COLOR_WHITE, "Memfile #%i", i);
       Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_GREEN, i == selected ? '>' : ' ');
     }
-    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_WHITE, "A to save, Y to load, X to delete");
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 10, COLOR_WHITE, "A to save, Y to load, X to delete");
     Draw_FlushFramebuffer();
     Draw_Unlock();
 
@@ -168,7 +198,7 @@ static void Save_MemfileToBin(void) {
     } else if (pressed & BUTTON_Y) {
       Save_ReadFromBin(selected);
     } else if (pressed & BUTTON_X) {
-      rst::util::Print("%s: Not yet implemented...", __func__);
+      Save_DeleteMemFile(selected);
     }else if (pressed & BUTTON_DOWN) {
       selected++;
     } else if (pressed & BUTTON_UP) {

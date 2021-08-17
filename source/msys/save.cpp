@@ -82,12 +82,12 @@ static void Save_WatchesToJson(void) {
 
 static void Save_WriteToBin(s32 selected) {
   game::CommonData& cdata = game::GetCommonData();
-
+  game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
   Draw_Lock();
   Draw_ClearFramebuffer();
   Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_TITLE,
                       "Saving...");
-  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, selected))) {
+  if(R_SUCCEEDED(File_SaveContextToSD(&cdata, link, selected))) {
     Draw_ClearFramebuffer();
     Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
                       "Saved!");
@@ -98,7 +98,6 @@ static void Save_WriteToBin(s32 selected) {
 
 static void Save_ReadFromBin(s32 selected) {
   game::CommonData& cdata = game::GetCommonData();
-
   MemFileT* newmemfile = new MemFileT();
   std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
   savePath.replace(38,1,std::to_string(selected));
@@ -108,18 +107,34 @@ static void Save_ReadFromBin(s32 selected) {
                       "Loading...");
 
   if(R_SUCCEEDED(File_ReadMemFileFromSd(newmemfile, savePath.c_str()))) {
-
     memcpy(&cdata.save, &newmemfile->save, sizeof(game::SaveData));
     memcpy(&cdata.save_backup, &newmemfile->save, sizeof(game::SaveData));
     memcpy(&cdata.sub1, &newmemfile->csub1, sizeof(game::CommonDataSub1));
     memcpy(&cdata.sub13s, &newmemfile->respawn, sizeof(game::RespawnData));
 
     cdata.time_copy = newmemfile->save.time;
-    EntranceWarp(cdata.sub1.entrance);
-    // XXX: Set the players position as well.
+    game::GlobalContext* gctx = rst::GetContext().gctx;
+    gctx->next_entrance = cdata.sub1.entrance;
+    gctx->gap_C533[1] = 0;
+    cdata.field_13624 = 0xFFFFFFFB;
+    //EntranceWarp(cdata.sub1.entrance);
+    
+    //EntranceWarp(newmemfile->linkcoords.rot.z);
+    cdata.sub13s[0].pos = newmemfile->linkcoords.pos;
+    
+    game::act::Player* link = gctx->GetPlayerActor();
+    
+    link->pos = newmemfile->linkcoords;
+    link->initial_pos = newmemfile->linkcoords;
+    link->ztarget_pos = newmemfile->linkcoords;
+    link->angle = newmemfile->angle;
+    gctx->field_C529_one_to_clear_input = 0x14;
     Draw_ClearFramebuffer();
     Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_GREEN,
                       "Loaded!");
+  } else {
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 60, COLOR_RED,
+                      "Version not supported!");
   }
   delete newmemfile;
   Draw_FlushFramebuffer();

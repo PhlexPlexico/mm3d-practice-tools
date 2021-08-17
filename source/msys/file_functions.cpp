@@ -36,7 +36,7 @@ namespace msys {
     }
   }
 
-  Result File_SaveContextToSD(game::CommonData* cdata, /*game::act::DayTimerActor* dtBoundaries,*/ s32 idx) {
+  Result File_SaveContextToSD(game::CommonData* cdata, game::act::Player* player, s32 idx) {
     MemFileT *newmemfile = new MemFileT();
     std::string savePath = "/3ds/mm3d/mm3d-practice-patch/memfile-#.bin";
     savePath.replace(38,1,std::to_string(idx));
@@ -44,7 +44,9 @@ namespace msys {
     memcpy(&newmemfile->save, &cdata->save, sizeof(game::SaveData));
     memcpy(&newmemfile->csub1, &cdata->sub1, sizeof(game::CommonDataSub1));
     memcpy(&newmemfile->respawn, &cdata->sub13s, sizeof(game::RespawnData));
-
+    newmemfile->linkcoords = player->pos;
+    newmemfile->angle = player->angle;
+    newmemfile->pzversion = PZ3D_VERSION;
     File_WriteMemFileToSd(newmemfile, savePath.c_str());
     delete newmemfile;
     return 1;
@@ -180,7 +182,8 @@ namespace msys {
     rst::util::Print("%s: Made it past read file.", __func__);
     FSFILE_Close(fsHandle);
     File_CloseHandle();
-    memcpy(data, buffer, sizeof(MemFileT));          
+    memcpy(data, buffer, sizeof(MemFileT));
+    if (data->pzversion != PZ3D_VERSION) return -1;
     return 1;
   }
 

@@ -16,13 +16,14 @@ namespace msys {
 
   #define MAX_SAVED_PROFILES 3
   #define PZ3D_MEMFILE_MAX 3
-
+  #define PZ3D_VERSION 1
   typedef struct {
+    u8 pzversion;
     game::SaveData save;
     game::CommonDataSub1 csub1;
     game::RespawnData respawn;
-    //XXX: Store players position.
-    
+    game::act::PosRot linkcoords;
+    u16 angle;
   } MemFileT;
 
   bool File_CheckOrCreateProfileDirectory();
@@ -30,7 +31,7 @@ namespace msys {
   void File_CloseHandle();
   Result File_SaveProfile(Command*);
   Result File_SaveWatches(Watch*);
-  Result File_SaveContextToSD(game::CommonData*, /*game::act::DayTimerActor*,*/ s32);
+  Result File_SaveContextToSD(game::CommonData*, game::act::Player*, s32);
   json File_WriteCommandListToJson(Command*);
   json File_WriteWatchesToJson(Watch*);
   Result File_WriteStringFileToSd(const char*, char[]);

@@ -96,3 +96,11 @@ ui_item_close_on_select:
 # Crouch Stab 0x23AC30 and 0x21C358 and 0x1D32D4
 # 1D32E0 1D31E4 0x1DBEA8
 # Test these: 1D32E0 and 0x1DBEA4
+
+
+# Uses the sound setting from the console instead of always forcing Surround.
+# b #0x000020
+use_console_sound_setting:
+  type: patch
+  addr: 0x1404E8
+  data: 060000EA

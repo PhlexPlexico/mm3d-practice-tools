@@ -216,7 +216,7 @@ const WarpsPlacesMenuEntry placesMenuEntries[] = {
     {"Termina Overworld", &WarpsPlacesOverworldTerminaMenu},
     {"Swamp Overworld", &WarpsPlacesOverworldSwampMenu},
     {"Snowhead Overworld", &WarpsPlacesOverworldSnowHeadMenu},
-    {"Great Nay Overworld", &WarpsPlacesOverworldGreatBayMenu},
+    {"Great Bay Overworld", &WarpsPlacesOverworldGreatBayMenu},
     {"Ikana Overworld", &WarpsPlacesOverworldIkanaMenu},
     {"Spider Houses", &WarpsSpiderHouses},
     {"Moon", &WarpsMoon},

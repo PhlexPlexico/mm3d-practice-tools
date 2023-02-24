@@ -140,14 +140,15 @@ static void Save_ReadFromBin(s32 selected) {
 
     cdata.time_copy = newmemfile->save.time;
     game::GlobalContext* gctx = rst::GetContext().gctx;
-    gctx->next_entrance = cdata.sub1.entrance;
+    gctx->next_entrance = cdata.sub13s[0].entrance_index;
     //gctx->gap_C533[1] = 0;
     // Setting this field is almost like a void flag. 0xFFFFFFFB is a void that does no damage.
     // Also has a different camera effect. 1 is typical water void with damage, 2 causes some 
     // camera zoom and soft locks. Could be a flag field
     cdata.field_13624 = 0xFFFFFFFB;
-
+     
     cdata.sub13s[0].pos = newmemfile->linkcoords.pos;
+    cdata.sub13s[2].pos = newmemfile->linkcoords.pos;
     gctx->field_C529_one_to_clear_input = 0x14;
     game::act::Player* link = gctx->GetPlayerActor();
     link->pos = newmemfile->linkcoords;

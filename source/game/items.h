@@ -243,4 +243,7 @@ bool CanUseItemUnsafe(ItemId item_id);
 /// Might return incorrect results for edge cases.
 bool CanUseItem(ItemId item_id);
 
+
+void GiveItemWithEffect(u32);
+
 }  // namespace game

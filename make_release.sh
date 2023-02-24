@@ -74,6 +74,6 @@ if [ -z ${RST_DEV+x} ]; then
   print_status "packing"
   
   pushd $RELEASE_DIR
-  7z a mm3d_project_restoration_${VERSION}.7z .
+  7z a mm3d_practice_tools_${VERSION}.7z .
   popd
 fi

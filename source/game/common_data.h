@@ -36,33 +36,48 @@ enum class Quiver : u32 {
   Quiver50 = 3,
 };
 
-struct __attribute__((packed)) __attribute__((aligned(2))) PlayerData {
-  u32 field_11C;
+struct /*__attribute__((packed)) __attribute__((aligned(2)))*/ PlayerData {
+  char field_11C[4];
   u8 gap_120[2];
   u16 save_count_maybe;
-  int anonymous_d;
-  int anonymous_e;
-  int anonymous_f;
-  int anonymous_g;
-  u8 anonymous_h[2];
+  char16_t playerName[8];
+  u16 anonymous_h;
+  
   u16 health_max;
   u16 health_current;
-  char magic_size_type;
-  char magic;
+  u8 magic_size_type;
+  u8 magic;
   u16 rupee_count;
   u16 razor_sword_hp;
-  u16 anonymous_k;
-  char magic_stuff;
+  u16 tatl_timer_maybe;
+  u8 magic_stuff;
   s8 magic_num_upgrades;
-  char anonymous_17;
+  u8 double_defense;
   char anonymous_18;
   char anonymous_19;
   char anonymous_20;
-  u16 owl_statue_flags;
-  char field_2E;
-  char field_2F;
+  union OwlStatues {
+    u16 raw;
+
+    BitField<0, 1, u16> great_bay;
+    BitField<1, 1, u16> zora_cape;
+    BitField<2, 1, u16> snowhead;
+    BitField<3, 1, u16> mountain_village;
+    BitField<4, 1, u16> clock_town;
+    BitField<5, 1, u16> milk_road;
+    BitField<6, 1, u16> woodfall;
+    BitField<7, 1, u16> southern_swamp;
+    BitField<8, 1, u16> ikana_canyon;
+    BitField<9, 1, u16> stone_tower;
+    BitField<10, 6, u16> pad_1;
+  };
+  OwlStatues owl_statue_flags;
+  // char field_2E;
+  // char field_2F;
+  u16 field_2f;
   char field_30;
   char field_31;
+  // int field_31;
 };
 static_assert(sizeof(PlayerData) == 0x32);
 static_assert(offsetof(PlayerData, magic) == 0x1F);
@@ -156,20 +171,30 @@ struct InventoryData {
     BitField<28, 4, u32> heart_container_pieces;
   };
   CollectRegister collect_register;
-  char anonymous_33[1];
-  char anonymous_34[3];
+  union DungeonItems {
+    u8 raw;
+
+    BitField<0, 1, u8> boss_key;
+    BitField<1, 1, u8> compass;
+    BitField<2, 1, u8> map;
+    BitField<3, 5, u8> pad_1;
+  };
+  DungeonItems woodfall_dungeon_items;
+  DungeonItems snowhead_dungeon_items;
+  DungeonItems great_bay_dungeon_items;
+  DungeonItems stone_tower_dungeon_items;
   u8 gap200[6];
-  char anonymous_35[1];
-  char anonymous_36;
-  char anonymous_37;
-  char anonymous_38;
+  u8 woodfall_temple_keys;
+  u8 snowhead_temple_keys;
+  u8 great_bay_temple_keys;
+  u8 stone_tower_temple_keys;
   u8 gap20A[5];
-  char anonymous_39;
-  char anonymous_40;
-  char anonymous_41;
-  char anonymous_42;
-  char anonymous_43;
-  char gap98[60];
+  u8 anonymous_39;
+  u8 woodfall_fairies;
+  u8 snowhead_fairies;
+  u8 great_bay_fairies;
+  u8 stone_tower_fairies;
+  u8 gap98[60]; //        L I N K            L I N K            L I N K           
 };
 static_assert(sizeof(InventoryData) == 0xD4);
 static_assert(offsetof(InventoryData, inventory_count_register) == 0x78);
@@ -192,10 +217,10 @@ struct SaveData {
   /// 0x0000 is midnight, 0x4000 is 6am, 0x8000 is noon, 0xc000 is 6pm.
   u16 time;
   u16 anonymous_3;
-  u16 rupee_accumulator;
+  s16 rupee_accumulator;
   act::Player::Form player_form;
   char anonymous_5;
-  char field_20;
+  bool has_tatl;
   char anonymous_7;
   char anonymous_8;
   char anonymous_9;
@@ -203,11 +228,11 @@ struct SaveData {
   char anonymous_11;
   char anonymous_12;
   char anonymous_13;
-  char anonymous_14;
+  char boss_started_flags;
   char anonymous_15;
   char anonymous_16;
   char gap33[205];
-  char anonymous_a[24];
+  char anonymous_a[24]; // 18 and 19 either 1 or 0.
   char anonymous_b;
   u8 gap_115[7];
   PlayerData player;
@@ -274,13 +299,13 @@ struct SaveData {
   char anonymous_83;
   char anonymous_84;
   char anonymous_85;
-  char anonymous_86;
+  u8 has_great_spin;
   char anonymous_87;
   char anonymous_88;
   char anonymous_89;
-  char anonymous_90;
+  char anonymous_90; 
   char anonymous_91;
-  char anonymous_92;
+  char anonymous_92; 
   char anonymous_93;
   char anonymous_94;
   char anonymous_95;
@@ -336,12 +361,15 @@ struct SaveData {
   char anonymous_142;
   char anonymous_143;
   char anonymous_144;
-  u8 gap12B7[3];
+  //u8 gap12B7[3];
+  u8 field_12ac;
+  u8 field_12ad;
+  u8 field_12ae;
   char anonymous_145;
   char anonymous_146;
   u8 gap12BC[13];
   char anonymous_147;
-  char anonymous_148[6];
+  u8 anonymous_148[6];
   char anonymous_149;
   char anonymous_150;
   char anonymous_151;
@@ -444,17 +472,18 @@ static_assert(sizeof(SaveData) == 0x1A88);
 
 struct CommonDataSub1 {
   int entrance;
-  u8 field_4;
-  u8 field_5;
-  u8 field_6;
+  u16 save_entrance;
+  u8 owl_save;
   u8 field_7;
   int field_8;
-  int field_C;
+  u8 invert_stick;
+  u8 field_D;
+  u16 field_F;
   int field_10;
   int field_14;
-  int field_18;
+  int total_owl_saves;
   int field_1C;
-};
+}; 
 
 struct CommonDataSub3 {
   u32 field_0;
@@ -624,13 +653,13 @@ struct CommonData {
   __attribute__((packed)) __attribute__((aligned(1))) int field_367E;
   u16 field_3682;
   u16 field_3684;
-  u16 field_3686;
+  u16 magic_accumulator;
   u16 field_3688;
   s16 magic_max;
   u16 field_368C;
   s16 magic_cost;
   u16 field_3690;
-  u16 field_3692;
+  u16 health_accumulator;
   u16 field_3694;
   u16 field_3696;
   u16 field_3698;
@@ -699,7 +728,7 @@ struct CommonData {
   int field_140E8;
   int field_140EC;
   char field_140F0;
-  u16 field_140F2;
+  u16 hash;
   int field_140F4;
 };
 static_assert(sizeof(CommonData) == 0x140F8);

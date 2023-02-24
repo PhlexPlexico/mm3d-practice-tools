@@ -859,4 +859,19 @@ bool CanUseItem(ItemId item) {
   return !gctx->hud_state.prohibit_regular_items;
 }
 
+void GiveItemWithEffect(u32 gi_item_index) {
+  game::GlobalContext* gctx = rst::GetContext().gctx;
+  if (!gctx) {
+    return;
+  }
+    
+  game::act::Player* player = gctx->GetPlayerActor();
+  if (!player) {
+    return;
+  }
+  player->get_item_id = gi_item_index;
+  rst::util::GetPointer<int(game::GlobalContext*, game::act::Player*)>(0x231038)(
+        gctx, player);
+}
+
 }  // namespace game

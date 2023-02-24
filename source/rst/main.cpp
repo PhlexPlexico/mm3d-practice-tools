@@ -183,20 +183,39 @@ RST_HOOK void Calc(game::State* state) {
       player->sword_active = 0x01;
     } 
   }
-  // End routines.
-  if (false) {
-    // game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
-    // game::Action tmp = game::GetActionForItem(game::ItemId::BlastMask);
-    // if (link) {
-    //   rst::util::Print("Common data picto ptr is %p, action for blast mask is %u", &(link->active_mask_id), (u8)tmp);
-    // }
-    PrintDebug(context.gctx);
 
-    // PrintDebug(context.gctx);
-    // if (state->pad_state.input.new_buttons.IsSet(game::pad::Button::ZR)) {
-    //   game::Allocator::Instance().PrintDebugInfo();
-    // }
+  // End routines.
+  if (true) {
+    game::act::Player* link = rst::GetContext().gctx->GetPlayerActor();
+    if (link) {
+      //rst::util::Print("Field 11E93 Is %u", link->field_11E92);
+    }
+    auto& cdata = game::GetCommonData();
+    if(context.gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR)) {
+      //game::GiveItem((game::ItemId)0xa3);
+      // for (u8 i = 0; i < 1; i++) {
+      //   rst::util::Print("\n%s gap200 %u value is %u", __func__, i, cdata.save.has_great_spin);
+      //   //cdata.save.inventory.gap20A[i] = 0;
+      // }
+      // rst::util::Print("%s anon39 %u and %u and %u and %u and %u and %u\n", __func__, \
+      // (u32)cdata.save.inventory.collect_register.pad_2,\
+      // cdata.save.player.field_11C[3],\
+      // cdata.save.player.gap_120[0],\
+      // cdata.save.player.gap_120[1],\
+      // cdata.save.player.field_11C[0],\
+      // cdata.save.player.field_11C[1]);
+      //std::string tmpString(cdata.save.player.newf.begin(), cdata.save.player.newf.end());
+      //char* tmp2 = reinterpret_cast<char*>(&cdata.zelda3[1]);
+      //rst::util::GetPointer<void(game::GlobalContext*, int msgid, int)>(0x21BAFC)(context.gctx, 0x11, 0x0);
+      //rst::util::Print("\n%s anonymous_18 %s value", __func__, cdata.save.equipment);
+       //game::GlobalContext::ShowMessage(0x1b9e, 0x0);
+       //game::GiveItemWithEffect(0x96);
+       //cdata.save.anonymous_123 = 0x14;
+    }
+    //cdata.save.inventory.item_counts[13] = 1;
+    //cdata.save.player.magic_stuff = 3;
   }
+    
 }
 
 RST_HOOK void DrawMenu() {
@@ -227,7 +246,7 @@ RST_HOOK void UiScheduleTriggerHook() {
   auto* gctx = GetContext().gctx;
   if (!gctx || gctx->type != game::StateType::Play)
     return;
-
+  //rst::util::Print("%s: Bombers notebook is %u", __func__, game::GetCommonData().save.inventory.collect_register.bombers_notebook);
   const bool zr = gctx->pad_state.input.buttons.IsSet(game::pad::Button::ZR);
   const bool start = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Start);
   const bool select = gctx->pad_state.input.new_buttons.IsSet(game::pad::Button::Select);
@@ -255,6 +274,7 @@ extern void (*__init_array_start[])(void) __attribute__((weak));
 extern void (*__init_array_end[])(void) __attribute__((weak));
 
 RST_HOOK void _start(void) {
+  rst::util::Print("\nin start");
   // Just in case something needs to be dynamically allocated...
   static char s_fake_heap[0x80000];
   fake_heap_start = &s_fake_heap[0];

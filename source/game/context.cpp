@@ -52,7 +52,7 @@ void GlobalContext::EmitLastDamageSound(const act::Actor& actor) {
 }
 
 void GlobalContext::VoidPlayer() {
-  rst::util::GetPointer<void()>(0x230ec8)();
+  rst::util::GetPointer<void(GlobalContext*)>(0x230ec8)(this);
 }
 
 }  // namespace game

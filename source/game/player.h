@@ -8,6 +8,7 @@
 #include "game/context.h"
 #include "game/items.h"
 #include "game/pad.h"
+#include "common/types.h"
 
 namespace game::act {
 
@@ -52,6 +53,8 @@ struct PlayerUtil : public as::ActorUtil {
   u8 pad[0xa0 - 0x8c];
 };
 static_assert(sizeof(PlayerUtil) == 0xa0);
+
+void FixSpeedIssues();
 
 // XXX: Very incomplete.
 struct Player : public Actor {
@@ -210,12 +213,14 @@ struct Player : public Actor {
   float field_8F0;
   u8 gap_8F4[8];
   u32 field_8FC;
-  u32 field_900;
-  u8 gap_904[16];
-  char field_914[12];
-  int field_920;
+  Vec3 field_900;
+  u8 gap_904[8];
+  char field_914[4];
+  u32 door;
+  u32 get_item_id; // Index+1 to the get item ID table.
+  Actor* grabbable_actor;
   u8 gap_924[4];
-  u32 field_928;
+  u32 field_928; // Epona Actor
   u8 fn1_idx;
   u8 fn2_idx;
   char field_92E;
@@ -291,7 +296,10 @@ struct Player : public Actor {
   u8 gap_20B4[61260];
 
   char field_11000;
-  u8 gap1[3071];
+  u8 gap_1[203];
+  u16 field_CC;
+  u16 field_CE;
+  u8 gap_d0[2864];
   u32 field_11C00;
   u8 gap_11C04[252];
   u32 field_11D00;
@@ -375,11 +383,13 @@ struct Player : public Actor {
   u16 field_11E8E;
   u8 gap_11E90;
   char field_11E91;
-  char field_11E92;
-  char field_11E93;
+  u8 field_11E92;
+  u8 field_11E93;
   float field_11E94;
   u32 field_11E98;
-  u8 gap_11E9C[20];
+  u8 gap_11E9C[12];
+  float field_11EA8;
+  float field_11EAC;
   float lin_vel_max;
   int field_11EB4;
   float field_11EB8;
@@ -398,7 +408,9 @@ struct Player : public Actor {
   u8 gap_11ED8[4];
   u32 field_11EDC;
   u8 gap_11EE0;
-  char field_11EE1[11];
+  char field_11EE1[3];
+  u32 field_11EE4;
+  u32 field_11EE8;
   float field_11EEC;
   u16 field_11EF0;
   u16 is_zora_slow_swim;
@@ -414,19 +426,32 @@ struct Player : public Actor {
   u16 field_F06;
   u32 field_11F08;
   u32 field_11F0C;
-  u8 gap_11F10[20];
+  u8 gap_11F10[8];
+  Vec3 field_11F18;
   u32 field_11F24;
-  u8 gap_11F28[20];
+  u8 gap_11F28[8];
+  Vec3 field_11F30;
   u32 field_11F3C;
   u8 gap_11F40[48];
   u32 field_11F70;
   u8 gap_11F74[140];
   u32 field_12000;
-  u8 gap_12004[110];
+  u8 gap_12004[76];
+  u8 attacking_maybe;
+  u8 form_or_5_for_kafei;
+  u8 gap_12052[6];
+  void (*field_12058_fn)();
+  u8 gap_1205C[22];
   __attribute__((packed)) __attribute__((aligned(1))) int field_12072;
-  u8 gap_1076[66];
-  u32 field_10B8;
-  u8 gap_10BC[172];
+  u8 gap_1076[54];
+  u32 field_120AC;
+  u32 field_120B0;
+  u32 field_120B4;
+  u32 field_120B8;
+  u32 field_120BC;
+  u32 field_120C0;
+  u32 field_120C4;
+  u8 gap_120C8[160];
   u32 field_1168;
   u8 gap_116C[492];
   u32 field_1358;
@@ -471,6 +496,7 @@ struct Player : public Actor {
   s16 field_12CCE;
 };
 static_assert(offsetof(Player, transform_mask_action) == 0x200);
+static_assert(offsetof(Player, grabbable_actor) == 0x00920);
 static_assert(offsetof(Player, field_12CCE) == 0x12CCE);
 static_assert(offsetof(Player, sword_active) == 0x11E3C);
 // TODO: complete the struct and add a size assertion.

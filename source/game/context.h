@@ -202,7 +202,7 @@ struct GlobalContext : State {
   ActorLists actors;
   u8 gap_2150[128];
   Vec3 field_21D0;
-  u8 gap_21DC[0x2394 - 0x21DC];
+  u8 gap_21DC[440];
   std::array<act::ObjElegyStatue*, 5> elegy_statues;
   char field_23A8;
   u8 gap_23A9[3];

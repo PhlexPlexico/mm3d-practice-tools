@@ -148,6 +148,7 @@ static void frame_advance() {
     }
     advState.pauseUnpause = false;
     advState.frameAdvance = false;
+    Draw_DrawFormattedStringTop(20, 20, COLOR_WHITE, "PAUSED");
     svcSleepThread(16e6);
   }
 }
@@ -224,7 +225,7 @@ RST_HOOK void DrawMenu() {
     frameBufferInit = false;
   }
   if (showTitle) {
-    Draw_DrawFormattedStringTop(150, 20, COLOR_WHITE, "MM3D Practice Patch");
+    Draw_DrawFormattedStringTop(130, 20, COLOR_WHITE, "MM3D Practice Patch v1.3.1");
     Draw_DrawFormattedStringTop(90, 30, COLOR_RED, "Please Read The README Before Continuing!");
     Draw_FlushFramebufferTop();
   } else {

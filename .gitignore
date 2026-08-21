@@ -1,22 +1,18 @@
-# Build files
-.mypy_cache
-*.bin
+# Game files you supply yourself: code.bin and exheader.bin dumps per version.
+bin/*.bin
+
+# Build output
+code/build/
+code/*.elf
+code/*.map
+code/*.ips
+code/*.bin
+code/*.sym
 *.o
-*.x
-*.elf
-*.sym
-*.d
-*.map
-newcodeinfo.h
-build/
-bak/
 
-# IDA
-*.id*
-*.nam
-*.til
-
-#vscode
-.vscode/
-
+# Release packaging
 release/
+
+# Python bytecode, written whenever a tool is imported rather than run
+__pycache__/
+*.pyc

@@ -1,0 +1,118 @@
+name: Release
+
+# Tag a commit to publish:  git tag v1.4.0 && git push origin v1.4.0
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # devkitARM and libctru, prebuilt.
+    container: ghcr.io/z3dr/randotools:next
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0        # so git describe can see tags
+
+      # git refuses to read a repo owned by another user, which is the normal
+      # situation inside a container. Without this every git call fails and the
+      # version silently degrades to a bare SHA.
+      - name: Trust the workspace
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      # Fail here with something readable rather than deep inside the build.
+      - name: Check the toolchain
+        run: |
+          : "${DEVKITARM:?not set by the image}"
+          "$DEVKITARM/bin/arm-none-eabi-gcc" --version | head -1
+          python3 --version
+          make --version | head -1
+
+      # Prefer the tag when there is one: git describe is only as good as the
+      # history the checkout actually fetched.
+      - name: Work out the version
+        id: version
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            v="${GITHUB_REF_NAME}"
+          else
+            v="$(git describe --tags --always --dirty 2>/dev/null || echo "${GITHUB_SHA::7}")"
+          fi
+          echo "value=$v" >> "$GITHUB_OUTPUT"
+          echo "building $v"
+
+      - name: Stage game files
+        env:
+          EXHEADER_1_0: ${{ secrets.EXHEADER_1_0 }}
+          EXHEADER_1_1: ${{ secrets.EXHEADER_1_1 }}
+        run: |
+          mkdir -p bin
+          if [ -z "$EXHEADER_1_0" ] && [ -z "$EXHEADER_1_1" ]; then
+            echo "::warning::No exheader secrets set - publishing patches only."
+            exit 0
+          fi
+          if [ -z "$EXHEADER_1_0" ] || [ -z "$EXHEADER_1_1" ]; then
+            echo "::error::Set both EXHEADER_1_0 and EXHEADER_1_1, or neither."
+            exit 1
+          fi
+          # tr -d because the web UI happily stores a secret with newlines in it,
+          # which decodes to something the wrong length rather than failing.
+          printf '%s' "$EXHEADER_1_0" | tr -d '\r\n' | base64 -d > bin/exheader1.0.bin
+          printf '%s' "$EXHEADER_1_1" | tr -d '\r\n' | base64 -d > bin/exheader1.1.bin
+          for f in bin/exheader1.0.bin bin/exheader1.1.bin; do
+            size=$(stat -c%s "$f")
+            if [ "$size" != "2048" ]; then
+              echo "::error::$f decoded to $size bytes, expected 2048 - the secret is truncated or is not an exheader."
+              exit 1
+            fi
+          done
+          echo "exheaders staged; packages will be complete"
+
+      - name: Verify the address table
+        run: |
+          if [ -f bin/code1.0.bin ] && [ -f bin/code1.1.bin ]; then
+            python3 tools/mapaddr.py --check
+            python3 tools/mapaddr.py --regcheck
+          else
+            echo "::warning::No code.bin dumps - skipping address verification."
+          fi
+
+      - name: Build and package
+        run: make release VERSION='${{ steps.version.outputs.value }}'
+
+      # Both versions must come out of one build of one source tree. If they
+      # differ in size by a lot, something version-specific has gone wrong.
+      - name: Sanity-check the output
+        run: |
+          for p in usa1.0-console usa1.0-citra usa1.1-console usa1.1-citra; do
+            test -s "release/$p/code.ips" || { echo "missing patch for $p"; exit 1; }
+          done
+          ls -l release/*/code.ips
+          sha256sum release/*.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mm3d-practice-tools
+          path: release/*.zip
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.zip
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          body: |
+            Pick the package matching **your game version and how you play it** --
+            the exheader differs between console and emulator, and between USA 1.0
+            and 1.1. Each zip has an `INSTALL.md`.
+
+            | package | for |
+            |---|---|
+            | `usa1.0-console` | USA 1.0 on hardware (Luma3DS) |
+            | `usa1.0-citra` | USA 1.0 on Citra / Azahar |
+            | `usa1.1-console` | USA 1.1 on hardware (Luma3DS) |
+            | `usa1.1-citra` | USA 1.1 on Citra / Azahar |

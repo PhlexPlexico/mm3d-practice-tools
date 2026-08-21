@@ -127,6 +127,25 @@ static void Save_DeleteMemFile(s32 selected) {
   Draw_Unlock();
 }
 
+/*
+ * Momentum has to be restored after the scene reloads, not before.
+ *
+ * Loading voids the player: the game rebuilds the scene and respawns Link from
+ * the respawn data. Anything written to the player actor at load time is on an
+ * actor that is about to be destroyed, so position and facing survive only
+ * because they go through the respawn entries -- velocity has nowhere to ride
+ * along. It has to be applied to the new actor once it exists.
+ *
+ * The signal is CommonData::field_13624, the respawn flag, which sits directly
+ * before sub13s and behaves like MM's respawnFlag: we set it to request the
+ * void, the game clears it when the scene comes back up. Waiting for it to
+ * return to zero and for a player actor to exist puts us on the first frame
+ * where writing velocity means anything.
+ *
+ * Guarded two ways in case that assumption does not hold on some path: the
+ * actor pointer must also have changed since the load, and the whole thing
+ * gives up after a few seconds rather than firing into an unrelated scene.
+ */
 #define MOMENTUM_TIMEOUT_FRAMES 600
 
 static PlayerState s_pendingState;

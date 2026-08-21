@@ -23,6 +23,8 @@ namespace msys {
   extern ToggleMenu GearTradeOneMenu;
   extern ToggleMenu GearTradeTwoMenu;
   extern ToggleMenu GearNotebookMenu;
+  extern ToggleMenu GearRoomKeyMenu;
+  extern ToggleMenu GearDeliveryMenu;
 
 static const char* const GearAmountNames[] = {"max health (* by 16 for a total heart)",
                                               "magic", "razor sword hp", "current rupees"};
@@ -260,6 +262,20 @@ static void Gear_Notebook(void) {
  */
 #define TRADE_SLOT_ONE 5
 #define TRADE_SLOT_TWO 17
+#define TRADE_SLOT_ROOM_KEY 58
+#define TRADE_SLOT_DELIVERY 59
+
+/*
+ * The game's item-to-slot table is a byte offset from items[0], not an index
+ * into items[] -- 0..23 are the item grid, 24..47 the masks, 48 onwards the
+ * bottles, and the quest slots sit past those. Room Key and the Special
+ * Delivery to Mama are at 58 and 59, well outside the 24-element array, so
+ * they are reached the way the game reaches them rather than by indexing
+ * items[] out of bounds.
+ */
+static game::ItemId& QuestSlot(u32 slot) {
+  return reinterpret_cast<game::ItemId*>(&game::GetCommonData().save.inventory.items[0])[slot];
+}
 
 static const game::ItemId TradeSlotOne[] = {
     game::ItemId::None,          game::ItemId::MoonTear,          game::ItemId::LandTitleDeed,
@@ -275,7 +291,7 @@ static const game::ItemId TradeSlotTwo[] = {
 static void Gear_TradeSelect(ToggleMenu* menu, u32 slot, const game::ItemId* ids, s32 selected) {
   if (selected < 0 || (u32)selected >= menu->nbItems)
     return;
-  game::GetCommonData().save.inventory.items[slot] = ids[selected];
+  QuestSlot(slot) = ids[selected];
   Gear_SelectOne(menu, selected);
 }
 
@@ -289,7 +305,7 @@ static void Gear_TradeTwoSelect(s32 selected) {
 
 /// Mark whichever entry matches what the slot currently holds.
 static void Gear_TradeShow(ToggleMenu* menu, u32 slot, const game::ItemId* ids) {
-  const game::ItemId held = game::GetCommonData().save.inventory.items[slot];
+  const game::ItemId held = QuestSlot(slot);
   s32 selected = 0;
   for (u32 i = 0; i < menu->nbItems; ++i) {
     if (ids[i] == held) {
@@ -299,6 +315,25 @@ static void Gear_TradeShow(ToggleMenu* menu, u32 slot, const game::ItemId* ids) 
   }
   Gear_SelectOne(menu, selected);
   ToggleMenuShow(menu);
+}
+
+static const game::ItemId RoomKeySlot[] = {game::ItemId::None, game::ItemId::RoomKey};
+static const game::ItemId DeliverySlot[] = {game::ItemId::None, game::ItemId::LetterToMama};
+
+static void Gear_RoomKeySelect(s32 selected) {
+  Gear_TradeSelect(&GearRoomKeyMenu, TRADE_SLOT_ROOM_KEY, RoomKeySlot, selected);
+}
+
+static void Gear_DeliverySelect(s32 selected) {
+  Gear_TradeSelect(&GearDeliveryMenu, TRADE_SLOT_DELIVERY, DeliverySlot, selected);
+}
+
+static void Gear_RoomKey(void) {
+  Gear_TradeShow(&GearRoomKeyMenu, TRADE_SLOT_ROOM_KEY, RoomKeySlot);
+}
+
+static void Gear_Delivery(void) {
+  Gear_TradeShow(&GearDeliveryMenu, TRADE_SLOT_DELIVERY, DeliverySlot);
 }
 
 static void Gear_TradeOne(void) {
@@ -331,6 +366,18 @@ ToggleMenu GearNotebookMenu = {
     .items = {{.on = 0, .title = "No", .method = Gear_NotebookSelect},
               {.on = 0, .title = "Yes", .method = Gear_NotebookSelect}}};
 
+ToggleMenu GearRoomKeyMenu = {
+    .title = "Room Key",
+    .nbItems = 2,
+    .items = {{.on = 0, .title = "Empty", .method = Gear_RoomKeySelect},
+              {.on = 0, .title = "Room Key", .method = Gear_RoomKeySelect}}};
+
+ToggleMenu GearDeliveryMenu = {
+    .title = "Special Delivery to Mama",
+    .nbItems = 2,
+    .items = {{.on = 0, .title = "Empty", .method = Gear_DeliverySelect},
+              {.on = 0, .title = "Special Delivery to Mama", .method = Gear_DeliverySelect}}};
+
 ToggleMenu GearTradeOneMenu = {
     .title = "Trade Item 1",
     .nbItems = 6,
@@ -350,7 +397,7 @@ ToggleMenu GearTradeTwoMenu = {
 
 Menu GearMenu = {
     .title = "Gear",
-    .nbItems = 9,
+    .nbItems = 11,
     .items = {
         {.title = "Total Health", .action_type = METHOD, .method = Gear_Health},
         {.title = "Magic", .action_type = METHOD, .method = Gear_Magic},
@@ -361,6 +408,8 @@ Menu GearMenu = {
         {.title = "Bomber's Notebook", .action_type = METHOD, .method = Gear_Notebook},
         {.title = "Trade Item 1", .action_type = METHOD, .method = Gear_TradeOne},
         {.title = "Trade Item 2", .action_type = METHOD, .method = Gear_TradeTwo},
+        {.title = "Room Key", .action_type = METHOD, .method = Gear_RoomKey},
+        {.title = "Special Delivery to Mama", .action_type = METHOD, .method = Gear_Delivery},
     }};
 
 }  // namespace msys

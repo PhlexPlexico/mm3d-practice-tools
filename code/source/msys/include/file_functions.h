@@ -18,6 +18,13 @@ namespace msys {
   #define PZ3D_MEMFILE_MAX 3
   #define PZ3D_VERSION 2
   #define PZ3D_RESPAWN_SLOTS 8
+  /*
+   * Link's kinematic state at the moment the memfile was written.
+   *
+   * The save file covers what he has; this covers where he was and how he was
+   * moving. Kept as its own struct so the save and load paths cannot disagree
+   * about which fields are part of it.
+   */
   typedef struct {
     game::act::PosRot pos;
     game::act::PosRot initial_pos;

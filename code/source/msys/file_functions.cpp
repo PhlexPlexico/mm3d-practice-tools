@@ -151,19 +151,27 @@ namespace msys {
      */
     memset(static_cast<void*>(newmemfile), 0, sizeof(MemFileT));
     
-    // Copy the save data struct, as well as some player information.
+    newmemfile->pzversion = PZ3D_VERSION;
+
     memcpy(static_cast<void*>(&newmemfile->save), &cdata->save, sizeof(game::SaveData));
     memcpy(static_cast<void*>(&newmemfile->csub1), &cdata->sub1, sizeof(game::CommonDataSub1));
-    memcpy(static_cast<void*>(&newmemfile->respawn), &cdata->sub13s, sizeof(game::RespawnData));
-    newmemfile->linkcoords = player->pos;
-    // The practice tool's bare 'angle' at 0xC2; mm3dr models it as part of
-    // ActorShape. Same two bytes.
-    newmemfile->angle = player->actor_shape.rot.y;
-    newmemfile->pzversion = PZ3D_VERSION;
-    newmemfile->velocity = player->lin_vel;
-    newmemfile->flags1 = player->flags1;
-    newmemfile->flags2 = player->flags2;
-    newmemfile->flags3 = player->flags3;
+    // Every respawn slot, not just the first.
+    memcpy(static_cast<void*>(newmemfile->respawn), cdata->sub13s, sizeof(newmemfile->respawn));
+
+    PlayerState& st = newmemfile->player;
+    st.pos = player->pos;
+    st.initial_pos = player->initial_pos;
+    st.ztarget_pos = player->ztarget_pos;
+    st.shape_rot = player->actor_shape.rot;
+    st.player_angle = player->player_angle;
+    st.vel = player->vel;
+    st.vel_xz = player->vel_xz;
+    st.vel_y = player->vel_y;
+    st.lin_vel = player->lin_vel;
+    st.flags1 = player->flags1;
+    st.flags2 = player->flags2;
+    st.flags3 = player->flags3;
+
     File_WriteMemFileToSd(newmemfile, path);
     return 1;
   }

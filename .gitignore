@@ -16,3 +16,4 @@ release/
 # Python bytecode, written whenever a tool is imported rather than run
 __pycache__/
 *.pyc
+*Zone.Identifier

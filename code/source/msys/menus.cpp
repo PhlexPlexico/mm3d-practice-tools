@@ -16,6 +16,7 @@
 #include "msys/include/menus/commands.h"
 #include "msys/include/menus/debug.h"
 #include "msys/include/menus/equips.h"
+#include "msys/include/menus/gear.h"
 #include "msys/include/menus/inventory.h"
 #include "msys/include/menus/save.h"
 #include "msys/include/menus/warps.h"
@@ -25,11 +26,12 @@ namespace msys {
 
   Menu pz3DMenu = {
       .title = "MM3D Practice Menu",
-      .nbItems = 8,
+      .nbItems = 9,
       .items{
           {.title = "Warps", .action_type = METHOD, .method = WarpsPlacesMenuShow},
           {.title = "Cheats", .action_type = MENU, .menu = &CheatsMenu},
           {.title = "Inventory", .action_type = MENU, .menu = &InventoryMenu},
+          {.title = "Gear", .action_type = MENU, .menu = &GearMenu},
           {.title = "Equips", .action_type = MENU, .menu = &EquipsMenu},
           {.title = "Watches", .action_type = METHOD, .method = &WatchesMenuFunc},
           {.title = "Debug", .action_type = MENU, .menu = &DebugMenu},

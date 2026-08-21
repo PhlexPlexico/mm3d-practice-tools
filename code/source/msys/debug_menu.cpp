@@ -1,4 +1,5 @@
 #include "msys/include/menus/debug.h"
+#include "msys/include/menus/flags.h"
 #include <stdio.h>
 #include "common/advanced_context.h"
 #include "common/hidstate.h"
@@ -188,8 +189,9 @@ static void DebugActors_ShowActors(void) {
 }
 
 Menu DebugMenu = {.title = "Debug",
-                  .nbItems = 1,
+                  .nbItems = 2,
                   .items = {
+        {.title = "Week Event Flags", .action_type = METHOD, .method = Flags_WeekEventMenuShow},
                       {.title = "Actors", .action_type = METHOD, .method = DebugActors_ShowActors},
                   }};
 

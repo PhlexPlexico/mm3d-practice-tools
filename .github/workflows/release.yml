@@ -87,7 +87,7 @@ jobs:
       # differ in size by a lot, something version-specific has gone wrong.
       - name: Sanity-check the output
         run: |
-          for p in usa1.0-console usa1.0-citra usa1.1-console usa1.1-citra; do
+          for p in usa1.0-console usa1.0-emulator usa1.1-console usa1.1-emulator; do
             test -s "release/$p/code.ips" || { echo "missing patch for $p"; exit 1; }
           done
           ls -l release/*/code.ips
@@ -113,6 +113,6 @@ jobs:
             | package | for |
             |---|---|
             | `usa1.0-console` | USA 1.0 on hardware (Luma3DS) |
-            | `usa1.0-citra` | USA 1.0 on Citra / Azahar |
+            | `usa1.0-emulator` | USA 1.0 on emulator / Azahar |
             | `usa1.1-console` | USA 1.1 on hardware (Luma3DS) |
-            | `usa1.1-citra` | USA 1.1 on Citra / Azahar |
+            | `usa1.1-emulator` | USA 1.1 on emulator / Azahar |

@@ -1,0 +1,54 @@
+/**
+ * @file sound.cpp
+ * @author leoetlino (https://github.com/leoetlino/)
+ * @brief
+ * @date 2021-09-15
+ *
+ * Brought in from the Project Restoration libraries. Edited to adjust for the randomizer.
+ */
+#include "game/sound.h"
+#include "game/addresses.h"
+
+#include <tuple>
+
+#include "common/utils.h"
+#include "game/actor.h"
+
+namespace game::sound {
+
+  class StreamMgr;
+
+  static StreamMgr& GetStreamMgr() {
+    return rnd::util::GetInstance<StreamMgr>(ADDR_GetStreamMgr_7CB49C, ADDR_GetStreamMgr_6B0A3C, ADDR_GetStreamMgr_1E11F8);
+  }
+
+  bool PlayEffect(EffectId id) {
+    return rnd::util::GetPointer<bool(EffectId)>(ADDR_PlayEffect_2006E4)(id);
+  }
+
+  bool PlayEffect(const z3dVec3f& position, EffectId id) {
+    return rnd::util::GetPointer<bool(const z3dVec3f&, EffectId)>(ADDR_PlayEffect_226218)(position, id);
+  }
+
+  bool PlayEffect(const act::Actor& actor, EffectId id) {
+    return PlayEffect(actor.pos.pos, id);
+  }
+
+  StreamId GetCurrentStreamId(StreamPlayer player) {
+    return rnd::util::GetPointer<StreamId(StreamMgr&, StreamPlayer)>(ADDR_GetCurrentStreamId_1E1194)(GetStreamMgr(), player);
+  }
+
+  bool PlayStream(StreamId id, StreamPlayer player) {
+    return rnd::util::GetPointer<bool(StreamMgr&, StreamId, StreamPlayer, u32)>(ADDR_bool_239228)(GetStreamMgr(), id, player,
+                                                                                          0xffffffff);
+  }
+
+  void ControlStream(StreamPlayer player, int a, int b) {
+    rnd::util::GetPointer<void(StreamMgr&, StreamPlayer, int, int)>(ADDR_ControlStream_1DC2F0)(GetStreamMgr(), player, a, b);
+  }
+
+  void ControlEnv(int index) {
+    rnd::util::GetPointer<void(int)>(ADDR_ControlEnv_1883F0)(index);
+  }
+
+}  // namespace game::sound

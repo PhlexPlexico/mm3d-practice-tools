@@ -1,0 +1,146 @@
+#include "game/addresses.h"
+OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
+OUTPUT_ARCH(arm)
+ENTRY(loader_patch)
+
+/* Tail padding of the vanilla text segment: 628 bytes on 1.0, 76 on 1.1. */
+__loader_base  = ADDR_LoaderBase;
+__loader_limit = 0x61D000;
+
+/* The exheader grows .data to end at 0x8A1000, so 0xD1000 is ours. Grow the
+   exheader before raising this. */
+__newcode_base = 0x7D0000;
+__newcode_max  = 0xD1000;
+
+SECTIONS {
+
+  . = ADDR_loader_100000;
+
+  .patch_loader ADDR_loader_100000 : {
+    *(.patch_loader)
+  }
+
+  .patch_startHeap ADDR_startHeap_10001C : {
+    *(.patch_startHeap)
+  }
+
+  .patch_MainLoop ADDR_MainLoop_10676C : {
+    *(.patch_MainLoop)
+  }
+
+  .patch_DrawMenu ADDR_DrawMenu_107148 : {
+    *(.patch_DrawMenu)
+  }
+
+  .patch_PreActorCalc ADDR_PreActorCalc_174A6C : {
+    *(.patch_PreActorCalc)
+  }
+
+  .patch_PostActorCalc ADDR_PostActorCalc_174E08 : {
+    *(.patch_PostActorCalc)
+  }
+
+  .patch_ReadGamePad ADDR_ReadGamePad_59BA10 : {
+    *(.patch_ReadGamePad)
+  }
+
+  .patch_DisableExistingTrigger ADDR_DisableExistingTrigger_59BA14 : {
+    *(.patch_DisableExistingTrigger)
+  }
+
+  .patch_ISGCrouchStabOne ADDR_ISGCrouchStabOne_1D32E0 : {
+    *(.patch_ISGCrouchStabOne)
+  }
+
+  .patch_ISGCrouchStabTwo ADDR_ISGCrouchStabTwo_1DBEA4 : {
+    *(.patch_ISGCrouchStabTwo)
+  }
+
+
+  .patch_DecoupleZlZr ADDR_DecoupleZlZr_1166C8 : {
+    *(.patch_DecoupleZlZr)
+  }
+
+  .patch_DecoupleStartSelect ADDR_DecoupleStartSelect_121EE8 : {
+    *(.patch_DecoupleStartSelect)
+  }
+
+  .patch_FixSurroundSound ADDR_FixSurroundSound_1404E8 : {
+    *(.patch_FixSurroundSound)
+  }
+
+  .patch_ItemCloseOnSelect ADDR_ItemCloseOnSelect_5C19E4 : {
+    *(.patch_ItemCloseOnSelect)
+  }
+
+  /* Stone Tower block speed constants. Data, not code -- see patches.S. */
+  .patch_FasterBlockMovement ADDR_FasterBlockMovement_2AC634 : {
+    *(.patch_FasterBlockMovement)
+  }
+
+  .patch_FasterBlockMovementBack ADDR_FasterBlockMovementBack_2D0C0C : {
+    *(.patch_FasterBlockMovementBack)
+  }
+
+  .patch_ElegyStatueNoDarkEffect ADDR_ElegyStatueNoDarkEffect_5187A4 : {
+    *(.patch_ElegyStatueNoDarkEffect)
+  }
+
+  .patch_ElegyStatueNoDarkEffectTwo ADDR_ElegyStatueNoDarkEffectTwo_5187D0 : {
+    *(.patch_ElegyStatueNoDarkEffectTwo)
+  }
+
+  . = __loader_base;
+  .loader : {
+    *(.loader*)
+  }
+  __loader_size = . - __loader_base;
+  ASSERT(. <= __loader_limit,
+         "the .loader blob has outgrown the vanilla text padding")
+
+  ASSERT(__loader_size <= 76,
+         "the .loader blob does not fit the 76 bytes USA 1.1 leaves for it")
+
+  . = __newcode_base;
+  _LD_SYMBOL_TEXT_START = . ;
+  .text : {
+    __text_start = . ;
+    *(.text*)
+    __text_end = . ;
+    *(.rodata*)
+
+    . = ALIGN(4);
+    __init_array_start = . ;
+    KEEP(*(SORT(.init_array.*)))
+    KEEP(*(.init_array))
+    __init_array_end = . ;
+    KEEP(*(.fini_array))
+    *(.init)
+    *(.fini)
+
+    . = ALIGN(4);
+    *(.eh_frame)
+
+    *(.ARM.exidx*)
+    *(.ARM.extab*)
+
+    *(.data*)
+    . = ALIGN(4);
+    *(.bss*)
+    *(COMMON)
+    __end = . ;
+  }
+
+  _LD_SYMBOL_TEXT_SIZE = __end - __text_start;
+
+  __newcode_map_size = (_LD_SYMBOL_TEXT_SIZE + 0xFFF) & ~0xFFF;
+
+  ASSERT(__newcode_base == 0x7D0000,
+         "loader.s hardcodes 0x7D0000; update it alongside __newcode_base")
+  ASSERT(_LD_SYMBOL_TEXT_SIZE <= __newcode_max,
+         "new code region overflows the window the loader maps RWX")
+
+  /DISCARD/ : {
+    *(.comment)
+  }
+}

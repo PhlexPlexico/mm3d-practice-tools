@@ -22,6 +22,7 @@ namespace msys {
   extern ToggleMenu GearQuiverMenu;
   extern ToggleMenu GearTradeOneMenu;
   extern ToggleMenu GearTradeTwoMenu;
+  extern ToggleMenu GearNotebookMenu;
 
 static const char* const GearAmountNames[] = {"max health (* by 16 for a total heart)",
                                               "magic", "razor sword hp", "current rupees"};
@@ -231,10 +232,21 @@ static void Gear_Quiver(void) {
   ToggleMenuShow(&GearQuiverMenu);
 }
 
-static void Gear_Notebook(void) {
+/// Yes/no rather than a silent toggle, so the menu shows the state it left
+/// things in.
+static void Gear_NotebookSelect(s32 selected) {
+  if (selected < 0 || selected > 1)
+    return;
   game::InventoryData::CollectRegister& collect =
       game::GetCommonData().save.inventory.collect_register;
-  collect.bombers_notebook = collect.bombers_notebook ? 0 : 1;
+  collect.bombers_notebook = selected;
+  Gear_SelectOne(&GearNotebookMenu, selected);
+}
+
+static void Gear_Notebook(void) {
+  const u32 has = game::GetCommonData().save.inventory.collect_register.bombers_notebook;
+  Gear_SelectOne(&GearNotebookMenu, (s32)has);
+  ToggleMenuShow(&GearNotebookMenu);
 }
 
 /*
@@ -312,6 +324,12 @@ ToggleMenu GearQuiverMenu = {
               {.on = 0, .title = "Quiver (30)", .method = Gear_QuiverSelect},
               {.on = 0, .title = "Big Quiver (40)", .method = Gear_QuiverSelect},
               {.on = 0, .title = "Biggest Quiver (50)", .method = Gear_QuiverSelect}}};
+
+ToggleMenu GearNotebookMenu = {
+    .title = "Bomber's Notebook",
+    .nbItems = 2,
+    .items = {{.on = 0, .title = "No", .method = Gear_NotebookSelect},
+              {.on = 0, .title = "Yes", .method = Gear_NotebookSelect}}};
 
 ToggleMenu GearTradeOneMenu = {
     .title = "Trade Item 1",

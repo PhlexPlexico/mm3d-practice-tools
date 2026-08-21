@@ -11,6 +11,7 @@
 #include "msys/include/menu.h"
 #include "msys/include/menus/cheats.h"
 #include "msys/include/menus/commands.h"
+#include "msys/include/menus/save.h"
 #include "msys/include/menus/watches.h"
 
 extern "C" {
@@ -134,6 +135,7 @@ namespace rnd {
     msys::Command_UpdateCommands(rInputCtx.cur.val);
     frame_advance();
 
+    msys::Save_ApplyPendingMomentum();
     msys::Cheats_ApplyInfiniteItems();
 
     if (GetAdvState().useISG) {

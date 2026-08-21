@@ -12,6 +12,8 @@ extern "C" {
 #include "common/advanced_context.h"
 
 namespace msys {
+    /// Finish a memfile load once the scene has come back up.
+    void Save_ApplyPendingMomentum(void);
   extern Menu SaveMenu;
 
 }

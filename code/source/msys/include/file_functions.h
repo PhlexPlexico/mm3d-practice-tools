@@ -9,25 +9,47 @@ extern "C" {
 #include "common/utils.h"
 #include "game/common_data.h"
 #include "game/actor.h"
+#include "z3d/z3DVec.h"
 #include "menus/commands.h"
 #include "menus/watches.h"
 
 namespace msys {
   #define MAX_SAVED_PROFILES 3
   #define PZ3D_MEMFILE_MAX 3
-  #define PZ3D_VERSION 1
+  #define PZ3D_VERSION 2
+  #define PZ3D_RESPAWN_SLOTS 8
+  typedef struct {
+    game::act::PosRot pos;
+    game::act::PosRot initial_pos;
+    game::act::PosRot ztarget_pos;
+    z3dVec3s shape_rot;   // full rotation; only .y used to be kept
+    u16 player_angle;     // the angle movement uses, distinct from the visual one
+    z3dVec3f vel;
+    float vel_xz;
+    float vel_y;
+    float lin_vel;
+    rnd::Flags<game::act::Player::Flag1> flags1;
+    rnd::Flags<game::act::Player::Flag2> flags2;
+    rnd::Flags<game::act::Player::Flag3> flags3;
+  } PlayerState;
+
   typedef struct {
     u8 pzversion;
     game::SaveData save;
     game::CommonDataSub1 csub1;
-    game::RespawnData respawn;
-    game::act::PosRot linkcoords;
-    float velocity;
-    rnd::Flags<game::act::Player::Flag1> flags1;
-    rnd::Flags<game::act::Player::Flag2> flags2;
-    rnd::Flags<game::act::Player::Flag3> flags3;
-    u16 angle;
+    /*
+     * All of them. CommonData::sub13s is an array of eight -- one per respawn
+     * mode -- and only the first used to be written, while the load path went
+     * on to modify the third. Saving one and restoring into several left the
+     * rest holding whatever the previous scene had put there.
+     */
+    game::RespawnData respawn[PZ3D_RESPAWN_SLOTS];
+    PlayerState player;
   } MemFileT;
+
+  // The whole array, or restoring one slot leaves the others stale.
+  static_assert(PZ3D_RESPAWN_SLOTS ==
+                sizeof(game::CommonData::sub13s) / sizeof(game::RespawnData));
 
   bool File_CheckOrCreateProfileDirectory();
   Handle File_GetHandle();

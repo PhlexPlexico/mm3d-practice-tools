@@ -5,8 +5,7 @@
 #include "include/menu.h"
 
 namespace msys {
-static const char* const LinkModifyNames[] = {"max health (* by 16 for a total heart)",
-                                              "magic", "razor sword hp", "current rupees"};
+
 
 static void Cheats_Health(void) {
   game::CommonData& cdata = game::GetCommonData();
@@ -179,156 +178,27 @@ static void Cheats_GoToDay4(void) {
   Cheats_SetDay(4);
 }
 
-static void Cheats_Modify_Link(LinkData whatToModify, u16* ptrToModify) {
-  Draw_Lock();
-  Draw_ClearFramebuffer();
-  Draw_FlushFramebuffer();
-  Draw_Unlock();
 
-  do {
-    Draw_Lock();
 
-    Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Current %s:", LinkModifyNames[whatToModify]);
-    Draw_DrawFormattedString(30, 30, COLOR_WHITE, "%u", *ptrToModify);
 
-    Draw_FlushFramebuffer();
-    Draw_Unlock();
 
-    u32 pressed = waitInputWithTimeout(1000);
-    if (pressed & (BUTTON_B | BUTTON_A)) {
-      break;
-    } else if (pressed & MENU_UP) {
-      *ptrToModify += 1;
-    } else if (pressed & MENU_DOWN) {
-      if (*ptrToModify < 1)
-        *ptrToModify = 0;
-      else
-        *ptrToModify -= 1;
-    } else if (pressed & MENU_RIGHT) {
-      *ptrToModify += 10;
-    } else if (pressed & MENU_LEFT) {
-      if (*ptrToModify < 10)
-        *ptrToModify = 0;
-      else
-        *ptrToModify -= 10;
-    }
 
-  } while (true);
-}
 
-/*
- * Magic, as the game models it.
- *
- * Granting magic (0x1710C4) sets four fields, not one: magic_acquired gates
- * whether magic can be spent at all, magic_num_upgrades is 0 for one bar and 1
- * for two, magic is the current amount, and magic_size_type is cleared. The
- * meter length is separate, in CommonData::magic_max.
- *
- * Chateau Romani is not a fourth upgrade level -- it is a week event flag that
- * makes update_magic_cost_and_reduce_magic (0x2264CC) zero the cost, so magic
- * is spent for free and the meter stays full.
- *
- * Setting only `magic`, as this used to, left the meter the wrong size and did
- * nothing for a player who had never been given magic at all.
- */
-enum MagicLevel {
-  MAGIC_NONE = 0,
-  MAGIC_REGULAR = 1,
-  MAGIC_DOUBLE = 2,
-  MAGIC_CHATEAU = 3,
-};
 
-static const char* const MagicLevelNames[] = {
-    "0 - none, magic items unusable",
-    "1 - regular",
-    "2 - double",
-    "3 - Chateau Romani, free",
-};
 
-// One bar is 48 units, two are 96. Both from the grant code at 0x1710C4.
-#define MAGIC_ONE_BAR 48
-#define MAGIC_TWO_BARS 96
 
-static u8 Cheats_GetMagicLevel(void) {
-  const game::CommonData& cdata = game::GetCommonData();
-  if (!cdata.save.player.magic_acquired)
-    return MAGIC_NONE;
-  if (cdata.save.week_event_reg_14.WEEKEVENTREG_DRANK_CHATEAU_ROMANI)
-    return MAGIC_CHATEAU;
-  return cdata.save.player.magic_num_upgrades >= 1 ? MAGIC_DOUBLE : MAGIC_REGULAR;
-}
 
-static void Cheats_SetMagicLevel(u8 level) {
-  game::CommonData& cdata = game::GetCommonData();
-  const bool hasMagic = level != MAGIC_NONE;
-  const bool doubled = level >= MAGIC_DOUBLE;
-  const s16 amount = !hasMagic ? 0 : (doubled ? MAGIC_TWO_BARS : MAGIC_ONE_BAR);
 
-  cdata.save.player.magic_acquired = hasMagic ? 1 : 0;
-  cdata.save.player.magic_num_upgrades = doubled ? 1 : 0;
-  cdata.save.player.magic_size_type = 0;
-  cdata.save.player.magic = (u8)amount;
-  cdata.magic_max = amount;
-  // Cancel any refill the game had queued, or it tops the meter back up to the
-  // old size.
-  cdata.magic_accumulator = 0;
 
-  cdata.save.week_event_reg_14.WEEKEVENTREG_DRANK_CHATEAU_ROMANI =
-      level == MAGIC_CHATEAU ? 1 : 0;
-}
 
-static void Cheats_Modify_Link_Magic(LinkData whatToModify, s8*) {
-  u8 level = Cheats_GetMagicLevel();
 
-  Draw_Lock();
-  Draw_ClearFramebuffer();
-  Draw_FlushFramebuffer();
-  Draw_Unlock();
 
-  do {
-    Draw_Lock();
 
-    Draw_DrawFormattedString(10, 10, COLOR_TITLE, "Current %s:", LinkModifyNames[whatToModify]);
-    Draw_DrawFormattedString(30, 30, COLOR_WHITE, "%-32s", MagicLevelNames[level]);
 
-    Draw_FlushFramebuffer();
-    Draw_Unlock();
-
-    u32 pressed = waitInputWithTimeout(1000);
-    if (pressed & (BUTTON_B | BUTTON_A)) {
-      break;
-    } else if (pressed & MENU_UP) {
-      if (level < MAGIC_CHATEAU)
-        Cheats_SetMagicLevel(++level);
-    } else if (pressed & MENU_DOWN) {
-      if (level > MAGIC_NONE)
-        Cheats_SetMagicLevel(--level);
-    }
-  } while (true);
-}
-
-static void Cheats_ModifyHealth(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  Cheats_Modify_Link(HEALTH, &cdata.save.player.health_max);
-}
-
-static void Cheats_ModifyMagic(void) {
-  Cheats_Modify_Link_Magic(MAGIC, nullptr);
-}
-
-static void Cheats_ModifyRazor(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  Cheats_Modify_Link(RAZOR_SWORD, &cdata.save.player.razor_sword_hp);
-}
-
-static void Cheats_ModifyRupees(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  Cheats_Modify_Link(RUPEE, &cdata.save.player.rupee_count);
-}
 
 Menu CheatsMenu = {
     .title = "Cheats",
-    .nbItems = 9,
+    .nbItems = 8,
     .items = {
         {.title = "Refill Health", .action_type = METHOD, .method = Cheats_Health},
         {.title = "Refill Magic", .action_type = METHOD, .method = Cheats_Magic},
@@ -338,7 +208,6 @@ Menu CheatsMenu = {
         {.title = "Change Flow of Time", .action_type = MENU, .menu = &TimeSpeedMenu},
         {.title = "Change Day", .action_type = MENU, .menu = &DayChangeMenu},
         {.title = "ISG", .action_type = METHOD, .method = Cheats_ISG},
-        {.title = "Edit Link's Info", .action_type = MENU, .menu = &LinkAmountInfo},
     }};
 
 ToggleMenu CheatsItemsMenu = {
@@ -382,14 +251,5 @@ Menu DayChangeMenu = {
               {.title = "Day 3", .action_type = METHOD, .method = Cheats_GoToDay3},
               {.title = "Day 4", .action_type = METHOD, .method = Cheats_GoToDay4}}};
 
-Menu LinkAmountInfo = {
-    .title = "Player Data",
-    .nbItems = 4,
-    .items = {
-        {.title = "Total Health", .action_type = METHOD, .method = Cheats_ModifyHealth},
-        {.title = "Magic Upgrades", .action_type = METHOD, .method = Cheats_ModifyMagic},
-        {.title = "Razor Sword Hits Remaining",
-         .action_type = METHOD,
-         .method = Cheats_ModifyRazor},
-        {.title = "Modify Rupee Count", .action_type = METHOD, .method = Cheats_ModifyRupees}}};
+
 }  // namespace msys

@@ -9,6 +9,14 @@
 #define COMMAND_COMBO_TIMEOUT 3
 #define COMMAND_MENU_MAX_SHOW 18
 #define COMMAND_NUM_COMMANDS 15
+/*
+ * Reset Input is last and is excluded from the editable list -- it is the way
+ * out of a binding that has locked you out, so it is not itself rebindable.
+ *
+ * The defaults below are set by index while saved profiles are keyed by name,
+ * so inserting a command in the middle of the table silently rebinds the
+ * defaults of everything after it. Append, do not insert.
+ */
 #define COMMAND_RESET_INDEX (COMMAND_NUM_COMMANDS - 1)
 
 namespace msys {
@@ -42,6 +50,8 @@ extern StoredPosition storedPositions[POSITION_SLOTS];
 
 void Commands_ShowCommands(void);
 void Command_UpdateCommands(u32 inputs);
+/// Read the stored positions back off the SD card at startup.
 void Positions_Init(void);
+/// Transient banner reporting the last command action; call once per frame.
 void Commands_DrawToast(void);
 }  // namespace msys

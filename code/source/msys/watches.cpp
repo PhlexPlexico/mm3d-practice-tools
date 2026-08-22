@@ -69,6 +69,8 @@ static void WatchesEditWatch(s32 selected) {
 
     Draw_DrawFormattedString(30, 30 + 3 * SPACING_Y, COLOR_WHITE, "Draw: %s",
                              watches[selected].display ? "ON " : "OFF");
+    if (selectedItem == 2 && chosen)
+      Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "X for keypad. Arrows to nudge.");
     Draw_DrawCharacter(10, 30 + 3 * SPACING_Y, COLOR_TITLE, selectedItem == 3 ? '>' : ' ');
 
     Draw_FlushFramebuffer();
@@ -77,7 +79,20 @@ static void WatchesEditWatch(s32 selected) {
     u32 pressed = waitInputWithTimeout(1000);
 
     if (chosen) {
-      if (pressed & (BUTTON_B | BUTTON_A))
+      // X opens the keypad; the nudges stay for walking to a nearby address,
+      // which is the one thing they are actually good at.
+      if (pressed & BUTTON_X) {
+        const u32 addr = (u32)bytes[0] << 24 | (u32)bytes[1] << 16 | (u32)bytes[2] << 8 | bytes[3];
+        const u32 entered = HexEntry("Enter Address", addr);
+        bytes[0] = (entered >> 24) & 0xFF;
+        bytes[1] = (entered >> 16) & 0xFF;
+        bytes[2] = (entered >> 8) & 0xFF;
+        bytes[3] = entered & 0xFF;
+        Draw_Lock();
+        Draw_ClearFramebuffer();
+        Draw_FlushFramebuffer();
+        Draw_Unlock();
+      } else if (pressed & (BUTTON_B | BUTTON_A))
         chosen = 0;
       else if (pressed & MENU_RIGHT)
         bytes[selectedByte] -= 0x10;

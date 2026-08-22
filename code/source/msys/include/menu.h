@@ -118,4 +118,6 @@ void ToggleMenuShow(ToggleMenu* menu);
 void AmountMenuShow(AmountMenu* menu);
 
 u32 KeyboardFill(char* buf, u32 len);
+/// Hex keypad for entering an address. Returns `initial` if cancelled.
+u32 HexEntry(const char* title, u32 initial);
 }  // namespace msys

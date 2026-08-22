@@ -84,15 +84,15 @@ namespace msys {
   static void Flags_ShowRegister(u32 reg) {
     FlagSelectedReg = reg;
     const u8 value = WeekEventRegs()[reg];
-    snprintf(FlagMenuTitle, sizeof(FlagMenuTitle), "week_event_reg_%02u", (u8)reg);
+    snprintf(FlagMenuTitle, sizeof(FlagMenuTitle), "week_event_reg_%02u", reg);
     FlagBitsMenu.title = FlagMenuTitle;
 
     for (u32 bit = 0; bit < 8; ++bit) {
       const char* name = FlagName(reg, bit);
       if (name)
-        snprintf(BitTitles[bit], sizeof(BitTitles[bit]), "%u %s", (u8)bit, name);
+        snprintf(BitTitles[bit], sizeof(BitTitles[bit]), "%u %s", bit, name);
       else
-        snprintf(BitTitles[bit], sizeof(BitTitles[bit]), "%u  bit %u", (u8)bit, (u8)bit);
+        snprintf(BitTitles[bit], sizeof(BitTitles[bit]), "%u  bit %u", bit, bit);
       FlagBitsMenu.items[bit].title = BitTitles[bit];
       FlagBitsMenu.items[bit].on = (value >> bit) & 1;
     }

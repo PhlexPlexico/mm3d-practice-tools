@@ -351,6 +351,112 @@ void AmountMenuShow(AmountMenu* menu) {  // displays an amount menu TODO: seems 
   } while (true);
 }
 
+/*
+ * Hex entry for an address.
+ *
+ * Not swkbd. That is a library applet, not a widget: swkbdInputText goes
+ * through aptLaunchLibraryApplet, which suspends the running application and
+ * hands the screens to a separate process, and the application's own APT loop
+ * has to service the transition. This menu works by not returning from the
+ * game's per-frame call, so the very thread that would have to cooperate is the
+ * one being held. libctru's service layer is not initialised here either --
+ * __service_ptr is null and nothing calls srvInit or aptInit; even SD access
+ * borrows the game's own FS session rather than opening one.
+ *
+ * So it is a keypad, which is also what Rosalina does from the same kind of
+ * injected context. Typing eight digits beats nudging four bytes by 0x10 and
+ * 0x01, which is what this replaces.
+ */
+#define HEX_COLS 4
+#define HEX_ROWS 5
+#define HEX_DIGITS 8
+
+static const char* const HexKeys[HEX_ROWS][HEX_COLS] = {
+    {"0", "1", "2", "3"},
+    {"4", "5", "6", "7"},
+    {"8", "9", "A", "B"},
+    {"C", "D", "E", "F"},
+    {"Del", "Clr", "OK", ""},
+};
+
+u32 HexEntry(const char* title, u32 initial) {
+  char buf[HEX_DIGITS + 1];
+  u32 len = 0;
+  s32 row = 0, col = 0;
+
+  // Start from the current value so a small correction does not mean retyping.
+  for (u32 i = 0; i < HEX_DIGITS; ++i) {
+    const u32 nibble = (initial >> ((HEX_DIGITS - 1 - i) * 4)) & 0xF;
+    buf[i] = nibble < 10 ? (char)('0' + nibble) : (char)('A' + nibble - 10);
+  }
+  buf[HEX_DIGITS] = '\0';
+  len = HEX_DIGITS;
+
+  Draw_Lock();
+  Draw_ClearFramebuffer();
+  Draw_FlushFramebuffer();
+  Draw_Unlock();
+
+  do {
+    Draw_Lock();
+    Draw_DrawString(10, 10, COLOR_TITLE, title);
+    Draw_DrawFormattedString(30, 30, COLOR_GREEN, "0x%-8s", buf);
+
+    for (s32 r = 0; r < HEX_ROWS; ++r) {
+      for (s32 c = 0; c < HEX_COLS; ++c) {
+        if (!HexKeys[r][c][0])
+          continue;
+        const bool here = (r == row && c == col);
+        Draw_DrawFormattedString(30 + c * 5 * SPACING_X, 50 + r * SPACING_Y,
+                                 here ? COLOR_GREEN : COLOR_WHITE, "%-4s", HexKeys[r][c]);
+      }
+    }
+
+    Draw_DrawString(10, SCREEN_BOT_HEIGHT - 20, COLOR_TITLE, "A to pick. B to cancel.");
+    Draw_FlushFramebuffer();
+    Draw_Unlock();
+
+    u32 pressed = waitInputWithTimeout(1000);
+    if (pressed & BUTTON_B)
+      return initial;
+
+    if (pressed & BUTTON_A) {
+      const char* key = HexKeys[row][col];
+      if (!strcmp(key, "OK"))
+        break;
+      if (!strcmp(key, "Clr")) {
+        len = 0;
+        buf[0] = '\0';
+      } else if (!strcmp(key, "Del")) {
+        if (len)
+          buf[--len] = '\0';
+      } else if (len < HEX_DIGITS) {
+        buf[len++] = key[0];
+        buf[len] = '\0';
+      }
+    } else if (pressed & MENU_UP) {
+      row = (row + HEX_ROWS - 1) % HEX_ROWS;
+    } else if (pressed & MENU_DOWN) {
+      row = (row + 1) % HEX_ROWS;
+    } else if (pressed & MENU_LEFT) {
+      col = (col + HEX_COLS - 1) % HEX_COLS;
+    } else if (pressed & MENU_RIGHT) {
+      col = (col + 1) % HEX_COLS;
+    }
+    // The last row is three keys wide, not four.
+    if (row == HEX_ROWS - 1 && col >= 3)
+      col = 2;
+  } while (true);
+
+  u32 value = 0;
+  for (u32 i = 0; i < len; ++i) {
+    const char ch = buf[i];
+    const u32 nibble = ch <= '9' ? (u32)(ch - '0') : (u32)(ch - 'A' + 10);
+    value = (value << 4) | nibble;
+  }
+  return value;
+}
+
 u32 KeyboardFill(char* buf, u32 len) {
   // static SwkbdState swkbd;
   // swkbdInit(&swkbd, SWKBD_TYPE_WESTERN, 1, -1);

@@ -99,6 +99,8 @@ namespace rnd {
           advState.advance_ctx_t.advance_state = advState.STEP;
         advState.pauseUnpause = false;
         advState.frameAdvance = false;
+        // The render hook is frozen in here, so anything on the top screen has
+        // to be drawn by this loop.
         Draw_DrawFormattedStringTop(20, 20, COLOR_WHITE, "PAUSED");
         Draw_FlushFramebufferTop();
         svcSleepThread(16e6);

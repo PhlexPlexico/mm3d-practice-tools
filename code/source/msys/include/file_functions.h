@@ -68,6 +68,7 @@ namespace msys {
    */
   #define PZ3D_PROFILE_MAGIC 0x50335A50u  /* 'PZ3P' */
   #define PZ3D_WATCHES_MAGIC 0x57335A50u  /* 'PZ3W' */
+  #define PZ3D_POSITIONS_MAGIC 0x4F335A50u  /* 'PZ3O' */
   #define PZ3D_BLOB_VERSION  1
   #define PZ3D_TITLE_MAX     32
 
@@ -83,6 +84,17 @@ namespace msys {
     u32 inputs[COMMAND_COMBO_MAX];
     u32 strict;
   } ProfileEntry;
+
+  /*
+   * Positions are the one thing keyed by slot rather than by name -- the slot
+   * number is the identity, so the file is a straight array and an unused slot
+   * is written out too, keeping index and position in step.
+   */
+  typedef struct {
+    u8 used;
+    u16 angle;
+    game::act::PosRot pos;
+  } PositionEntry;
 
   typedef struct {
     char name[WATCHES_MAXNAME + 1];
@@ -100,6 +112,8 @@ namespace msys {
   Result File_LoadProfile(Command*);
   Result File_SaveWatches(Watch*);
   Result File_LoadWatches(Watch*);
+  Result File_SavePositions(StoredPosition*);
+  Result File_LoadPositions(StoredPosition*);
   Result File_SaveContextToSD(game::CommonData*, game::act::Player*, const char*);
   Result File_WriteBlobToSd(const void*, u32, const char*);
   Result File_ReadBlobFromSd(void*, u32, u32*, const char*);

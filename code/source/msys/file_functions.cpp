@@ -135,6 +135,54 @@ namespace msys {
     return 1;
   }
 
+  Result File_SavePositions(StoredPosition* positions) {
+    PositionEntry entries[POSITION_SLOTS];
+    BlobHeader header = {PZ3D_POSITIONS_MAGIC, PZ3D_BLOB_VERSION, POSITION_SLOTS};
+
+    for (u32 i = 0; i < POSITION_SLOTS; ++i) {
+      memset(static_cast<void*>(&entries[i]), 0, sizeof(entries[i]));
+      entries[i].used = positions[i].used;
+      entries[i].angle = positions[i].angle;
+      entries[i].pos = positions[i].pos;
+    }
+
+    u8 buffer[sizeof(BlobHeader) + sizeof(entries)];
+    memcpy(buffer, &header, sizeof(header));
+    memcpy(buffer + sizeof(header), entries, sizeof(entries));
+
+    char path[] = "/3ds/mm3d/mm3d-practice-patch/positions.bin";
+    return File_WriteBlobToSd(buffer, sizeof(buffer), path);
+  }
+
+  Result File_LoadPositions(StoredPosition* positions) {
+    u8 buffer[sizeof(BlobHeader) + POSITION_SLOTS * sizeof(PositionEntry)];
+    u32 read = 0;
+    char path[] = "/3ds/mm3d/mm3d-practice-patch/positions.bin";
+    if (!R_SUCCEEDED(File_ReadBlobFromSd(buffer, sizeof(buffer), &read, path)))
+      return -1;
+
+    BlobHeader header;
+    if (read < sizeof(header))
+      return -2;
+    memcpy(&header, buffer, sizeof(header));
+    if (header.magic != PZ3D_POSITIONS_MAGIC || header.version != PZ3D_BLOB_VERSION)
+      return -3;
+    // Fewer slots than we have is fine -- an older file just leaves the rest
+    // empty. More than we have is not, so it is clamped rather than trusted.
+    u32 count = header.count < POSITION_SLOTS ? header.count : POSITION_SLOTS;
+    if (read < sizeof(header) + count * sizeof(PositionEntry))
+      return -4;
+
+    for (u32 i = 0; i < count; ++i) {
+      PositionEntry e;
+      memcpy(&e, buffer + sizeof(header) + i * sizeof(PositionEntry), sizeof(e));
+      positions[i].used = e.used ? 1 : 0;
+      positions[i].angle = e.angle;
+      positions[i].pos = e.pos;
+    }
+    return 1;
+  }
+
   Result File_SaveContextToSD(game::CommonData* cdata, game::act::Player* player, const char* path) {
     // Static: MemFileT is ~6.9KB, too big for the menu thread's 12KB stack, and
     // operator new would drag in std::bad_alloc's unwinder for a single user.

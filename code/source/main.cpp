@@ -25,6 +25,7 @@ namespace rnd {
 
     void Init(Context& context) {
       msys::Watches_Init();
+      msys::Positions_Init();
       context.has_initialised = true;
     }
   }  // namespace
@@ -99,6 +100,7 @@ namespace rnd {
         advState.pauseUnpause = false;
         advState.frameAdvance = false;
         Draw_DrawFormattedStringTop(20, 20, COLOR_WHITE, "PAUSED");
+        Draw_FlushFramebufferTop();
         svcSleepThread(16e6);
       }
     }
@@ -114,6 +116,7 @@ namespace rnd {
       Draw_FlushFramebufferTop();
     } else {
       msys::drawWatches();
+      msys::Commands_DrawToast();
     }
   }
 

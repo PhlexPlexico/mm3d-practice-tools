@@ -3,7 +3,10 @@
 
 namespace msys {
 
-static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMsg, char* delMsg, char* failMsg, Result* saved, char filePath[], bool saveWatches) {
+/// Which of the three config blobs the dialog is acting on.
+enum SaveTarget { SAVE_PROFILE, SAVE_WATCHES, SAVE_POSITIONS };
+
+static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMsg, char* delMsg, char* failMsg, Result* saved, char filePath[], SaveTarget target) {
   Draw_Lock();
   Draw_ClearFramebuffer();
   Draw_FlushFramebuffer();
@@ -29,10 +32,17 @@ static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMs
     if (pressed & BUTTON_A) {
       Draw_Lock();
       Draw_ClearFramebuffer();
-      if (!saveWatches)
+      switch (target) {
+      case SAVE_PROFILE:
         *saved = File_SaveProfile(commandList);
-      else
+        break;
+      case SAVE_WATCHES:
         *saved = File_SaveWatches(watches);
+        break;
+      case SAVE_POSITIONS:
+        *saved = File_SavePositions(storedPositions);
+        break;
+      }
       Draw_DrawString(10, SCREEN_BOT_HEIGHT - 30, COLOR_TITLE,
                         "Saving...");
       if (R_FAILED(*saved)) {
@@ -61,26 +71,26 @@ static void Save_DrawJsonInformation(char* topMsg, char* btmMsg, char* successMs
 
 static void Save_ProfileToJson(void) {
   Result saved = 0;
-  char path[43] = "/3ds/mm3d/mm3d-practice-patch/profile.json";
+  char path[] = "/3ds/mm3d/mm3d-practice-patch/profile.bin";
   char saveMsg[] = "Save Current Shortcut Keys?";
   char confirmMsg[] = "Press A to save, B to go back, and Y to delete yourprofile.";
   char successMsg[] = "Save Complete! Press B to go back.";
   char delMsg[] = "Delete Complete! Press B to go back.";
   char failMsg[] = "Save not completed. Error writing to SD.\nPlease restart your game and try again.";
 
-  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path, false);
+  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path, SAVE_PROFILE);
 }
 
 static void Save_WatchesToJson(void) {
   Result saved = 0;
-  char path[43] = "/3ds/mm3d/mm3d-practice-patch/watches.json";
+  char path[] = "/3ds/mm3d/mm3d-practice-patch/watches.bin";
   char saveMsg[] = "Save Current Watches?";
   char confirmMsg[] = "Press A to save, B to go back, and Y to delete your watches.";
   char successMsg[] = "Save Complete! Press B to go back.";
   char delMsg[] = "Delete Complete! Press B to go back.";
   char failMsg[] = "Save not completed. Please ensure you have watches\nTO save!\nPlease restart your game and try again.";
 
-  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path, true);
+  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path, SAVE_WATCHES);
 }
 
 static void Save_WriteToBin(s32 selected) {
@@ -259,6 +269,19 @@ static void Save_ReadFromBin(s32 selected) {
   Draw_Unlock();
 }
 
+static void Save_PositionsToBin(void) {
+  Result saved = 0;
+  char path[] = "/3ds/mm3d/mm3d-practice-patch/positions.bin";
+  char saveMsg[] = "Save Stored Positions?";
+  char confirmMsg[] = "Press A to save, B to go back, and Y to delete them.";
+  char successMsg[] = "Save Complete! Press B to go back.";
+  char delMsg[] = "Delete Complete! Press B to go back.";
+  char failMsg[] = "Save not completed. Error writing to SD.\nPlease restart your game and try again.";
+
+  Save_DrawJsonInformation(saveMsg, confirmMsg, successMsg, delMsg, failMsg, &saved, path,
+                           SAVE_POSITIONS);
+}
+
 static void Save_MemfileToBin(void) {
   s32 selected = 0;
 
@@ -301,10 +324,11 @@ static void Save_MemfileToBin(void) {
 }
 
 Menu SaveMenu = {.title = "SD Card",
-                 .nbItems = 3,
+                 .nbItems = 4,
                  .items = {
                      {.title = "Profile", .action_type = METHOD, .method = Save_ProfileToJson},
                      {.title = "Watches", .action_type = METHOD, .method = Save_WatchesToJson},
+                     {.title = "Positions", .action_type = METHOD, .method = Save_PositionsToBin},
                      {.title = "Memfiles", .action_type = METHOD, .method = Save_MemfileToBin}
                  }};
 

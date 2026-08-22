@@ -1,11 +1,15 @@
 #pragma once
 
+#include "game/actor.h"
+
 #include "msys/include/menu.h"
 
 #define COMMAND_COMBO_MAX 5
+#define POSITION_SLOTS 8
 #define COMMAND_COMBO_TIMEOUT 3
 #define COMMAND_MENU_MAX_SHOW 18
-#define COMMAND_NUM_COMMANDS 13
+#define COMMAND_NUM_COMMANDS 15
+#define COMMAND_RESET_INDEX (COMMAND_NUM_COMMANDS - 1)
 
 namespace msys {
 typedef enum {
@@ -27,6 +31,17 @@ typedef struct Command {
 } Command;
 extern Command commandList[];
 
+/// A stored position. Slots are identified by index, not by name, so the file
+/// is a plain array with a used flag rather than keyed entries.
+typedef struct {
+  u8 used;
+  game::act::PosRot pos;
+  u16 angle;
+} StoredPosition;
+extern StoredPosition storedPositions[POSITION_SLOTS];
+
 void Commands_ShowCommands(void);
 void Command_UpdateCommands(u32 inputs);
+void Positions_Init(void);
+void Commands_DrawToast(void);
 }  // namespace msys

@@ -14,6 +14,7 @@ extern "C" {
 #include "msys/include/file_functions.h"
 #include "msys/include/menu.h"
 #include "msys/include/menus/commands.h"
+#include <stdarg.h>
 #include "msys/include/menus/debug.h"
 #include "msys/include/menus/inventory.h"
 #include "msys/include/menus/warps.h"
@@ -96,28 +97,91 @@ static void Command_VoidOut(void) {
   context.gctx->VoidPlayer();
 }
 
-static game::act::PosRot storedPosRot;
-static u16 angle;
+/*
+ * Stored positions, and the transient banner that reports what just happened.
+ *
+ * One slot was never enough to compare two approaches to the same trick, so
+ * there are several and the active one is cycled with its own commands. Which
+ * slot is current is only visible when it changes, so the banner says so for a
+ * couple of seconds rather than taking up screen permanently.
+ */
+#define TOAST_FRAMES 120
+
+StoredPosition storedPositions[POSITION_SLOTS];
+static u32 currentSlot = 0;
+
+static char toastText[40];
+static u32 toastFrames = 0;
+
+static void Toast(const char* fmt, ...) {
+  va_list args;
+  va_start(args, fmt);
+  vsnprintf(toastText, sizeof(toastText), fmt, args);
+  va_end(args);
+  toastFrames = TOAST_FRAMES;
+}
+
+/*
+ * Drawn where PAUSED goes, which is free whenever this has anything to say:
+ * pausing stops the render hook this is called from, so the two never compete
+ * for the line. Counts down as it draws, so a frozen game holds the message
+ * rather than expiring it unseen.
+ */
+void Commands_DrawToast(void) {
+  if (toastFrames == 0)
+    return;
+  --toastFrames;
+  Draw_DrawFormattedStringTop(20, 20, COLOR_WHITE, "%-34s", toastText);
+  Draw_FlushFramebufferTop();
+}
+
+void Positions_Init(void) {
+  if (File_CheckOrCreateProfileDirectory())
+    File_LoadPositions(storedPositions);
+}
+
 static void Command_StorePos(void) {
   game::act::Player* link = GetPlayer();
-  if (link) {
-    storedPosRot = link->pos;
-    angle = link->actor_shape.rot.y;
-  }
+  if (!link)
+    return;
+  storedPositions[currentSlot].pos = link->pos;
+  storedPositions[currentSlot].angle = link->actor_shape.rot.y;
+  storedPositions[currentSlot].used = 1;
+  // Written through rather than left for the SD menu: a stored position is no
+  // use if it only survives until the console is turned off, and storing is a
+  // deliberate press, so the write happens where a brief pause is expected.
+  const bool saved = R_SUCCEEDED(File_SavePositions(storedPositions));
+  Toast("Stored position %u%s", currentSlot + 1, saved ? "" : " (not saved)");
 }
 
 static void Command_LoadPos(void) {
   game::act::Player* link = GetPlayer();
-  if (link) {
-    link->pos = storedPosRot;
-    link->initial_pos = storedPosRot;
-    link->ztarget_pos = storedPosRot;
-    link->actor_shape.rot.y = angle;
+  if (!link)
+    return;
+  if (!storedPositions[currentSlot].used) {
+    Toast("Position %u is empty", currentSlot + 1);
+    return;
   }
+  link->pos = storedPositions[currentSlot].pos;
+  link->initial_pos = storedPositions[currentSlot].pos;
+  link->ztarget_pos = storedPositions[currentSlot].pos;
+  link->actor_shape.rot.y = storedPositions[currentSlot].angle;
+  Toast("Loaded position %u", currentSlot + 1);
 }
 
-// static void Command_PreviousPos(void);
-// static void Command_NextPos(void);
+static void Command_CycleSlot(s32 by) {
+  currentSlot = (currentSlot + POSITION_SLOTS + by) % POSITION_SLOTS;
+  Toast("Position %u%s", currentSlot + 1, storedPositions[currentSlot].used ? "" : " (empty)");
+}
+
+static void Command_PreviousPos(void) {
+  Command_CycleSlot(-1);
+}
+
+static void Command_NextPos(void) {
+  Command_CycleSlot(1);
+}
+
 
 static void Command_PauseUnpause(void) {
   advState.pauseUnpause = true;
@@ -219,15 +283,31 @@ static void Commands_ListInitDefaults(void) {
       commandList[11].inputs[1] = (BUTTON_L1 | BUTTON_R1);
       commandList[11].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_START);
       commandList[11].strict = 0;
+
+      commandList[12].comboLen = 3;  // Previous Position
+      commandList[12].inputs[0] = BUTTON_L1;
+      commandList[12].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[12].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X);
+      commandList[12].strict = 0;
+
+      commandList[13].comboLen = 3;  // Next Position
+      commandList[13].inputs[0] = BUTTON_L1;
+      commandList[13].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+      commandList[13].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_Y);
+      commandList[13].strict = 0;
     }
     rnd::util::Print("%s: Reset combo coming up!\n", __func__);
-    commandList[12].comboLen = 5;  // Reset inputs.
-    commandList[12].inputs[0] = BUTTON_L1;
-    commandList[12].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-    commandList[12].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X);
-    commandList[12].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B);
-    commandList[12].inputs[4] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B | BUTTON_LEFT);
-    commandList[12].strict = 0;
+    // Always reset this one, whatever the profile said -- it is the way back
+    // out of a broken binding. COMMAND_RESET_INDEX rather than a literal, since
+    // it has to track the end of the table.
+    commandList[COMMAND_RESET_INDEX].comboLen = 5;
+    commandList[COMMAND_RESET_INDEX].inputs[0] = BUTTON_L1;
+    commandList[COMMAND_RESET_INDEX].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+    commandList[COMMAND_RESET_INDEX].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X);
+    commandList[COMMAND_RESET_INDEX].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B);
+    commandList[COMMAND_RESET_INDEX].inputs[4] =
+        (BUTTON_L1 | BUTTON_R1 | BUTTON_X | BUTTON_B | BUTTON_LEFT);
+    commandList[COMMAND_RESET_INDEX].strict = 0;
   }
 }
 
@@ -241,12 +321,12 @@ Command commandList[] = {
     {"Void Out", 0, 0, {0}, Command_VoidOut, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Store Position", 0, 0, {0}, Command_StorePos, COMMAND_PRESS_TYPE, 0, 0},
     {"Load Position", 0, 0, {0}, Command_LoadPos, COMMAND_PRESS_TYPE, 0, 0},
-    // {"Previous Position", 0, 0, { 0 }, Command_PreviousPos, COMMAND_PRESS_TYPE, 0},
-    // {"Next Position", 0, 0, { 0 }, Command_NextPos, COMMAND_PRESS_TYPE, 0},
     {"Pause/Unpause", 0, 0, {0}, Command_PauseUnpause, COMMAND_PRESS_TYPE, 0, 0},
     {"Frame Advance", 0, 0, {0}, Command_FrameAdvance, COMMAND_PRESS_TYPE, 0, 0},
     //{"Toggle Hitbox View (TODO)", 0, 0, {0}, Command_HitboxView, COMMAND_PRESS_TYPE, 0, 0},
     {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
+    {"Previous Position", 0, 0, {0}, Command_PreviousPos, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+    {"Next Position", 0, 0, {0}, Command_NextPos, COMMAND_PRESS_ONCE_TYPE, 0, 0},
     {"Reset Input", 0, 0, {0}, Commands_ListInitDefaults, COMMAND_PRESS_TYPE, 0, 0},
 };
 

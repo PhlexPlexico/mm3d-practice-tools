@@ -107,6 +107,10 @@ static void Command_VoidOut(void) {
  */
 #define TOAST_FRAMES 120
 
+#define SLOT_REPEAT_FRAMES 8
+
+static u32 slotCooldown = 0;
+
 StoredPosition storedPositions[POSITION_SLOTS];
 static u32 currentSlot = 0;
 
@@ -170,6 +174,9 @@ static void Command_LoadPos(void) {
 }
 
 static void Command_CycleSlot(s32 by) {
+  if (slotCooldown)
+    return;
+  slotCooldown = SLOT_REPEAT_FRAMES;
   currentSlot = (currentSlot + POSITION_SLOTS + by) % POSITION_SLOTS;
   Toast("Position %u%s", currentSlot + 1, storedPositions[currentSlot].used ? "" : " (empty)");
 }
@@ -284,16 +291,20 @@ static void Commands_ListInitDefaults(void) {
       commandList[11].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_START);
       commandList[11].strict = 0;
 
-      commandList[12].comboLen = 3;  // Previous Position
+      // Not L+R+X: that is the third step of the Reset Input combo, so a
+      // three-step command ending there fires partway through a reset.
+      commandList[12].comboLen = 4;  // Previous Position
       commandList[12].inputs[0] = BUTTON_L1;
       commandList[12].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-      commandList[12].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_X);
+      commandList[12].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+      commandList[12].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_LEFT);
       commandList[12].strict = 0;
 
-      commandList[13].comboLen = 3;  // Next Position
+      commandList[13].comboLen = 4;  // Next Position
       commandList[13].inputs[0] = BUTTON_L1;
       commandList[13].inputs[1] = (BUTTON_L1 | BUTTON_R1);
-      commandList[13].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_Y);
+      commandList[13].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+      commandList[13].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_RIGHT);
       commandList[13].strict = 0;
     }
     rnd::util::Print("%s: Reset combo coming up!\n", __func__);
@@ -337,6 +348,9 @@ void Command_UpdateCommands(u32 curInputs) {  // curInputs should be all the hel
     Commands_ListInitDefaults();
     commandInit = 1;
   }
+
+  if (slotCooldown)
+    --slotCooldown;
 
   for (int i = 0; i < COMMAND_NUM_COMMANDS; i++) {
     if (commandList[i].comboLen == 0)

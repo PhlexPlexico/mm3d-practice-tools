@@ -135,9 +135,7 @@ namespace game {
 
   void GiveMask(ItemId item_id) {
     auto* gctx = rnd::GetContext().gctx;
-    auto& masks = GetCommonData().save.inventory.masks;
     rnd::util::GetPointer<int(game::GlobalContext*, game::ItemId)>(ADDR_GiveItem_233BEC)(gctx, item_id);
-    masks[(u32)item_id] = item_id;
   }
 
   bool HasMask(ItemId item_id) {

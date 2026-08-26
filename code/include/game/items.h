@@ -222,14 +222,13 @@ namespace game {
   static_assert(sizeof(GetItemEntry) == 0x8);
 
   const ItemId MaskSlots[] = {
-      ItemId::PostmanHat,   ItemId::AllNightMask, ItemId::StoneMask,  ItemId::BlastMask,        ItemId::GreatFairyMask,
+      ItemId::PostmanHat,   ItemId::AllNightMask, ItemId::BlastMask,  ItemId::StoneMask,        ItemId::GreatFairyMask,
       ItemId::DekuMask,     ItemId::KeatonMask,   ItemId::BremenMask, ItemId::BunnyHood,        ItemId::DonGeroMask,
       ItemId::MaskOfScents, ItemId::GoronMask,    ItemId::RomaniMask, ItemId::CircusLeaderMask, ItemId::KafeiMask,
       ItemId::CoupleMask,   ItemId::MaskOfTruth,  ItemId::ZoraMask,   ItemId::KamaroMask,       ItemId::GibdoMask,
       ItemId::GaroMask,     ItemId::CaptainHat,   ItemId::GiantMask,  ItemId::FierceDeityMask};
 
-  // Ordered from inventory.cpp.
-  const u32 MaskSlotsOrdered[] = {0, 1, 3, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23};
+  const u32 MaskSlotsOrdered[] = {5, 11, 17, 23, 16, 14, 1, 8, 6, 20, 12, 13, 0, 15, 4, 19, 9, 18, 21, 3, 7, 2, 10, 22};
 
   constexpr bool ItemIsBottled(ItemId item) {
     return ItemId::Bottle <= item && item <= ItemId::MysteryMilkSpoiled;

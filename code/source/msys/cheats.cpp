@@ -1,5 +1,7 @@
 #include "include/menus/cheats.h"
+#include "common/advanced_context.h"
 #include "common/hidstate.h"
+#include "game/actor.h"
 #include "game/common_data.h"
 #include "include/draw.h"
 #include "include/menu.h"
@@ -123,24 +125,50 @@ static void Cheats_ISG(void) {
   advState.useISG = !advState.useISG;
 }
 
-static void TimeAdvance_6AM(void) {
+static void Cheats_SyncDayTimer(u16 time, bool is_night) {
+  game::GlobalContext* gctx = rnd::GetContext().gctx;
+  if (gctx) {
+    for (size_t i = 0; i < gctx->actors.lists.size(); ++i) {
+      for (game::act::Actor* actor = gctx->actors.lists[i].first; actor; actor = actor->next) {
+        if (actor->id != game::act::Id::DayTimer)
+          continue;
+        game::act::DayTimerActor* timer = reinterpret_cast<game::act::DayTimerActor*>(actor);
+        // boundary[0] is 0x4000, boundary[1] is 0xC000, so evening names the
+        // boundary the clock is travelling towards: dawn while night runs,
+        // dusk while day does. Stale, it leaves the actor watching for a
+        // boundary already behind us.
+        timer->evening = is_night ? 0 : 1;
+        timer->time = time;
+        timer->field_1FE = time;
+      }
+    }
+  }
+}
+
+
+static void Cheats_SetTime(u16 time) {
   game::CommonData& cdata = game::GetCommonData();
-  cdata.save.time = 0x4000;
+  cdata.save.time = time;
+  cdata.time_copy = time;
+  cdata.time_copy_3 = time;
+  cdata.save.is_night = (u16)(time - 0x4000) >= 0x8000;
+  Cheats_SyncDayTimer(time, cdata.save.is_night);
+}
+
+static void TimeAdvance_6AM(void) {
+  Cheats_SetTime(0x4000);
 }
 
 static void TimeAdvance_12PM(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  cdata.save.time = 0x8000;
+  Cheats_SetTime(0x8000);
 }
 
 static void TimeAdvance_6PM(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  cdata.save.time = 0xC000;
+  Cheats_SetTime(0xC000);
 }
 
 static void TimeAdvance_12AM(void) {
-  game::CommonData& cdata = game::GetCommonData();
-  cdata.save.time = 0x0000;
+  Cheats_SetTime(0x0000);
 }
 
 /*

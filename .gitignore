@@ -17,3 +17,4 @@ release/
 __pycache__/
 *.pyc
 *Zone.Identifier
+code/include/addresses.h

@@ -30,8 +30,8 @@ namespace game::as {
                            game::as::ActorUtil* actorUtil, void* cmbMan, s32 animId, void* boneMtxBuf) {
     rnd::util::GetPointer<int(game::ObjectBank::ObjectBankArchive*, game::GlobalContext*, game::as::ActorUtil*, void*,
                               void*, s32, void*, void*, int)>(ADDR_int_4C3A40)(archive, gctx, actorUtil, cmbMan,
-                                                                        /*actorResource*/ NULL, animId, boneMtxBuf,
-                                                                        boneMtxBuf, 8);
+                                                                               /*actorResource*/ NULL, animId,
+                                                                               boneMtxBuf, boneMtxBuf, 8);
   }
 
   void ActorUtil_Destroy(game::as::ActorUtil* actorUtil) {

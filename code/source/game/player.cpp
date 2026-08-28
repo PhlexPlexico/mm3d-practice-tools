@@ -17,7 +17,8 @@ namespace game::act {
 
   static void PlayerChangeStateToStill(Player* player, GlobalContext* gctx) {
     constexpr float speed_maybe = -6.0;
-    rnd::util::GetPointer<void(Player*, GlobalContext*, float)>(ADDR_PlayerChangeStateToStill_1E6500)(player, gctx, speed_maybe);
+    rnd::util::GetPointer<void(Player*, GlobalContext*, float)>(ADDR_PlayerChangeStateToStill_1E6500)(player, gctx,
+                                                                                                      speed_maybe);
   }
 
   FormParam& GetFormParam(FormParamIndex idx) {

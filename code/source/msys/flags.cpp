@@ -36,12 +36,8 @@ namespace msys {
    * contiguously. The game's offsets say they are; assert it, so a header edit
    * cannot quietly move every flag by one.
    */
-  static_assert(offsetof(game::SaveData, week_event_reg_35) -
-                    offsetof(game::SaveData, week_event_reg_00) ==
-                35);
-  static_assert(offsetof(game::SaveData, week_event_reg_131) -
-                    offsetof(game::SaveData, week_event_reg_00) ==
-                131);
+  static_assert(offsetof(game::SaveData, week_event_reg_35) - offsetof(game::SaveData, week_event_reg_00) == 35);
+  static_assert(offsetof(game::SaveData, week_event_reg_131) - offsetof(game::SaveData, week_event_reg_00) == 131);
 
   /// The registers are consecutive bytes, so one pointer indexes all of them.
   static u8* WeekEventRegs(void) {
@@ -124,8 +120,7 @@ namespace msys {
         for (u32 b = 0; b < 8; ++b)
           bits[b] = ((regs[j] >> b) & 1) ? '1' : '0';
         bits[8] = '\0';
-        Draw_DrawFormattedString(30, 30 + i * SPACING_Y, COLOR_WHITE, "reg %03u  %s  %02X", j,
-                                 bits, regs[j]);
+        Draw_DrawFormattedString(30, 30 + i * SPACING_Y, COLOR_WHITE, "reg %03u  %s  %02X", j, bits, regs[j]);
         Draw_DrawCharacter(10, 30 + i * SPACING_Y, COLOR_TITLE, selected == (s32)j ? '>' : ' ');
       }
 
@@ -162,16 +157,15 @@ namespace msys {
     } while (true);
   }
 
-  ToggleMenu FlagBitsMenu = {
-      .title = "",
-      .nbItems = 8,
-      .items = {{.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle},
-                {.on = 0, .title = "", .method = Flags_BitToggle}}};
+  ToggleMenu FlagBitsMenu = {.title = "",
+                             .nbItems = 8,
+                             .items = {{.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle},
+                                       {.on = 0, .title = "", .method = Flags_BitToggle}}};
 
 }  // namespace msys

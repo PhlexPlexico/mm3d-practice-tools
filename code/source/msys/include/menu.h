@@ -56,68 +56,68 @@ namespace msys {
 #define CORE_SYSTEM 1
 #define CORE_DEFAULT -2
 
-typedef enum MenuItemAction { METHOD, MENU } MenuItemAction;
+  typedef enum MenuItemAction { METHOD, MENU } MenuItemAction;
 
-typedef struct MenuItem {
-  const char* title;
+  typedef struct MenuItem {
+    const char* title;
 
-  MenuItemAction action_type;
-  union {
-    struct Menu* menu;
-    void (*method)(void);
-  };
-} MenuItem;
+    MenuItemAction action_type;
+    union {
+      struct Menu* menu;
+      void (*method)(void);
+    };
+  } MenuItem;
 
-typedef struct Menu {
-  const char* title;
+  typedef struct Menu {
+    const char* title;
 
-  u32 nbItems;
-  MenuItem items[0x40];
-} Menu;
+    u32 nbItems;
+    MenuItem items[0x40];
+  } Menu;
 
-typedef struct ToggleMenuItem {
-  u8 on;
-  const char* title;
-  void (*method)(s32);
-} ToggleMenuItem;
+  typedef struct ToggleMenuItem {
+    u8 on;
+    const char* title;
+    void (*method)(s32);
+  } ToggleMenuItem;
 
-typedef struct ToggleMenu {
-  const char* title;
+  typedef struct ToggleMenu {
+    const char* title;
 
-  u32 nbItems;
-  ToggleMenuItem items[0x40];
-} ToggleMenu;
+    u32 nbItems;
+    ToggleMenuItem items[0x40];
+  } ToggleMenu;
 
-typedef struct AmountMenuItem {
-  u16 amount;  // current amount
-  u16 hex;     // display in hex or decimal
-  const char* title;
-  void (*method)(s32);
-} AmountMenuItem;
+  typedef struct AmountMenuItem {
+    u16 amount;  // current amount
+    u16 hex;     // display in hex or decimal
+    const char* title;
+    void (*method)(s32);
+  } AmountMenuItem;
 
-typedef struct AmountMenu {
-  const char* title;
+  typedef struct AmountMenu {
+    const char* title;
 
-  u32 nbItems;
-  AmountMenuItem items[0x40];
-} AmountMenu;
+    u32 nbItems;
+    AmountMenuItem items[0x40];
+  } AmountMenu;
 
 #define TOGGLE_MENU_MAX_SHOW 18
 #define AMOUNT_MENU_MAX_SHOW 18
 
-u32 waitInputWithTimeout(u32 msec);
-u32 waitInputNoRepeat(u32 msec);
-u32 waitInput(void);
+  u32 waitInputWithTimeout(u32 msec);
+  u32 waitInputNoRepeat(u32 msec);
+  u32 waitInput(void);
 
-MyThread* menuCreateThread(void);
-void menuEnter(void);
-void menuThreadMain(void);
+  MyThread* menuCreateThread(void);
+  void menuEnter(void);
+  void menuThreadMain(void);
 
-void menuShow(Menu* root);
-void ToggleMenuShow(ToggleMenu* menu);
-void AmountMenuShow(AmountMenu* menu);
+  void menuShow(Menu* root);
+  void ToggleMenuShow(ToggleMenu* menu);
+  void AmountMenuShow(AmountMenu* menu);
 
-u32 KeyboardFill(char* buf, u32 len);
-/// Hex keypad for entering an address. Returns `initial` if cancelled.
-u32 HexEntry(const char* title, u32 initial);
+  u32 KeyboardFill(char* buf, u32 len);
+  /// Hex keypad for entering an address. Returns `initial` if cancelled.
+  u32 HexEntry(const char* title, u32 initial);
 }  // namespace msys

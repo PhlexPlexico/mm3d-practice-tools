@@ -4,14 +4,16 @@
 #include "game/addresses.h"
 
 namespace msys {
-  
+
   bool File_CheckOrCreateProfileDirectory() {
     File_GetHandle();
     FS_Archive sdmcArchive = 0;
-    if(!R_SUCCEEDED(FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) return false;
+    if (!R_SUCCEEDED(FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, ""))))
+      return false;
     FSUSER_CreateDirectory(sdmcArchive, fsMakePath(PATH_ASCII, "/3ds"), FS_ATTRIBUTE_DIRECTORY);
     FSUSER_CreateDirectory(sdmcArchive, fsMakePath(PATH_ASCII, "/3ds/mm3d"), FS_ATTRIBUTE_DIRECTORY);
-    FSUSER_CreateDirectory(sdmcArchive, fsMakePath(PATH_ASCII, "/3ds/mm3d/mm3d-practice-patch"), FS_ATTRIBUTE_DIRECTORY);
+    FSUSER_CreateDirectory(sdmcArchive, fsMakePath(PATH_ASCII, "/3ds/mm3d/mm3d-practice-patch"),
+                           FS_ATTRIBUTE_DIRECTORY);
     FSUSER_CloseArchive(sdmcArchive);
     File_CloseHandle();
     return true;
@@ -117,8 +119,7 @@ namespace msys {
     memcpy(&header, buffer, sizeof(header));
     if (header.magic != PZ3D_WATCHES_MAGIC || header.version != PZ3D_BLOB_VERSION)
       return -3;
-    if (header.count > WATCHES_MAX ||
-        read < sizeof(header) + header.count * sizeof(WatchEntry))
+    if (header.count > WATCHES_MAX || read < sizeof(header) + header.count * sizeof(WatchEntry))
       return -4;
 
     for (u32 i = 0; i < header.count; ++i) {
@@ -198,7 +199,7 @@ namespace msys {
      * field write below then goes through it.
      */
     memset(static_cast<void*>(newmemfile), 0, sizeof(MemFileT));
-    
+
     newmemfile->pzversion = PZ3D_VERSION;
 
     memcpy(static_cast<void*>(&newmemfile->save), &cdata->save, sizeof(game::SaveData));
@@ -244,8 +245,7 @@ namespace msys {
       File_CloseHandle();
       return -1;
     }
-    FSUSER_OpenFile(&fsHandle, sdmcArchive, fsMakePath(PATH_ASCII, path),
-                    FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
+    FSUSER_OpenFile(&fsHandle, sdmcArchive, fsMakePath(PATH_ASCII, path), FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
     // Truncate first, or a shorter blob leaves a tail of the previous one.
     FSFILE_SetSize(fsHandle, length);
     FSFILE_Write(fsHandle, NULL, 0, data, length, FS_WRITE_FLUSH | FS_WRITE_UPDATE_TIME);
@@ -285,12 +285,12 @@ namespace msys {
   Result File_WriteMemFileToSd(MemFileT* data, const char* path) {
     FS_Archive sdmcArchive = 0;
     Handle fsHandle = File_GetHandle();
-    if(!R_SUCCEEDED(FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) {
+    if (!R_SUCCEEDED(FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) {
       rnd::util::Print("%s: Could not open archive. Perhaps it was not closed prior to?", __func__);
       FSFILE_Close(fsHandle);
       File_CloseHandle();
       return -1;
-    } 
+    }
     FSUSER_OpenFile(&fsHandle, sdmcArchive, fsMakePath(PATH_ASCII, path), FS_OPEN_WRITE | FS_OPEN_CREATE, 0);
     FSFILE_Write(fsHandle, NULL, 0, data, sizeof(MemFileT), FS_WRITE_FLUSH | FS_WRITE_UPDATE_TIME);
     FSFILE_Close(fsHandle);
@@ -315,13 +315,13 @@ namespace msys {
   Result File_DeleteFileFromSd(char path[]) {
     FS_Archive sdmcArchive = 0;
     Handle fsHandle = File_GetHandle();
-    if(!R_SUCCEEDED(FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) {
+    if (!R_SUCCEEDED(FSUSER_OpenArchive(&sdmcArchive, ARCHIVE_SDMC, fsMakePath(PATH_EMPTY, "")))) {
       rnd::util::Print("%s: Could not open archive. Perhaps it was not closed prior to?", __func__);
       FSFILE_Close(fsHandle);
       File_CloseHandle();
       return -1;
-    } 
-    if(!R_SUCCEEDED(FSUSER_DeleteFile(sdmcArchive, fsMakePath(PATH_ASCII, path)))) {
+    }
+    if (!R_SUCCEEDED(FSUSER_DeleteFile(sdmcArchive, fsMakePath(PATH_ASCII, path)))) {
       FSFILE_Close(fsHandle);
       FSUSER_CloseArchive(sdmcArchive);
       File_CloseHandle();
@@ -332,6 +332,5 @@ namespace msys {
       File_CloseHandle();
       return 1;
     }
-    
   }
 }  // namespace msys

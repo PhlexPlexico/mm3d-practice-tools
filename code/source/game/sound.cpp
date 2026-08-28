@@ -19,7 +19,8 @@ namespace game::sound {
   class StreamMgr;
 
   static StreamMgr& GetStreamMgr() {
-    return rnd::util::GetInstance<StreamMgr>(ADDR_GetStreamMgr_7CB49C, ADDR_GetStreamMgr_6B0A3C, ADDR_GetStreamMgr_1E11F8);
+    return rnd::util::GetInstance<StreamMgr>(ADDR_GetStreamMgr_7CB49C, ADDR_GetStreamMgr_6B0A3C,
+                                             ADDR_GetStreamMgr_1E11F8);
   }
 
   bool PlayEffect(EffectId id) {
@@ -35,16 +36,18 @@ namespace game::sound {
   }
 
   StreamId GetCurrentStreamId(StreamPlayer player) {
-    return rnd::util::GetPointer<StreamId(StreamMgr&, StreamPlayer)>(ADDR_GetCurrentStreamId_1E1194)(GetStreamMgr(), player);
+    return rnd::util::GetPointer<StreamId(StreamMgr&, StreamPlayer)>(ADDR_GetCurrentStreamId_1E1194)(GetStreamMgr(),
+                                                                                                     player);
   }
 
   bool PlayStream(StreamId id, StreamPlayer player) {
-    return rnd::util::GetPointer<bool(StreamMgr&, StreamId, StreamPlayer, u32)>(ADDR_bool_239228)(GetStreamMgr(), id, player,
-                                                                                          0xffffffff);
+    return rnd::util::GetPointer<bool(StreamMgr&, StreamId, StreamPlayer, u32)>(ADDR_bool_239228)(GetStreamMgr(), id,
+                                                                                                  player, 0xffffffff);
   }
 
   void ControlStream(StreamPlayer player, int a, int b) {
-    rnd::util::GetPointer<void(StreamMgr&, StreamPlayer, int, int)>(ADDR_ControlStream_1DC2F0)(GetStreamMgr(), player, a, b);
+    rnd::util::GetPointer<void(StreamMgr&, StreamPlayer, int, int)>(ADDR_ControlStream_1DC2F0)(GetStreamMgr(), player,
+                                                                                               a, b);
   }
 
   void ControlEnv(int index) {

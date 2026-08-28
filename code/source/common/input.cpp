@@ -1,6 +1,6 @@
 #include "common/input.h"
-#include "hid.h"
 #include "common/utils.h"
+#include "hid.h"
 extern "C" {
 #include <3ds/svc.h>
 }

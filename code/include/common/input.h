@@ -1,7 +1,7 @@
 #pragma once
 
-#include "game/addresses.h"
 #include "common/types.h"
+#include "game/addresses.h"
 #include "hid.h"
 
 namespace rnd {

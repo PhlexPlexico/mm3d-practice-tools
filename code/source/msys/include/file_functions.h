@@ -1,23 +1,23 @@
 extern "C" {
-  #include <3ds/services/fs.h>
-  #include <3ds/result.h>
+#include <3ds/result.h>
+#include <3ds/services/fs.h>
 }
 #include <stdio.h>
 #include "common/debug.h"
 #include "common/flags.h"
-#include "game/player.h"
 #include "common/utils.h"
-#include "game/common_data.h"
 #include "game/actor.h"
-#include "z3d/z3DVec.h"
+#include "game/common_data.h"
+#include "game/player.h"
 #include "menus/commands.h"
 #include "menus/watches.h"
+#include "z3d/z3DVec.h"
 
 namespace msys {
-  #define MAX_SAVED_PROFILES 3
-  #define PZ3D_MEMFILE_MAX 3
-  #define PZ3D_VERSION 2
-  #define PZ3D_RESPAWN_SLOTS 8
+#define MAX_SAVED_PROFILES 3
+#define PZ3D_MEMFILE_MAX 3
+#define PZ3D_VERSION 2
+#define PZ3D_RESPAWN_SLOTS 8
   /*
    * Link's kinematic state at the moment the memfile was written.
    *
@@ -29,8 +29,8 @@ namespace msys {
     game::act::PosRot pos;
     game::act::PosRot initial_pos;
     game::act::PosRot ztarget_pos;
-    z3dVec3s shape_rot;   // full rotation; only .y used to be kept
-    u16 player_angle;     // the angle movement uses, distinct from the visual one
+    z3dVec3s shape_rot;  // full rotation; only .y used to be kept
+    u16 player_angle;    // the angle movement uses, distinct from the visual one
     z3dVec3f vel;
     float vel_xz;
     float vel_y;
@@ -55,22 +55,21 @@ namespace msys {
   } MemFileT;
 
   // The whole array, or restoring one slot leaves the others stale.
-  static_assert(PZ3D_RESPAWN_SLOTS ==
-                sizeof(game::CommonData::sub13s) / sizeof(game::RespawnData));
+  static_assert(PZ3D_RESPAWN_SLOTS == sizeof(game::CommonData::sub13s) / sizeof(game::RespawnData));
 
   bool File_CheckOrCreateProfileDirectory();
   Handle File_GetHandle();
   void File_CloseHandle();
-  /*
-   * On-disk format for the two config files. Entries are keyed by name, not
-   * index, so reordering commands cannot silently rebind anyone's controls;
-   * unknown names are skipped and missing ones keep their defaults.
-   */
-  #define PZ3D_PROFILE_MAGIC 0x50335A50u  /* 'PZ3P' */
-  #define PZ3D_WATCHES_MAGIC 0x57335A50u  /* 'PZ3W' */
-  #define PZ3D_POSITIONS_MAGIC 0x4F335A50u  /* 'PZ3O' */
-  #define PZ3D_BLOB_VERSION  1
-  #define PZ3D_TITLE_MAX     32
+/*
+ * On-disk format for the two config files. Entries are keyed by name, not
+ * index, so reordering commands cannot silently rebind anyone's controls;
+ * unknown names are skipped and missing ones keep their defaults.
+ */
+#define PZ3D_PROFILE_MAGIC 0x50335A50u   /* 'PZ3P' */
+#define PZ3D_WATCHES_MAGIC 0x57335A50u   /* 'PZ3W' */
+#define PZ3D_POSITIONS_MAGIC 0x4F335A50u /* 'PZ3O' */
+#define PZ3D_BLOB_VERSION 1
+#define PZ3D_TITLE_MAX 32
 
   typedef struct {
     u32 magic;
@@ -120,4 +119,4 @@ namespace msys {
   Result File_WriteMemFileToSd(MemFileT*, const char*);
   Result File_ReadMemFileFromSd(MemFileT*, const char*);
   Result File_DeleteFileFromSd(char[]);
-}
+}  // namespace msys

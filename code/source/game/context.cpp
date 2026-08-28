@@ -32,8 +32,8 @@ namespace game {
 
   act::Actor* GlobalContext::SpawnActor(act::Actor* actor, act::Id id, u16 rx, u16 ry, u16 rz, u16 param,
                                         z3dVec3f pos) {
-    auto spawn_actor_wrapper = rnd::util::GetPointer<act::Actor*(ActorLists*, act::Actor*, GlobalContext*, act::Id, u16,
-                                                                 u16, u16, u16 param, z3dVec3f)>(ADDR_SpawnActor_22CAAC);
+    auto spawn_actor_wrapper = rnd::util::GetPointer<act::Actor*(
+        ActorLists*, act::Actor*, GlobalContext*, act::Id, u16, u16, u16, u16 param, z3dVec3f)>(ADDR_SpawnActor_22CAAC);
     return spawn_actor_wrapper(&actors, actor, this, id, rx, ry, rz, param, pos);
   }
 
@@ -72,7 +72,8 @@ namespace game {
   }
 
   void KillAllActorsWithMissingObjects(game::GlobalContext* gctx) {
-    rnd::util::GetPointer<void(game::GlobalContext*, game::ActorLists*)>(ADDR_KillAllActorsWithMissingObjects_4E0974)(gctx, &gctx->actors);
+    rnd::util::GetPointer<void(game::GlobalContext*, game::ActorLists*)>(ADDR_KillAllActorsWithMissingObjects_4E0974)(
+        gctx, &gctx->actors);
   }
 
 }  // namespace game

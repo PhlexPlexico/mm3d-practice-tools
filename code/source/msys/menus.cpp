@@ -5,16 +5,17 @@
  * registration -- so adding a feature means defining its Menu in its own .cpp,
  * declaring it in msys/include/menus/, and listing it below.
  *
- * Warps and Watches hang off as METHOD rather than MENU: both drive their own
+ * Watches hang off as METHOD rather than MENU: both drive their own
  * display loops rather than going through the generic Menu dispatcher.
  */
 
-#include "msys/include/menu.h"
 #include "msys/include/menus.h"
+#include "msys/include/menu.h"
 
 #include "msys/include/menus/cheats.h"
 #include "msys/include/menus/commands.h"
 #include "msys/include/menus/debug.h"
+#include "msys/include/menus/dungeons.h"
 #include "msys/include/menus/equips.h"
 #include "msys/include/menus/gear.h"
 #include "msys/include/menus/inventory.h"
@@ -26,12 +27,13 @@ namespace msys {
 
   Menu pz3DMenu = {
       .title = "MM3D Practice Menu",
-      .nbItems = 9,
+      .nbItems = 10,
       .items{
-          {.title = "Warps", .action_type = METHOD, .method = WarpsPlacesMenuShow},
+          {.title = "Warps", .action_type = MENU, .menu = &WarpsMenu},
           {.title = "Cheats", .action_type = MENU, .menu = &CheatsMenu},
           {.title = "Inventory", .action_type = MENU, .menu = &InventoryMenu},
           {.title = "Gear", .action_type = MENU, .menu = &GearMenu},
+          {.title = "Dungeons", .action_type = MENU, .menu = &DungeonsMenu},
           {.title = "Equips", .action_type = MENU, .menu = &EquipsMenu},
           {.title = "Watches", .action_type = METHOD, .method = &WatchesMenuFunc},
           {.title = "Debug", .action_type = MENU, .menu = &DebugMenu},

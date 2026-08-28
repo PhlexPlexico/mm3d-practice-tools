@@ -1,10 +1,10 @@
 #include "common/advanced_context.h"
 #include "common/hidstate.h"
 #include "common/input.h"
-#include "game/context.h"
-#include "game/player.h"
 #include "game/common_data.h"
+#include "game/context.h"
 #include "game/pad.h"
+#include "game/player.h"
 #include "game/states/state.h"
 #include "game/ui.h"
 #include "msys/include/draw.h"
@@ -39,7 +39,6 @@ namespace rnd {
   extern void (*__init_array_start[])(void) __attribute__((weak));
   extern void (*__init_array_end[])(void) __attribute__((weak));
 
-
   void _start(void) {
     static char s_fake_heap[0x10000];
 
@@ -61,13 +60,11 @@ namespace rnd {
           !advState.advance_ctx_t.d_down_latched) {
         advState.advance_ctx_t.advance_state = advState.PAUSED;
         advState.advance_ctx_t.d_down_latched = 1;
-      } else if (advState.pauseUnpause &&
-                 advState.advance_ctx_t.advance_state != advState.NORMAL &&
+      } else if (advState.pauseUnpause && advState.advance_ctx_t.advance_state != advState.NORMAL &&
                  !advState.advance_ctx_t.d_down_latched) {
         advState.advance_ctx_t.advance_state = advState.NORMAL;
         advState.advance_ctx_t.d_down_latched = 1;
-      } else if (advState.frameAdvance &&
-                 advState.advance_ctx_t.advance_state == advState.NORMAL) {
+      } else if (advState.frameAdvance && advState.advance_ctx_t.advance_state == advState.NORMAL) {
         advState.advance_ctx_t.advance_state = advState.LATCHED;
       } else if (!advState.pauseUnpause) {
         advState.advance_ctx_t.d_down_latched = 0;
@@ -81,8 +78,7 @@ namespace rnd {
 
       toggle_advance();
       if (advState.advance_ctx_t.advance_state == advState.STEP) {
-        advState.advance_ctx_t.advance_state =
-            advState.frameAdvance ? advState.LATCHED : advState.PAUSED;
+        advState.advance_ctx_t.advance_state = advState.frameAdvance ? advState.LATCHED : advState.PAUSED;
       }
 
       advState.pauseUnpause = false;

@@ -14,11 +14,12 @@
         * [2.3.5 Remains](#235-remains)
         * [2.3.6 Ocarina Songs](#236-ocarina-songs)
     * [2.4 Gear](#24-gear)
-    * [2.5 Equips](#25-equips)
-    * [2.6 Watches](#26-watches)
-    * [2.7 Debug](#27-debug)
-        * [2.7.1 Week Event Flags](#271-week-event-flags)
-        * [2.7.2 Actors](#272-actors)
+    * [2.5 Dungeons](#25-dungeons)
+    * [2.6 Equips](#26-equips)
+    * [2.7 Watches](#27-watches)
+    * [2.8 Debug](#28-debug)
+        * [2.8.1 Week Event Flags](#281-week-event-flags)
+        * [2.8.2 Actors](#282-actors)
 * [3 Commands](#3-commands)
 * [4 Save](#4-save)
     * [4.1 Memfiles](#41-memfiles)
@@ -39,6 +40,8 @@ The warps menu contains a listing of all the entrances in the game categorized i
 
 There is also a way to manually enter the entrance index, if you know where to go.
 
+**Owl Statues** toggles which of the ten statues you have hit, which is the list the song of soaring offers you. They are shown in the order the game stores them: great bay coast, zora cape, snowhead, mountain village, clock town, milk road, woodfall, southern swamp, ikana canyon and stone tower.
+
 ### 2.2 Cheats
 The chaet menu lets you modify data that pertains to the current save file.
 
@@ -52,9 +55,11 @@ The chaet menu lets you modify data that pertains to the current save file.
 
 **Change Day** will allow you to change which day you are on
 
-**Change Time of Day** will allow you to change what the current time of day is.  
+**Change Time of Day** jumps the clock to 6AM, 12PM, 6PM or 12AM. Winding it backwards keeps you on the day you are already on - the game tracks the day boundary apart from the clock itself, and both are moved together now, so going from an evening back to an afternoon no longer rolls you forward to the next dawn.
 
-Hours are typically incremented by 0xAAA, but this is not exact in all cases.
+6AM and 6PM land a moment past the boundary rather than exactly on it, since exactly on it is the point the game uses to decide a day has turned.
+
+The clock face on the lower screen does not slide to the new time until the area reloads. The time itself is correct straight away; it is only the dial that lags.
 
 **Change Flow of Time** allows you to change how quickly the 3 day timer is moving.
 
@@ -86,7 +91,9 @@ Enable and disables which songs you have obtained.
 ### 2.4 Gear
 The gear menu edits the values that show on the gear screen in game. This was the **Edit Link's Info** submenu under cheats, moved out and filled in, since none of it is really a cheat.
 
-**Total Health** adjusts link's maximum health. If you multiply by 16, it gives you a full heart.
+**Total Health** adjusts link's maximum health, a full heart at a time on up and down and ten hearts on left and right. Lowering it below your current health brings current health down with it, so you are not left with filled hearts sitting outside the containers you have.
+
+**Current Health** adjusts how full those hearts are. It moves a sixteenth of a heart on up and down and a full heart on left and right, so you can set up the exact amount of health a hit needs to leave you on. It is not held to your maximum, so you can overfill it if you want to see what that looks like.
 
 **Magic** sets how much magic link has, from 0 to 3. 0 takes it away entirely, and while it is 0 nothing that needs magic will work, including the lens of truth. 1 is the standard meter and 2 is the upgraded one. 3 gives you Chateau Romani, which keeps the meter full and lets you spend magic for free.
 
@@ -100,12 +107,19 @@ The gear menu edits the values that show on the gear screen in game. This was th
 
 **Trade Item 1**, **Trade Item 2**, **Room Key** and **Special Delivery to Mama** hold the trade quest items. The game keeps one slot per chain and swaps whatever is in it rather than stacking them up, so picking a new item replaces the one that was there. Moon's tear and all four title deeds share the first slot, kafei's letter and the pendant of memories share the second, and the room key and the special delivery have one each.
 
-### 2.5 Equips
+### 2.5 Dungeons
+The dungeons menu holds the items that belong to a temple rather than to link. There is a screen for each of woodfall, snowhead, great bay and stone tower, and each one carries that temple's small key count along with its map, compass and boss key.
+
+Left and right wind the key count, capped at nine. Nothing in the game asks for more than four, so the cap is there to keep the counter quick to wind round rather than to stop you. A toggles the map, compass and boss key, and B backs out.
+
+The keys and the three items sit in different places in the save file, but that is an accident of how it is stored, so a temple is one screen here rather than two.
+
+### 2.6 Equips
 The equips tab lets you adjust what is on your face buttons and what can be used. These values show as integers, but are actually hex values. The item list can be found [here](https://github.com/PhlexPlexico/mm3d-practice-tools/blob/eaa119fe17afbb3a1780a31c331d183ca8627cc6/source/game/items.h#L9). As an example, take the bottle which is item ID `0x12`. Converted to an integer it would be `18` in the menu.
 
 ***Warning:*** While you may be able to equip any of these items to you buttons, using them may cause the game to crash. 
 
-### 2.6 Watches
+### 2.7 Watches
 The watches menu contains a list of dots as you load it (if no watches are saved). Once clicking A on one, you can give it a name, a type(signed/unsigned/hex/float 8/16/32 bit), and whether or not to draw it on the screen. Once you know the address you're looking for, you can scroll over the `Addr:` and use A to select the portion of the address to edit. Once complete, and selected to draw, you will find it on the bottom screen. If it's invalid, it will produce `Invalid Address`.
 
 Once you have selected the `Addr:` line with A, there are two ways to change it. The dpad nudges the highlighted byte, which is handy for walking to an address near the one you already have. For anything else, press X to bring up a keypad and type the address out.
@@ -113,17 +127,17 @@ Once you have selected the `Addr:` line with A, there are two ways to change it.
 The keypad starts with whatever the address already is, so correcting a digit or two does not mean typing all eight again. Move around it with the dpad or circle pad and press A to pick a key. `Del` removes the last digit, `Clr` empties the whole thing, and `OK` accepts what you have typed. B backs out and leaves the address as it was. If you type fewer than eight digits the rest are treated as leading zeroes, so `7751D8` and `007751D8` are the same address.
 
 
-### 2.7 Debug
+### 2.8 Debug
 The debug menu allows you to see and modify at a lower level to what is happening within the game.  There are menus for week event flags and for actors.
 
-#### 2.7.1 Week Event Flags
+#### 2.8.1 Week Event Flags
 The game keeps 140 single byte registers of event state - who you have spoken to, what you have handed over, which cutscenes have played. This menu lists all of them with their current value spelled out in bits, so a register with anything set in it stands out without opening it.
 
 Pressing A on one opens its eight flags as a list you can toggle. Where the flag has a known name it is shown, and where it does not you get the bit number instead. Left and right page through the list.
 
 ***Warning:*** These are the same flags the game uses to decide what has happened in your cycle. Turning one on out of order can leave a quest in a state the game never expects to see.
 
-#### 2.7.2 Actors
+#### 2.8.2 Actors
 The actor menu will show you a list of all currently loaded actors in the game. These can be filtered by using L+R to find various types of actors. These contain the following:
 - All
 - Switch

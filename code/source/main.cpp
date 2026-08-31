@@ -133,6 +133,7 @@ namespace rnd {
     context.gctx = static_cast<game::GlobalContext*>(state);
 
     Input_Update();
+    msys::Commands_ApplyBreakFree();
     msys::Command_UpdateCommands(rInputCtx.cur.val);
     frame_advance();
 

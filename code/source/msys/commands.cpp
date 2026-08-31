@@ -205,6 +205,66 @@ namespace msys {
   //   // gStaticContext.collisionDisplay = !gStaticContext.collisionDisplay;
   // }
 
+  static bool breakFreeActive = false;
+  static bool breakFreePendingStateReset = false;
+
+  static void Command_BreakFree(void) {
+    breakFreeActive = !breakFreeActive;
+    // Armed on the way on only. See the applier for why this is a one-shot.
+    breakFreePendingStateReset = breakFreeActive;
+    Toast("Break free %s", breakFreeActive ? "on" : "off");
+  }
+
+  void Commands_ApplyBreakFree(void) {
+    if (!breakFreeActive)
+      return;
+
+    GetContext();
+    if (!context.gctx || context.gctx->type != game::StateType::Play)
+      return;
+
+    // 0x7F is the manager's wildcard for whatever is current, and the only
+    // route that also unwinds the camera. The id write covers the frames
+    // before the manager drains the request.
+    s16* csId = rnd::util::GetPointer<s16>(ADDR_sCutsceneMgr_687C14);
+    if (*csId != -1) {
+      rnd::util::GetPointer<int(int)>(ADDR_CutSceneManager_Stop_20EA14)(0x7F);
+      *csId = -1;
+    }
+    context.gctx->field_268C = 0;
+
+    if (context.gctx->msg_context.msg_mode != 0)
+      rnd::util::GetPointer<void(game::GlobalContext*)>(ADDR_ResetMessageContext_13800C)(context.gctx);
+
+    game::act::Player* link = GetPlayer();
+    if (link) {
+      link->flags1 = static_cast<game::act::Player::Flag1>(0);
+      link->flags2 = static_cast<game::act::Player::Flag2>(0);
+
+      /*
+       * The game's own talk-exit, for kaepora's first half -- where the camera
+       * lets go but link still cannot move, because the cutscene stop does
+       * nothing about a talk.
+       *
+       * This ends by clearing fn1_idx and action_type, which is what I was
+       * doing by hand and which on its own never freed him: the transition is
+       * the three calls it makes first, one of which hands off to the next talk
+       * if there is one. Signature confirmed from the disassembly -- r1 is the
+       * player, since r1+0x11DB0 is flags1.
+       *
+       * Once, on the frame this is switched on, and never again. fn1_idx
+       * selects link's state handler, and resetting it every frame is one he
+       * can never settle a movement state out of -- that is what left him
+       * standing still the last two attempts. Press off and on to fire again.
+       */
+      if (breakFreePendingStateReset) {
+        breakFreePendingStateReset = false;
+        rnd::util::GetPointer<void(game::GlobalContext*, game::act::Player*)>(ADDR_resetTalkState_20CDFC)(context.gctx,
+                                                                                                          link);
+      }
+    }
+  }
+
   static void Command_ToggleWatches(void) {
     advState.showWatches = !advState.showWatches;
     toggleWatches();
@@ -304,8 +364,14 @@ namespace msys {
         commandList[13].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
         commandList[13].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_RIGHT);
         commandList[13].strict = 0;
+
+        commandList[14].comboLen = 4;  // Break Free
+        commandList[14].inputs[0] = BUTTON_L1;
+        commandList[14].inputs[1] = (BUTTON_L1 | BUTTON_R1);
+        commandList[14].inputs[2] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN);
+        commandList[14].inputs[3] = (BUTTON_L1 | BUTTON_R1 | BUTTON_DOWN | BUTTON_UP);
+        commandList[14].strict = 0;
       }
-      rnd::util::Print("%s: Reset combo coming up!\n", __func__);
       // Always reset this one, whatever the profile said -- it is the way back
       // out of a broken binding. COMMAND_RESET_INDEX rather than a literal, since
       // it has to track the end of the table.
@@ -335,6 +401,7 @@ namespace msys {
       {"Toggle Watches", 0, 0, {0}, Command_ToggleWatches, COMMAND_PRESS_TYPE, 0, 0},
       {"Previous Position", 0, 0, {0}, Command_PreviousPos, COMMAND_PRESS_ONCE_TYPE, 0, 0},
       {"Next Position", 0, 0, {0}, Command_NextPos, COMMAND_PRESS_ONCE_TYPE, 0, 0},
+      {"Break Free From CS", 0, 0, {0}, Command_BreakFree, COMMAND_PRESS_TYPE, 0, 0},
       {"Reset Input", 0, 0, {0}, Commands_ListInitDefaults, COMMAND_PRESS_TYPE, 0, 0},
   };
 

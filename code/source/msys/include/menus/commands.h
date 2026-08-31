@@ -8,7 +8,7 @@
 #define POSITION_SLOTS 8
 #define COMMAND_COMBO_TIMEOUT 3
 #define COMMAND_MENU_MAX_SHOW 18
-#define COMMAND_NUM_COMMANDS 15
+#define COMMAND_NUM_COMMANDS 16
 /*
  * Reset Input is last and is excluded from the editable list -- it is the way
  * out of a binding that has locked you out, so it is not itself rebindable.
@@ -54,4 +54,5 @@ namespace msys {
   void Positions_Init(void);
   /// Transient banner reporting the last command action; call once per frame.
   void Commands_DrawToast(void);
+  void Commands_ApplyBreakFree(void);
 }  // namespace msys

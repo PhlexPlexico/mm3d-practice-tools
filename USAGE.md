@@ -170,6 +170,7 @@ The practice patch implements the following commands
 * pause - pauses the game on the current frame `L+R+UP`
 * advance - advances a single frame `UP`
 * toggle watches - displays active watches on the bottom screen.
+* break free - hands control back during a cutscene, and again to give it up `L+R+DOWN+UP`
 * reset inputs - Reset inputs to a default state, either by your profile if it exists, or the above defaults. `L+R+X+B+LEFT`
 
 There are eight position slots rather than one, so you can keep a few setups on the go at once and compare them. Store and restore always work on whichever slot is selected, and the previous/next commands move between them without opening the menu.
@@ -177,6 +178,12 @@ There are eight position slots rather than one, so you can keep a few setups on 
 Whenever you store, restore, or change slot, the slot number appears at the top of the upper screen for a couple of seconds, in the same spot `PAUSED` uses. Trying to restore a slot you have not stored anything into yet will say so rather than dropping link somewhere unexpected.
 
 The slots are written to the SD card as soon as you store one, and read back when the game loads, so they survive turning the console off.
+
+Break free is a toggle rather than a press: once on, it holds link free every frame until you press it again. It has to be, because the game's cutscene manager only queues a stop rather than acting on one, and the cutscene keeps putting link back where it wants him until that request is drained. A single press would win one frame and no more.
+
+Switching it on also ends whatever talk link is in, which is what frees him from the ones where the camera lets go but he still cannot move - kaepora before the song of soaring is the usual example. That part only fires on the way on, so if something grabs him again later, press it off and on to fire it a second time.
+
+While it is on no cutscene will play at all, since each one is torn down as it starts. That is the point during practice, but it is easy to forget about, so the toast on the upper screen says which way it went.
 
 ## 4 Save
 The saving menu currently has the functionality to store your button combinations for commands to the SD card (known as your "profile"). This way, it becomes a portable file that you can share with your friends, or move to another system if yours breaks.  

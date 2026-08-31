@@ -81,7 +81,7 @@ jobs:
           fi
 
       - name: Build and package
-        run: make release VERSION='${{ steps.version.outputs.value }}'
+        run: make release -j VERSION='${{ steps.version.outputs.value }}'
 
       # Both versions must come out of one build of one source tree. If they
       # differ in size by a lot, something version-specific has gone wrong.

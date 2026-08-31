@@ -342,7 +342,7 @@ namespace game {
     u16 field_8230;
     u16 field_8232;
     u8 gap_8234[10];
-    u8 hide_hud;
+    u8 msg_mode;
     u8 field_823F;
     u8 gap_8240[160];
     u32 field_82E0;

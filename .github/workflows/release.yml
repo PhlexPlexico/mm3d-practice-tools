@@ -98,14 +98,62 @@ jobs:
           name: mm3d-practice-tools
           path: release/*.zip
 
+      # Conventional-commit changelog, feat: and fix: only. Anything else --
+      # chore, docs, refactor, unprefixed -- is deliberately left out, so the
+      # notes read as what changed for a user rather than what was committed.
+      - name: Build the changelog
+        id: changelog
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          set -euo pipefail
+          prev="$(git describe --tags --abbrev=0 "${GITHUB_REF_NAME}^" 2>/dev/null || true)"
+          if [ -n "$prev" ]; then
+            range="${prev}..${GITHUB_REF_NAME}"
+            echo "changelog since $prev"
+          else
+            range="${GITHUB_REF_NAME}"
+            echo "no previous tag; using the whole history"
+          fi
+
+          # %s is the subject alone, so a body that happens to mention fix:
+          # cannot smuggle a line in. Scopes and the breaking-change ! match
+          # too, so feat(menu)!: still lands under Features.
+          #
+          # Merges are included rather than skipped: a squash merge carries the
+          # whole change on its own subject ("feat: thing (#24)"), and dropping
+          # those loses the entry entirely. An ordinary "Merge pull request ..."
+          # subject does not match either pattern, so it still falls out. The
+          # dedupe covers the overlap, where a merge repeats a subject that is
+          # also on one of the commits it brought in.
+          subjects="$(git log --pretty=format:'%s' "$range")"
+
+          feats="$(printf '%s\n' "$subjects" | grep -E '^feat(\([^)]*\))?!?:' \
+                   | sed -E 's/^feat(\([^)]*\))?!?:[[:space:]]*//' | sed 's/^/- /' \
+                   | awk '!seen[$0]++' || true)"
+          fixes="$(printf '%s\n' "$subjects" | grep -E '^fix(\([^)]*\))?!?:' \
+                   | sed -E 's/^fix(\([^)]*\))?!?:[[:space:]]*//' | sed 's/^/- /' \
+                   | awk '!seen[$0]++' || true)"
+
+          # Multi-line step output. The delimiter is random so a commit subject
+          # cannot close the block early and inject workflow commands.
+          delim="EOF_$(openssl rand -hex 8)"
+          {
+            echo "notes<<${delim}"
+            [ -n "$feats" ] && printf '## Features\n\n%s\n\n' "$feats"
+            [ -n "$fixes" ] && printf '## Fixes\n\n%s\n\n' "$fixes"
+            [ -z "$feats$fixes" ] && printf '_No feat: or fix: commits since %s._\n\n' "${prev:-the start of the project}"
+            echo "${delim}"
+          } >> "$GITHUB_OUTPUT"
+
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v2
         with:
           files: release/*.zip
-          generate_release_notes: true
           fail_on_unmatched_files: true
           body: |
+            ${{ steps.changelog.outputs.notes }}
+
             Pick the package matching **your game version and how you play it** --
             the exheader differs between console and emulator, and between USA 1.0
             and 1.1. Each zip has an `INSTALL.md`.

@@ -98,3 +98,4 @@ GetFormParam_7AE9E8	0x7AE9E8	0x7AE9E8	xref 2/2 +refcount
 GetStreamMgr_7CB49C	0x7CB49C	0x7CB49C	xref 24/24 +refcount
 IrPadState	0x7C1490	0x7C1490	xref 2/2 +refcount
 SharedHidBlock	0x7B2D30	0x7B2D30	xref 3/3 +refcount
+sStateInfoTable_6883FC	0x6883FC	0x6883FC	window 64/0 soft

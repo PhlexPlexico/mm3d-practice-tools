@@ -1,20 +1,28 @@
 #include "game/states/state.h"
+#include "common/utils.h"
+#include "game/addresses.h"
 
 namespace game {
 
-  /*
-   * Ask the main loop to switch game state on the next tick.
-   *
-   * The practice tool's copy of this lived in a state.cpp that also carried the
-   * custom-game-state machinery -- an extended StateInfo table and the
-   * rst_GameStateGetNextStateInfo trampoline behind the 0x1053EC hook. None of
-   * that is needed to change to a state the game already knows about, so only
-   * this is here; the extension comes in with the feature that needs it.
-   */
+  const StateInfo* FindStateInfoByType(StateType type) {
+    const StateInfo* table = rnd::util::GetPointer<const StateInfo>(ADDR_sStateInfoTable_6883FC);
+    for (u32 i = 0; i < 16; ++i) {
+      if (table[i].init_fn == nullptr)
+        break;
+      if (table[i].type == type)
+        return &table[i];
+    }
+    return nullptr;
+  }
+
   void State::ChangeState(StateType new_type) {
-    status = State::Status::Changing;
-    next_state_init_fn = nullptr;
+    const StateInfo* info = FindStateInfoByType(new_type);
+    if (!info)
+      return;
+    next_state_init_fn = info->init_fn;
+    next_state_instance_size = info->instance_size;
     type = new_type;
+    status = State::Status::Changing;
   }
 
 }  // namespace game
